@@ -4,7 +4,7 @@ include("../../Include/opendb.php");
 $courseNumber = mysql_escape_string($_POST['course_number']);
 $data = mysql_escape_string($_POST['data']);
 $query = sprintf("SELECT * FROM `courses` WHERE course_number = '%d'", $courseNumber);
-
+$data = str_replace("'", "\'", $data);
 $results = mysql_query($query) or die(mysql_error());
 $num_results = mysql_num_rows($results);
 
