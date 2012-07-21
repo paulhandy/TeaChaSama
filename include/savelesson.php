@@ -1,6 +1,6 @@
 <?php
 
-include("opendb.php");
+include("../../Include/opendb.php");
 $courseNumber = mysql_escape_string($_POST['cnum']);
 $bookIndex = mysql_escape_string($_POST['bki']);
 $chapterIndex = mysql_escape_string($_POST['chi']);
