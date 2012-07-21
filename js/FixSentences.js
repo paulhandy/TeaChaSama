@@ -28,6 +28,7 @@ Proto.fixSentences = function(args){
         $(this.wrapper).hide();
         return;
     }
+    console.log('fixing sentences method start');
     var proto = this;
     
     fixWrapper.style.display = 'block';

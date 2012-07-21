@@ -47,7 +47,7 @@ function ChapterDecoder(data){
         });
         popdiv.style.display='block';
         popdiv.style.height = this.wrapper.offsetHeight+250+'px';
-        console.log(this.wrapper.offsetHeight);
+        
         $(background).center();
         $(popdiv).center();
         submit.onkeydown = getTextAndMoveOn;
@@ -58,7 +58,6 @@ function ChapterDecoder(data){
             _gpWrapper.style.display='none';
             proto.text.en = CKEDITOR.instances.entext.getData();
             proto.text.jp = CKEDITOR.instances.jatext.getData();
-            console.log(CKEDITOR.instances);
             proto.paragraphs = proto.splitParagraphs({
                 en: proto.text.en,
                 jp: proto.text.jp
@@ -134,6 +133,7 @@ Proto.splitSentences = function(args){
     return args;
 };
 Proto.checkLengths = function(args){
+    console.log(args);
     if(args.jp.length != args.jp.length){
         return false;
     }

@@ -121,7 +121,6 @@ function BookEditor(urldata){
         })-1;
         IndexWriter.divs[divindex].chapter.push(chapterIndexNav);
         addChapterli.onclick = chapterAddListener;
-        addChapterli.onkeydown = chapterAddListener;
         
         $('#bookEditorTab a').click(function (e) {
             e.preventDefault();
@@ -153,9 +152,9 @@ function BookEditor(urldata){
                 index: args.book.chapter.length + 1
             };
             args.lesson.index= args.chapter.index;
-            args.book.chapter.push(args.chapter);
             LessonWriter.data.chapter.push(args.lesson);
         }
+        args.book.chapter.push(args.chapter);
         args.lesson.index= args.chapter.index;
         
         var id = 'book'+args.book.index+'ch'+args.chapter.index;
@@ -310,7 +309,7 @@ function BookEditor(urldata){
                     input.setAttribute('value', getSelectedText().trim());
                 }
                 submit.onclick = addTheTrack;
-                submit.onkeydown = addTheTrack;
+                //submit.onkeydown = addTheTrack;
             }
         });
         function addTheTrack(e){
@@ -335,7 +334,7 @@ function BookEditor(urldata){
             proto.addBooki.classList.remove('icon-white');
         }
         proto.addBookButton.onclick = addBookListener;
-        proto.addBookButton.onkeydown = addBookListener;
+        //proto.addBookButton.onkeydown = addBookListener;
     })();
     function addBookListener(e){
         proto.addBook();
