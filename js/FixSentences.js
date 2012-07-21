@@ -1,4 +1,4 @@
-Proto.fixSentences = function(args){
+Proto.fixSentences = function(pgr){
     /*
          * First, we make assumptions.  The Japanese text was probably split 
          * correctly in Japanese.  They rock like that.
@@ -23,7 +23,7 @@ Proto.fixSentences = function(args){
          */
     var fixWrapper = document.getElementById('cdFixParagraphs');
     fixWrapper.style.display = 'block';
-    if(args.tofix.length === 0){
+    if(pgr.tofix.length === 0){
         fixWrapper.style.display = 'none';
         $(this.wrapper).hide();
         return;
@@ -58,14 +58,14 @@ Proto.fixSentences = function(args){
     resetLists();
     var i;
     instructions.firstElementChild.innerHTML = 'Do any English sentences need to be Recombined (bad sentence split)? Y/N';
-    for(i=0; i<args.tofix[0].jp;i++){
+    for(i=0; i<pgr.tofix[0].jp;i++){
         rightList[i].classList.add('greyedOut');
     }
     prevOnkeydown = document.onkeydown;
     prevOnkeypress = document.onkeypress;
     document.onkeypress = function(e){
         if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
-            for(i=0; i<args.tofix[0].jp;i++){
+            for(i=0; i<pgr.tofix[0].jp;i++){
                 rightList[i].classList.remove('greyedOut');
             }
             checkSplit();
@@ -78,21 +78,21 @@ Proto.fixSentences = function(args){
         tmp += '<span class="badge badge-info">Type<i class="icon-arrow-up"></i>to select first sentence</span>\n\
         <span class="badge badge-info">Type<i class="icon-arrow-down"></i>to select second sentence</span>';
         message.innerHTML = tmp;
-        if(args.tofix[0].en > args.tofix[0].jp){
+        if(pgr.tofix[0].en > pgr.tofix[0].jp){
                 
-            for(i=0; i<args.tofix[0].en;i++){
+            for(i=0; i<pgr.tofix[0].en;i++){
                 leftList[i].classList.remove('greyedOut');
             }
-            for(i=0; i<args.tofix[0].jp;i++){
+            for(i=0; i<pgr.tofix[0].jp;i++){
                 rightList[i].classList.remove('greyedOut');
             }
             instructions.firstElementChild.innerHTML = 'Do any sentences need to be split? [type N to move on]';
         }
-        if(args.tofix[0].en < args.tofix[0].jp){
-            for(i=0; i<args.tofix[0].en;i++){
+        if(pgr.tofix[0].en < pgr.tofix[0].jp){
+            for(i=0; i<pgr.tofix[0].en;i++){
                 leftList[i].classList.remove('greyedOut');
             }
-            for(i=0; i<args.tofix[0].jp;i++){
+            for(i=0; i<pgr.tofix[0].jp;i++){
                 rightList[i].classList.remove('greyedOut');
             }
             instructions.firstElementChild.innerHTML = 'Do any sentences need to be split? Y/N';
@@ -103,42 +103,42 @@ Proto.fixSentences = function(args){
             }
         }
     }
-    function routineFix(enIndex, jaIndex){
+    function routineFix(arg){
         instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
-        if(args.tofix[0].en == args.tofix[0].jp){
+        if(pgr.tofix[0].en == pgr.tofix[0].jp){
             doNextParagraph();
         }
-        if(args.tofix[0].en > args.tofix[0].jp){
-            if(args.tofix[0].jp-1 == jaIndex){
-                while(args.tofix[0].en > args.tofix[0].jp){
-                    args.en[args.tofix[0].index][args.tofix[0].en-2] +=args.en[args.tofix[0].index].pop();
+        if(pgr.tofix[0].en > pgr.tofix[0].jp){
+            if(pgr.tofix[0].jp-1 == arg.jp){
+                while(pgr.tofix[0].en > pgr.tofix[0].jp){
+                    pgr.en[pgr.tofix[0].index][pgr.tofix[0].en-2] +=pgr.en[pgr.tofix[0].index].pop();
                 }
-                routineFix(enIndex, jaIndex);
+                routineFix(arg.en, arg.jp);
             }
-            if(enIndex === undefined){
-                enIndex = 1;
+            if(arg.en === undefined){
+                arg.en = 1;
             }
-            if(jaIndex === undefined){
-                jaIndex = 0;
+            if(arg.jp === undefined){
+                arg.jp = 0;
             }
-            for(i=0; i<args.tofix[0].en;i++){
-                if(i != enIndex && !leftList[i].classList.contains('greyedOut')){
+            for(i=0; i<pgr.tofix[0].en;i++){
+                if(i != arg.en && !leftList[i].classList.contains('greyedOut')){
                     leftList[i].classList.add('greyedOut');
                     leftList[i].classList.remove('alert');
                     leftList[i].classList.remove('alert-error');
-                }else if (i == enIndex){
+                }else if (i == arg.en){
                     leftList[i].classList.remove('greyedOut');
                     leftList[i].classList.add('alert');
                     leftList[i].classList.add('alert-error');
                         
                 }
             }
-            for(i=0; i<args.tofix[0].jp;i++){
-                if(i != jaIndex && i!= jaIndex+1 && !rightList[i].classList.contains('greyedOut')){
+            for(i=0; i<pgr.tofix[0].jp;i++){
+                if(i != arg.jp && i!= arg.jp+1 && !rightList[i].classList.contains('greyedOut')){
                     rightList[i].classList.add('greyedOut');
                     rightList[i].classList.remove('alert');
                     rightList[i].classList.remove('alert-warning');
-                }else if(i == jaIndex || i== jaIndex+1){
+                }else if(i == arg.jp || i== arg.jp+1){
                     rightList[i].classList.remove('greyedOut');
                     rightList[i].classList.add('alert');
                     rightList[i].classList.add('alert-warning');
@@ -146,47 +146,47 @@ Proto.fixSentences = function(args){
             }
             document.onkeydown = function(e){
                 if(e.keyCode === 38){
-                    args.en[args.tofix[0].index][enIndex-1] += args.en[args.tofix[0].index].splice(enIndex, 1)[0];
+                    pgr.en[pgr.tofix[0].index][arg.en-1] += pgr.en[pgr.tofix[0].index].splice(arg.en, 1)[0];
                     resetLists();
-                    routineFix(enIndex, jaIndex+1);
+                    routineFix(arg.en, arg.jp+1);
                 }
                 if(e.keyCode === 40){
-                    routineFix(enIndex+1, jaIndex+1);
+                    routineFix(arg.en+1, arg.jp+1);
                 }
             }
         }
-        if(args.tofix[0].en < args.tofix[0].jp){
-            if(args.tofix[0].en-1 == enIndex){
-                while(args.tofix[0].jp > args.tofix[0].en){
-                    args.jp[args.tofix[0].index][args.tofix[0].jp-2] +=args.jp[args.tofix[0].index].pop();
+        if(pgr.tofix[0].en < pgr.tofix[0].jp){
+            if(pgr.tofix[0].en-1 == arg.en){
+                while(pgr.tofix[0].jp > pgr.tofix[0].en){
+                    pgr.jp[pgr.tofix[0].index][pgr.tofix[0].jp-2] +=pgr.jp[pgr.tofix[0].index].pop();
                 }
-                routineFix(enIndex, jaIndex);
+                routineFix(arg.en, arg.jp);
             }
-            if(enIndex === undefined){
-                enIndex = 0;
+            if(arg.en === undefined){
+                arg.en = 0;
             }
-            if(jaIndex === undefined){
-                jaIndex = 1;
+            if(arg.jp === undefined){
+                arg.jp = 1;
             }
-            console.log(enIndex+":"+jaIndex);
-            for(i=0; i<args.tofix[0].en;i++){
-                if(i != enIndex && i!= enIndex+1 && !leftList[i].classList.contains('greyedOut')){
+            console.log(arg.en+":"+arg.jp);
+            for(i=0; i<pgr.tofix[0].en;i++){
+                if(i != arg.en && i!= arg.en+1 && !leftList[i].classList.contains('greyedOut')){
                     leftList[i].classList.add('greyedOut');
                     leftList[i].classList.remove('alert');
                     leftList[i].classList.remove('alert-warning');
-                }else if(i == enIndex || i== enIndex+1){
+                }else if(i == arg.en || i== arg.en+1){
                     leftList[i].classList.remove('greyedOut');
                     leftList[i].classList.add('alert');
                     leftList[i].classList.add('alert-warning');
                 }
                     
             }
-            for(i=0; i<args.tofix[0].jp;i++){
-                if(i != jaIndex && !rightList[i].classList.contains('greyedOut')){
+            for(i=0; i<pgr.tofix[0].jp;i++){
+                if(i != arg.jp && !rightList[i].classList.contains('greyedOut')){
                     rightList[i].classList.add('greyedOut');
                     rightList[i].classList.remove('alert');
                     rightList[i].classList.remove('alert-error');
-                }else if (i == jaIndex){
+                }else if (i == arg.jp){
                     rightList[i].classList.remove('greyedOut');
                     rightList[i].classList.add('alert');
                     rightList[i].classList.add('alert-error');
@@ -194,14 +194,14 @@ Proto.fixSentences = function(args){
             }
             document.onkeydown = function(e){
                 if(e.keyCode === 38){
-                    args.jp[args.tofix[0].index][jaIndex-1] += args.jp[args.tofix[0].index].splice(jaIndex, 1)[0];
+                    pgr.jp[pgr.tofix[0].index][arg.jp-1] += pgr.jp[pgr.tofix[0].index].splice(arg.jp, 1)[0];
                         
                     resetLists();
-                    routineFix(enIndex, jaIndex+1);
+                    routineFix(arg.en, arg.jp+1);
                 }
                 if(e.keyCode === 40){
                         
-                    routineFix(enIndex+1, jaIndex+1);
+                    routineFix(arg.en+1, arg.jp+1);
                 }
             }
         }
@@ -215,11 +215,11 @@ Proto.fixSentences = function(args){
         for(i=0;i<rightList.length;i++){
             removeListListeners(rightList[i]);
         }
-        proto.paragraphs.en[pgIndex] = args.en[args.tofix[0].index];
-        proto.paragraphs.jp[pgIndex] = args.jp[args.tofix[0].index];
-        args.tofix = proto.checkLengths();
+        proto.paragraphs.en[pgIndex] = pgr.en[pgr.tofix[0].index];
+        proto.paragraphs.jp[pgIndex] = pgr.jp[pgr.tofix[0].index];
+        pgr.tofix = proto.checkLengths();
         if(proto.paragraphs.tofix.length>0){
-            proto.fixSentences(args);
+            proto.fixSentences(pgr);
         }
     }
     function resetLists(){
@@ -227,7 +227,7 @@ Proto.fixSentences = function(args){
         rightnav.innerHTML = '';
         leftHeader = leftnav.appendChild(leftHeader);
         rightHeader = rightnav.appendChild(rightHeader);
-        //removeListListeners
+        
         for(i=0;i<leftList.length;i++){
             removeListListeners(leftList[i]);
         }
@@ -235,23 +235,23 @@ Proto.fixSentences = function(args){
             removeListListeners(rightList[i]);
         }
         leftList = [];
-        rightList = [];
-            
-        for(i=0; i<args.tofix[0].en;i++){
+        rightList = [];    
+        for(i=0; i<pgr.tofix[0].en;i++){
             leftList[i] = docreate('li', 'enSentence', 'en'+i);
             leftnav.appendChild(docreate('li', 'divider'));
             leftList[i] = leftnav.appendChild(leftList[i]);
-            leftList[i].innerHTML = args.en[args.tofix[0].index].line[i].text;
+            leftList[i].innerHTML = pgr.en[pgr.tofix[0].index].line[i].text;
             setListListeners(leftList[i]);
         }
-        for(i=0; i<args.tofix[0].jp;i++){
+        console.log(pgr.tofix);
+        for(i=0; i<pgr.tofix[0].jp;i++){
             rightList[i] = docreate('li', 'jaSentence', 'ja'+i); 
             rightnav.appendChild(docreate('li', 'divider'));
             rightList[i] = rightnav.appendChild(rightList[i]);
-            rightList[i].innerHTML = args.jp[args.tofix[0].index].line[i].text;
+            rightList[i].innerHTML = pgr.jp[pgr.tofix[0].index].line[i].text;
             setListListeners(rightList[i]);
         }
-            
+        console.log(i);    
         popdiv.style.height = fixWrapper.offsetHeight+'px';
 
         $(popdiv).center();
@@ -303,3 +303,9 @@ Proto.fixSentences = function(args){
         li.onkeydown = null;
     }
 };
+Proto.fixParagraphs = function(args){
+    args.en;
+    args.jp;
+    args.ex;
+    console.log(args);
+}

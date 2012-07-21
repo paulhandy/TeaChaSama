@@ -71,27 +71,30 @@ function ChapterDecoder(data){
                 en: proto.paragraphs.en,
                 jp: proto.paragraphs.jp
             });
-            totalMisaligned = proto.paragraphs.tofix.length;
             data.chapter.paragraph = proto.paragraphs.en;
             data.chapter.raw = proto.paragraphs;
-            if(args.skip){
-                console.log('skipping sentence translation arrangement');
-                if(args.toClipper){
-                    $(proto.wrapper).hide();
-                    $(popdiv).hide();
-                    
-                    proto.audioclipper.chapter= data.chapter;
-                    data = proto.audioclipper.chapter;
-                    console.log(data);
-                    proto.audioclipper.show();
-                    proto.audioclipper.decodeLineSet();
-                    proto.audioclipper.setListeners();
-                    proto.audioclipper.displayNextTwoLines();
-                }
+            if(proto.paragraphs.tofix == false){
+                proto.fixParagraphs(proto.paragraphs);
             }else{
-                proto.fixSentences(proto.paragraphs);
+                totalMisaligned = proto.paragraphs.tofix.length;
+                if(args.skip){
+                    console.log('skipping sentence translation arrangement');
+                    if(args.toClipper){
+                        $(proto.wrapper).hide();
+                        $(popdiv).hide();
+                    
+                        proto.audioclipper.chapter= data.chapter;
+                        data = proto.audioclipper.chapter;
+                        console.log(data);
+                        proto.audioclipper.show();
+                        proto.audioclipper.decodeLineSet();
+                        proto.audioclipper.setListeners();
+                        proto.audioclipper.displayNextTwoLines();
+                    }
+                }else{
+                    proto.fixSentences(proto.paragraphs);
+                }
             }
-            
         }
     };
 }
@@ -99,7 +102,7 @@ var Proto = ChapterDecoder.prototype;
 Proto.splitParagraphs = function(args){
     var paragraph = {};
     var splitP = /<(?=p|\/p)[^>]*?>/g;
-    var englishFilterRe = /<(?!h\d|\/h\d)[^>]*?>/g;
+    var englishFilterRe = /<[^>]*?>/g;
     var jaFilterRe = /<(?!ruby|rb|rt|\/rb|\/rt|\/ruby|h\d|\/h\d)[^>]*?>/g;
     var andFilter = /&[^;]+?;/g;
     var supFilter = /<(?=sup).*?(?=\/sup)[^>]*?>/g;
@@ -134,20 +137,21 @@ Proto.splitSentences = function(args){
 };
 Proto.checkLengths = function(args){
     console.log(args);
-    if(args.jp.length != args.jp.length){
+    if(args.en.length != args.jp.length){
         return false;
     }
     var i, j=[], offSet;
     for(i=0;i<args.en.length;i++){
         if(args.en[i].line.length != args.jp[i].line.length){
             offSet = {
-                en: args.en[i].length,
-                jp: args.jp[i].length,
+                en: args.en[i].line.length,
+                jp: args.jp[i].line.length,
                 index: i
             };
             j.push(offSet);
         }
     }
+    console.log(j[0].en);
     return j;
 };
 function splitJapaneseSentences(myString){
@@ -198,7 +202,7 @@ function splitIntoSentences(args){
         var splitSentence = match[0].split(/\s/g);
         var lastWord = splitSentence[splitSentence.length-1].trim();
         var abbreviation = args.ex.indexOf(lastWord.replace(/[^a-zA-Z.]/g, '')) >= 0 
-            || (lastWord.length == 2 && (lastWord.toLocaleUpperCase()).charCodeAt(0) <=90);
+        || (lastWord.length == 2 && (lastWord.toLocaleUpperCase()).charCodeAt(0) <=90);
             
         if (abbreviation)
         {
