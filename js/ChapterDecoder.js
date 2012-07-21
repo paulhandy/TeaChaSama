@@ -74,23 +74,7 @@ function ChapterDecoder(data){
             data.chapter.paragraph = proto.paragraphs.en;
             data.chapter.raw = proto.paragraphs;
             if(proto.paragraphs.tofix == false){
-                if(args.skip){
-                    console.log('skipping sentence translation arrangement');
-                    if(args.toClipper){
-                        $(proto.wrapper).hide();
-                        $(popdiv).hide();
-                    
-                        proto.audioclipper.chapter= data.chapter;
-                        data = proto.audioclipper.chapter;
-                        console.log(data);
-                        proto.audioclipper.show();
-                        proto.audioclipper.decodeLineSet();
-                        proto.audioclipper.setListeners();
-                        proto.audioclipper.displayNextTwoLines();
-                    }
-                }else{
-                    proto.fixParagraphs(proto.paragraphs);
-                }
+                proto.fixParagraphs(proto.paragraphs);
             }else{
                 totalMisaligned = proto.paragraphs.tofix.length;
                 if(args.skip){
