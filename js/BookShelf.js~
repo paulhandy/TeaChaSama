@@ -1,0 +1,34 @@
+var bs = new BookShelf(); 
+
+function BookShelf(){
+  this.title = null;
+  this.book = [];
+  this.addBook = (function(){
+    var tmp = new Book();
+    this.book.push(tmp);
+    return tmp;
+  })();
+})();
+
+BookShelf.prototype.getIndexHtml = (function(){
+  var tabarea, nav, li, a, tabcont, tabpane;
+  tabarea = document.createElement('div');
+  tabarea.setAttribute('class', 'tabbable tabs-right');
+  nav = document.createElement('ul');
+  nav.setAttribute('class', 'nav nav-tabs');
+  tabcont = document.createElement('div');
+  tabcont.setAttribute('class', 'tab-content');
+  tabarea.appendChild(nav);
+  tabarea.appendChild(tabcont);
+  for(i=0;i<this.book.length;i++){
+    li = document.createElement('li');
+    li.setAttribute('href', '#tab'+(i+1));
+    a = document.createElement('a');
+    a.setAttribute('data-toggle', 'tab');
+    a.innerHTML = this.book[i].title;
+    li.appendChild(a);
+    nav.appendChild(li);
+    this.book[i].getIndexHtml(i+1);
+    tabcont.appendChild();
+  }
+})();

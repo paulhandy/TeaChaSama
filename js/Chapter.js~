@@ -1,0 +1,29 @@
+function Chapter(){
+  this.title = null;
+  this.author = null;
+  this.audio = null;
+  this.index = null;
+  this.paragraph = [];
+};
+Chapter.prototype.addParagraph = (function()
+{
+    var p = new Paragraph();
+    this.paragraph.push(p);
+    return p;
+})();
+  
+Chapter.prototype.getIndexCard = (function(i)
+{
+	var li, a, title, auth;
+	li = document.createElement('li');
+	a = document.createElement('a');
+	a.setAttribute('href', '#chapter'+i);
+	title = document.createElement('div');
+   auth = document.createElement('div');
+   title.setAttribute('class', 'chapter-index-title');
+   auth.setAttribute('class', 'chapter-index-author');
+   a.appendChild(title);
+   a.appendChild(auth);
+   li.appendChild(a);
+   return li;
+})();

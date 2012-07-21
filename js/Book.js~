@@ -1,0 +1,24 @@
+function Book(){
+  this.title = null;
+  this.chapter = [];
+  this.addChapter = (function(){
+    var c = new Chapter();
+    this.chapter.push(c);
+    return c;
+  };
+  this.getIndexHtml = (function(paneindex){
+		var i=0, pane, ul;
+		pane = document.createElement('div');
+		pane.setAttribute('class', 'tab-pane');
+		pane.setAttribute('id', 'tab'+paneindex);
+		ul = document.createElement('ul');
+		ul.setAttribute('class', 'chapter-list');
+		for(i=0;i<this.chapter.length;i++)
+		{
+			ul.appendChild(this.chapter[i].getIndexCard());
+		}	
+		pane.appendChild(ul);
+		return pane;
+	})();
+};
+

@@ -1,0 +1,103 @@
+.chapter-list{
+
+}
+.chapter-list > li {
+    list-style:none;
+}
+.translation-canvas, .grammar-canvas{
+    width: 28px;
+    height: 14px;
+    margin-right: .3em;
+    line-height: 14px;
+}
+.translucent{
+    opacity:0.6;
+    position:fixed;
+    display:block;
+    background:black;
+    height: 100%;
+    width: 100%;
+    z-index:500;
+}
+.rounded-white{
+    background: white;
+    position: fixed;
+    opacity:1;
+    display:block;
+    height: 400px;
+    padding: 10px 10px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    z-index: 1000;
+    padding: 10px 10px;
+}
+.fixSentence{
+    cursor: pointer;
+}
+#fixerInstruction{
+    height: 100px;
+}
+.greyedOut{
+    color:#ddd;
+}
+.choose1{
+    content: "<i class:'icon-arrow-up'></i>"
+}
+.choose2{
+    content: "<i class:'icon-arrow-down'></i>"
+}
+#audioEditor{
+    background:white;
+    border-radius:20px;
+    position:absolute;
+    top:-10000px;
+    left:-10000px;
+    max-width:1300px;
+    min-width: 960px;
+    min-height: 200px;
+}
+#audioEditorLines, #audioEditorButtonGroup{
+    display:none;
+}.editButton{
+    cursor:pointer;
+}
+.indexEditChapter .editChapterNav{
+    display:none
+}
+.indexEditChapter:hover .editChapterNav{
+    display:inherit;
+}
+.editButton:hover{
+    background-color:transparent;
+}
+.editButton{
+    background-color:white;
+    border-radius:10px;
+}
+#audiowrapper{
+    width:1px;
+    height:1px;
+    opacity:0;
+    position:relative;
+    top:0;
+    left:0;
+}
+#chapterdecoder{
+    display:none;
+}
+.timeline{
+    min-width:940px;
+}
+#cdEnterRow{
+    display: table-row;
+    padding-left : 10px;
+    position : 'relative';
+    text-align : 'center';
+}
+#cdEnterTextButton{
+    position : relative;
+    top : 10px;
+    left : 400px;
+
+}

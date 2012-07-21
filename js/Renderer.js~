@@ -1,0 +1,62 @@
+var BookShelf = (function(){
+  this.title = null;
+  this.book = [];
+  this.addBook = (function(){
+    var b = new Book();
+    this.book.push(b);
+    return b;
+  })();
+  this.getIndexHtml = (function(){
+    var tabarea, nav, li, a, tabcont, tabpane;
+    tabarea = document.createElement('div');
+    tabarea.setAttribute('class', 'tabbable tabs-right');
+    nav = document.createElement('ul');
+    nav.setAttribute('class', 'nav nav-tabs');
+  })();
+})();
+var Book = (function(){
+  this.title = null;
+  this.chapter = [];
+  this.addChapter = (function(){
+    var c = new Chapter();
+    this.chapter.push(c);
+    return c;
+  })();
+  
+})();
+
+var Chapter = (function(){
+  this.title = null;
+  this.author = null;
+  this.audio = null;
+})();
+
+var Paragraph = (function(){
+  this.Line = [];
+  this.addLine = (function(txt, trans, clip){
+    var l = new Line();
+    l.text = txt;
+    l.translation = trans;
+    l.audioClip = clip;
+    this.Line.push(l);
+    return l;
+  })();
+  
+})();
+
+var Line = function(){
+  this.text = null;
+  this.translation = null;
+  this.audioClip = null;
+};
+
+var AudioTrack = function(){
+  this.fileName = null;
+  this.duration = 0;
+};
+
+var AudioClip = function(){
+  this.start= 0;
+  this.duration= 0;
+  this.end= 0;
+};

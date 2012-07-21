@@ -1,0 +1,12 @@
+
+
+var AudioTrack = function(){
+  this.fileName = null;
+  this.duration = 0;
+};
+
+var AudioClip = function(){
+  this.start= 0;
+  this.duration= 0;
+  this.end= 0;
+};

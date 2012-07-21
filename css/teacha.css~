@@ -1,0 +1,12 @@
+.chapter-list{
+  
+}
+.chapter-list > li {
+  list-style:none;
+}
+.translation-canvas, .grammar-canvas{
+  width: 14px;
+  height: 14px;
+  *margin-right: .3em;
+  line-height: 14px;
+}

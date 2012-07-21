@@ -1,0 +1,8 @@
+var Paragraph = (function(){
+  this.Line = [];
+  this.addLine = (function(){
+    var l = new Line();
+    this.Line.push(l);
+    return l;
+  })();
+})();

@@ -1,0 +1,99 @@
+function Line(){
+  this.text = null;
+  this.translation = null;
+  this.audioClip = null;
+  this.vocab = [];
+  this.grammar = [];
+  var lineWrapper = document.createElement('span'),
+	    ddmbgp = document.createElement('div'),
+	    bcontainer = document.createElement('a'),
+	    b = document.createElement('span'),
+	    ul = document.createElement('ul'),
+	    li = document.createElement('li'),
+	    btnGroup = document.createElement('div'),
+	    soundbtn = document.createElement('button'),
+	    transbtn = document.createElement('button'),
+	    vocabbtn = document.createElement('button'),
+	    grammarbtn = document.createElement('button'),
+	    utterance = document.createElement('span');
+  initialize();
+  
+  this.addVocab = (function(){
+    var v = new Vocab();
+    this.vocab.push(v);
+    return v;
+  })();
+  
+  this.addGrammar = (function(){
+    var g = new Grammar();
+    this.grammar.push(g);
+    return g;
+  })();
+  
+  this.getLineHtml = (function(){
+    utterance.innerHTML = this.text;
+    lineWrapper.appendChild(ddmbgp);
+    lineWrapper.appendChild(utterance);
+    return lineWrapper;
+  })();
+  this.vocabInline = (function(){
+    
+  })();
+  this.showTranslation = (function(){
+    
+  })();
+  this.grammarInline = (function(){
+    
+  })();
+  this.setListeners = (function(){
+    soundbtn.onclick = this.audioClip.play;
+    soundbtn.onkeydown = this.audioClip.play;
+    transbtn.onclick = this.showTranslation;
+    transbtn.onkeydown = this.showTranslation;
+    vocabbtn.onkeydown = this.vocabInline;
+    vocabbtn.onclick = this.vocabInline;
+    grammarbtn.onkeydown = this.grammarInline;
+    grammarbtn.onclick = this.grammarInline;
+  })();
+  
+  this.removeListeners = function(){
+    soundbtn.onclick = null;
+    soundbtn.onkeydown = null;
+    transbtn.onclick = null;
+    transbtn.onkeydown =null;
+    vocabbtn.onkeydown =null;
+    vocabbtn.onclick = null;
+    grammarbtn.onkeydown =null;
+    grammarbtn.onclick = null;
+  };
+  
+  function initialize(){
+    lineWrapper.setAttribute('class', 'line-wrapper');
+    utterance.setAttribute('class', 'utterance-area');
+    ddmbgp.setAttribute('class', 'btn-group');
+    bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
+    b.setAttribute('class', 'caret');
+    ul.setAttribute('class', 'dropdown-menu');
+    btnGroup.setAttribute('class', 'btn-group');
+    soundbtn.setAttribute('class', 'btn btn-large');
+    transbtn.setAttribute('class', 'btn btn-large');
+    vocabbtn.setAttribute('class', 'btn btn-large');
+    grammarbtn.setAttribute('class', 'btn btn-large');
+    btnGroup.appendChild(soundbtn);
+    btnGroup.appendChild(transbtn);
+    btnGroup.appendChild(vocabbtn);
+    btnGroup.appendChild(grammarbtn);
+    li.appendChild(btnGroup);
+    ul.appendChild(li);
+    ul.style.minWidth = 0+'px';
+    bcontainer.appendChild(b);
+    ddmbgp.appendChild(bcontainer);
+    ddmbgp.appendChild(ul);
+    soundbtn.innerHTML = '<ruby><rb><i class="icon icon-headphones" ></i></rb><rt>聞く</rt></ruby>';
+    transbtn.innerHTML = '<ruby><rb><canvas class="translation-canvas" ></canvas></rb><rt>翻訳</rt></ruby>';
+    transbtn.style.padding = '9px 7px';
+    vocabbtn.innerHTML = '<ruby><rb><i class="icon icon-book"></i></rb><rt>単語</rt></ruby>';
+    grammarbtn.innerHTML = '<ruby><rb><canvas class="grammar-canvas"></canvas></rb><rt>文法</rt></ruby>';
+    grammarbtn.style.padding = '9px 7px';
+  };
+};
