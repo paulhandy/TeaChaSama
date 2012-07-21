@@ -153,8 +153,9 @@ function BookEditor(urldata){
             };
             args.lesson.index= args.chapter.index;
             LessonWriter.data.chapter.push(args.lesson);
+            args.book.chapter.push(args.chapter);
         }
-        args.book.chapter.push(args.chapter);
+        
         args.lesson.index= args.chapter.index;
         
         var id = 'book'+args.book.index+'ch'+args.chapter.index;
