@@ -73,28 +73,30 @@ function ChapterDecoder(data){
             });
             data.chapter.paragraph = proto.paragraphs.en;
             data.chapter.raw = proto.paragraphs;
-            if(proto.paragraphs.tofix == false){
-                proto.fixParagraphs(proto.paragraphs);
-            }else{
-                totalMisaligned = proto.paragraphs.tofix.length;
-                if(args.skip){
-                    console.log('skipping sentence translation arrangement');
-                    if(args.toClipper){
-                        $(proto.wrapper).hide();
-                        $(popdiv).hide();
+            
+            totalMisaligned = proto.paragraphs.tofix.length;
+            if(args.skip){
+                console.log('skipping sentence translation arrangement');
+                if(args.toClipper){
+                    $(proto.wrapper).hide();
+                    $(popdiv).hide();
                     
-                        proto.audioclipper.chapter= data.chapter;
-                        data = proto.audioclipper.chapter;
-                        console.log(data);
-                        proto.audioclipper.show();
-                        proto.audioclipper.decodeLineSet();
-                        proto.audioclipper.setListeners();
-                        proto.audioclipper.displayNextTwoLines();
-                    }
+                    proto.audioclipper.chapter= data.chapter;
+                    data = proto.audioclipper.chapter;
+                    console.log(data);
+                    proto.audioclipper.show();
+                    proto.audioclipper.decodeLineSet();
+                    proto.audioclipper.setListeners();
+                    proto.audioclipper.displayNextTwoLines();
+                }
+            }else{
+                if(proto.paragraphs.tofix == false){
+                    proto.fixParagraphs(proto.paragraphs);
                 }else{
                     proto.fixSentences(proto.paragraphs);
                 }
             }
+            
         }
     };
 }
@@ -143,12 +145,19 @@ Proto.checkLengths = function(args){
     var i, j=[], offSet;
     for(i=0;i<args.en.length;i++){
         if(args.en[i].line.length != args.jp[i].line.length){
-            offSet = {
-                en: args.en[i].line.length,
-                jp: args.jp[i].line.length,
-                index: i
-            };
-            j.push(offSet);
+            if(args.en[i].line.length==1){
+                while(args.jp[i].line.length>1){
+                    args.jp[i].line[0].text += args.jp[i].line.splice(1, 1)[0].text;
+                }
+            }else{
+                offSet = {
+                    en: args.en[i].line.length,
+                    jp: args.jp[i].line.length,
+                    index: i
+                };
+                j.push(offSet);
+            }
+            
         }
     }
     console.log(j[0].en);

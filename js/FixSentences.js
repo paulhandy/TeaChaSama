@@ -99,137 +99,140 @@ Proto.fixSentences = function(pgr){
         }
         document.onkeypress = function(e){
             if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
+                instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
                 routineFix();
             }
         }
     }
     function routineFix(arg){
-        instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
-        if(pgr.tofix[0].en == pgr.tofix[0].jp){
+        var ndx = pgr.tofix[0].index;
+        if(arg == undefined){
+            arg = {
+                en:pgr.tofix[0].en > pgr.tofix[0].jp?1:0,
+                jp:pgr.tofix[0].en > pgr.tofix[0].jp?0:1
+            };
+        }
+        if(pgr.en[ndx].line.length == pgr.jp[ndx].line.length){
             doNextParagraph();
         }
         if(pgr.tofix[0].en > pgr.tofix[0].jp){
-            if(pgr.tofix[0].jp-1 == arg.jp){
-                while(pgr.tofix[0].en > pgr.tofix[0].jp){
-                    pgr.en[pgr.tofix[0].index][pgr.tofix[0].en-2] +=pgr.en[pgr.tofix[0].index].pop();
+            if(pgr.jp[ndx].line.length-1 == arg.jp){
+                while(pgr.en[ndx].line.length > pgr.jp[ndx].line.length){
+                    //pgr.en[ndx].line[arg.jp].text += pgr.en[ndx].line.pop().text;
+                    pgr.en[ndx].line = shiftUp({
+                        array:pgr.en[ndx].line, 
+                        index:arg.jp+1
+                    });
                 }
                 routineFix(arg.en, arg.jp);
             }
-            if(arg.en === undefined){
-                arg.en = 1;
-            }
-            if(arg.jp === undefined){
-                arg.jp = 0;
-            }
-            for(i=0; i<pgr.tofix[0].en;i++){
-                if(i != arg.en && !leftList[i].classList.contains('greyedOut')){
-                    leftList[i].classList.add('greyedOut');
-                    leftList[i].classList.remove('alert');
-                    leftList[i].classList.remove('alert-error');
-                }else if (i == arg.en){
-                    leftList[i].classList.remove('greyedOut');
-                    leftList[i].classList.add('alert');
-                    leftList[i].classList.add('alert-error');
-                        
-                }
-            }
-            for(i=0; i<pgr.tofix[0].jp;i++){
-                if(i != arg.jp && i!= arg.jp+1 && !rightList[i].classList.contains('greyedOut')){
-                    rightList[i].classList.add('greyedOut');
-                    rightList[i].classList.remove('alert');
-                    rightList[i].classList.remove('alert-warning');
-                }else if(i == arg.jp || i== arg.jp+1){
-                    rightList[i].classList.remove('greyedOut');
-                    rightList[i].classList.add('alert');
-                    rightList[i].classList.add('alert-warning');
-                }
-            }
+            highlightMovers({
+                rflength: pgr.jp[ndx].line.length,
+                yflength: pgr.en[ndx].line.length,
+                r: arg.jp,
+                y:arg.en,
+                rl: rightList,
+                yl:leftList
+            });
             document.onkeydown = function(e){
+                document.onkeydown = null;
                 if(e.keyCode === 38){
-                    pgr.en[pgr.tofix[0].index][arg.en-1] += pgr.en[pgr.tofix[0].index].splice(arg.en, 1)[0];
+                    //pgr.en[ndx].line[arg.en-1].text += pgr.en[ndx].line.splice(arg.en, 1)[0].text;
+                    console.log(e);
+                    pgr.en[ndx].line = shiftUp({
+                        array:pgr.en[ndx].line, 
+                        index:arg.en
+                    });
                     resetLists();
-                    routineFix(arg.en, arg.jp+1);
+                    routineFix({
+                        en:arg.en,
+                        jp:arg.jp
+                    });
                 }
                 if(e.keyCode === 40){
-                    routineFix(arg.en+1, arg.jp+1);
+                    routineFix({
+                        en:arg.en+1,
+                        jp:arg.jp+1
+                    });
                 }
             }
         }
         if(pgr.tofix[0].en < pgr.tofix[0].jp){
-            if(pgr.tofix[0].en-1 == arg.en){
-                while(pgr.tofix[0].jp > pgr.tofix[0].en){
-                    pgr.jp[pgr.tofix[0].index][pgr.tofix[0].jp-2] +=pgr.jp[pgr.tofix[0].index].pop();
+            if(pgr.en[ndx].line.length -1== arg.en){
+                while(pgr.jp[ndx].line.length > pgr.en[ndx].line.length){
+                    //pgr.jp[ndx].line[pgr.tofix[0].jp-2].text +=pgr.jp[ndx].line.pop().text;
+                    pgr.jp[ndx].line = shiftUp({
+                        array:pgr.jp[ndx].line, 
+                        index:arg.en+1
+                    });
                 }
                 routineFix(arg.en, arg.jp);
             }
-            if(arg.en === undefined){
-                arg.en = 0;
-            }
-            if(arg.jp === undefined){
-                arg.jp = 1;
-            }
-            console.log(arg.en+":"+arg.jp);
-            for(i=0; i<pgr.tofix[0].en;i++){
-                if(i != arg.en && i!= arg.en+1 && !leftList[i].classList.contains('greyedOut')){
-                    leftList[i].classList.add('greyedOut');
-                    leftList[i].classList.remove('alert');
-                    leftList[i].classList.remove('alert-warning');
-                }else if(i == arg.en || i== arg.en+1){
-                    leftList[i].classList.remove('greyedOut');
-                    leftList[i].classList.add('alert');
-                    leftList[i].classList.add('alert-warning');
-                }
-                    
-            }
-            for(i=0; i<pgr.tofix[0].jp;i++){
-                if(i != arg.jp && !rightList[i].classList.contains('greyedOut')){
-                    rightList[i].classList.add('greyedOut');
-                    rightList[i].classList.remove('alert');
-                    rightList[i].classList.remove('alert-error');
-                }else if (i == arg.jp){
-                    rightList[i].classList.remove('greyedOut');
-                    rightList[i].classList.add('alert');
-                    rightList[i].classList.add('alert-error');
-                }
-            }
+            highlightMovers({
+                rflength: pgr.en[ndx].line.length,
+                yflength: pgr.jp[ndx].line.length,
+                r: arg.en,
+                y:arg.jp,
+                rl: leftList,
+                yl:rightList
+            });
             document.onkeydown = function(e){
+                document.onkeydown = null;
                 if(e.keyCode === 38){
-                    pgr.jp[pgr.tofix[0].index][arg.jp-1] += pgr.jp[pgr.tofix[0].index].splice(arg.jp, 1)[0];
-                        
+                    //pgr.jp[ndx].line[arg.jp-1].text += pgr.jp[ndx].line.splice(arg.jp, 1)[0].text;
+                    pgr.jp[ndx].line = shiftUp({
+                        array:pgr.jp[ndx].line, 
+                        index:arg.jp
+                    });
+                    
                     resetLists();
-                    routineFix(arg.en, arg.jp+1);
+                    routineFix({
+                        en:arg.en,
+                        jp:arg.jp
+                    });
                 }
                 if(e.keyCode === 40){
-                        
-                    routineFix(arg.en+1, arg.jp+1);
+                    
+                    routineFix({
+                        en:arg.en+1,
+                        jp:arg.jp+1
+                    });
                 }
             }
         }
     }
     function highlightMovers(args){
-        for(i=0; i<pgr.tofix[0].en;i++){
-            if(i != arg.en && i!= arg.en+1 && !leftList[i].classList.contains('greyedOut')){
-                leftList[i].classList.add('greyedOut');
-                leftList[i].classList.remove('alert');
-                leftList[i].classList.remove('alert-warning');
-            }else if(i == arg.en || i== arg.en+1){
-                leftList[i].classList.remove('greyedOut');
-                leftList[i].classList.add('alert');
-                leftList[i].classList.add('alert-warning');
+        var i;
+        //rflength, yflength, r, y , rcl, ycl;
+        for(i=0; i<args.rflength;i++){
+            if(i != args.r && i!= args.r+1 && !args.rl[i].classList.contains('greyedOut')){
+                args.rl[i].classList.add('greyedOut');
+                args.rl[i].classList.remove('alert');
+                args.rl[i].classList.remove('alert-warning');
+            }else if(i == args.r || i== args.r+1){
+                args.rl[i].classList.remove('greyedOut');
+                args.rl[i].classList.add('alert');
+                args.rl[i].classList.add('alert-warning');
             }
                     
         }
-        for(i=0; i<pgr.tofix[0].jp;i++){
-            if(i != arg.jp && !rightList[i].classList.contains('greyedOut')){
-                rightList[i].classList.add('greyedOut');
-                rightList[i].classList.remove('alert');
-                rightList[i].classList.remove('alert-error');
-            }else if (i == arg.jp){
-                rightList[i].classList.remove('greyedOut');
-                rightList[i].classList.add('alert');
-                rightList[i].classList.add('alert-error');
+        for(i=0; i<args.yflength;i++){
+            if(i != args.y && !args.yl[i].classList.contains('greyedOut')){
+                args.yl[i].classList.add('greyedOut');
+                args.yl[i].classList.remove('alert');
+                args.yl[i].classList.remove('alert-error');
+            }else if (i == args.y){
+                args.yl[i].classList.remove('greyedOut');
+                args.yl[i].classList.add('alert');
+                args.yl[i].classList.add('alert-error');
             }
         }
+    }
+    function shiftUp(args){
+        var splice = args.array.splice(args.index, 1)[0];
+        var text =  splice == null? '': splice.text;
+        args.array[args.index-1].text += text;
+        return args.array;
     }
     function doNextParagraph(){
         document.onkeydown = prevOnkeydown;
@@ -240,9 +243,9 @@ Proto.fixSentences = function(pgr){
         for(i=0;i<rightList.length;i++){
             removeListListeners(rightList[i]);
         }
-        proto.paragraphs.en[pgIndex] = pgr.en[pgr.tofix[0].index];
-        proto.paragraphs.jp[pgIndex] = pgr.jp[pgr.tofix[0].index];
-        pgr.tofix = proto.checkLengths();
+        proto.paragraphs.en[pgr.tofix[0].index] = pgr.en[pgr.tofix[0].index];
+        proto.paragraphs.jp[pgr.tofix[0].index] = pgr.jp[pgr.tofix[0].index];
+        pgr.tofix = proto.checkLengths(pgr);
         if(proto.paragraphs.tofix.length>0){
             proto.fixSentences(pgr);
         }
@@ -252,7 +255,6 @@ Proto.fixSentences = function(pgr){
         rightnav.innerHTML = '';
         leftHeader = leftnav.appendChild(leftHeader);
         rightHeader = rightnav.appendChild(rightHeader);
-        
         for(i=0;i<leftList.length;i++){
             removeListListeners(leftList[i]);
         }
@@ -261,22 +263,21 @@ Proto.fixSentences = function(pgr){
         }
         leftList = [];
         rightList = [];    
-        for(i=0; i<pgr.tofix[0].en;i++){
+        for(i=0; i<pgr.en[pgr.tofix[0].index].line.length;i++){
             leftList[i] = docreate('li', 'enSentence', 'en'+i);
             leftnav.appendChild(docreate('li', 'divider'));
             leftList[i] = leftnav.appendChild(leftList[i]);
             leftList[i].innerHTML = pgr.en[pgr.tofix[0].index].line[i].text;
             setListListeners(leftList[i]);
         }
-        console.log(pgr.tofix);
-        for(i=0; i<pgr.tofix[0].jp;i++){
+        
+        for(i=0; i<pgr.jp[pgr.tofix[0].index].line.length;i++){
             rightList[i] = docreate('li', 'jaSentence', 'ja'+i); 
             rightnav.appendChild(docreate('li', 'divider'));
             rightList[i] = rightnav.appendChild(rightList[i]);
             rightList[i].innerHTML = pgr.jp[pgr.tofix[0].index].line[i].text;
             setListListeners(rightList[i]);
         }
-        console.log(i);    
         popdiv.style.height = fixWrapper.offsetHeight+'px';
 
         $(popdiv).center();
@@ -329,8 +330,9 @@ Proto.fixSentences = function(pgr){
     }
 };
 Proto.fixParagraphs = function(args){
+    console.log('fix paragraphs');
+    console.log(args);
     args.en;
     args.jp;
     args.ex;
-    console.log(args);
 }
