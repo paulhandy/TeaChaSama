@@ -320,15 +320,14 @@ function Line(){
             mediaelement.setCurrentTime(proto.audioClip.start);
         }, 50);
 
-				
-        // add event listener
-        mediaelement.ontimeupdate = function(e) {
+        mediaelement.addEventListener('timeupdate', function(e) {
             var time = mediaelement.currentTime;
             if(time > proto.audioClip.end && keeplistening){
                 mediaelement.pause();
                 keeplistening = false;
             }
-        };
+		      
+        }, false);
 
     });
     this.vocabInline = function(){
