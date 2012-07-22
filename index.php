@@ -1,6 +1,6 @@
 <?php
-include("../../Include/opendb.php");
-
+include("../Include/opendb.php");
+include("include/getindex.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -9,9 +9,23 @@ include("../../Include/opendb.php");
         <script type="text/javascript" src="js/TeaChaSama.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8" />
-        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
         <link href="css/teacha.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
+            var bookshelf;
+            $(function(){
+                var str = document.getElementById('indexJSONDiv').innerHTML;
+                document.getElementById('indexJSONDiv').innerHTML = '';
+                bookshelf = new BookShelf();
+                bookshelf.databaseIndexParser(str);
+                $('#bookNav').append(bookshelf.getIndexHtml());
+                $('#bookNav a').click(function (e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
+            });
+            
+            
             
         </script>
     </head>
@@ -29,6 +43,9 @@ include("../../Include/opendb.php");
             </div>
         </div>
         <div class="container-fluid">
+            <div id="bookNav">
+
+            </div>
             <div class="row-fluid">
                 <div id="indexDiv">
                 </div>
@@ -43,5 +60,6 @@ include("../../Include/opendb.php");
 
             </div>
         </div>
+        <div style="display:none" id="indexJSONDiv"><?php echo $index['index_data']; ?></div>
     </body>
 </html>
