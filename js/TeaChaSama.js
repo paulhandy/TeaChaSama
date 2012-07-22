@@ -249,7 +249,7 @@ function Paragraph(){
     this.getParagraphHtml = function(){
         var section = document.createElement('section'), i;
         for(i=0;i<this.line.length; i++){
-            section.innerHTML += this.line[i].getLineHtml().innerHTML;
+            section.appendChild(this.line[i].getLineHtml());
         }
         return section;
     };
@@ -276,12 +276,13 @@ function Line(){
     soundbtn = document.createElement('button'),
     transbtn = document.createElement('button'),
     vocabbtn = document.createElement('button'),
-    grammarbtn = document.createElement('button');
-    //utterance = document.createElement('span');
+    grammarbtn = document.createElement('button'),
+    utterance = document.createElement('span');
     
     this.getLineHtml = function(){
+        utterance.innerHTML = this.text;
         lineWrapper.appendChild(ddmbgp);
-        lineWrapper.innerHTML += this.text;
+        lineWrapper.appendChild(utterance);
         return lineWrapper;
     };
     this.vocabInline = function(){
@@ -319,6 +320,7 @@ function Line(){
     };
     var initialize = (function(){
         lineWrapper.setAttribute('class', 'line-wrapper');
+        utterance.setAttribute('class', 'utterance-area');
         ddmbgp.setAttribute('class', 'btn-group');
         bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
         b.setAttribute('class', 'caret');
