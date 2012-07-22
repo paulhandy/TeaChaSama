@@ -228,12 +228,13 @@ function Chapter(){
         return li;
     };
     this.getLessonHtml = function(){
-        var i;
+        var i, mediaelement;
         document.getElementById('lesson-title').innerHTML = this.title;
         document.getElementById('lesson-author').innerHTML = this.author;
         document.getElementById('lesson-article').innerHTML = '';
         document.getElementById('bookNav').style.display = 'none';
-        
+        mediaelement = document.getElementById('audioDiv');
+        console.log(this.audio);
         for(i=0; i<this.paragraph.length;i++){
             document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
             document.getElementById('lesson-article').style.display = 'block';

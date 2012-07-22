@@ -51,12 +51,11 @@ include("include/getindex.php");
                 </div>
                 <div id="lessonDiv">
                     <div class="span3">
-                        <!--Sidebar content-->
+                        <div id="audioDiv" style="position:fixed;top:50px;left:20px;"></div>
                     </div>
                     <div class="span9" id="lesson-content-wrapper">
                         <h1 id="lesson-title"></h1>
                         <h5 id="lesson-author"></h5>
-                        <div id="audioDiv"></div>
                         <article id="lesson-article" class="span8 well" style="display:none;"></article>
                     </div>
                     
