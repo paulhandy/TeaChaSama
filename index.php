@@ -45,11 +45,9 @@ include("include/getindex.php");
             </div>
         </div>
         <div class="container-fluid">
-            <div id="bookNav">
 
-            </div>
             <div class="row-fluid">
-                <div id="indexDiv">
+                <div id="bookNav">
                 </div>
                 <div id="lessonDiv">
                     <div class="span9">
