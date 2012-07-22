@@ -8,6 +8,7 @@ include("include/getindex.php");
         <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
         <script src="johndyer-mediaelement-b090320/build/mediaelement-and-player.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="johndyer-mediaelement-b090320/build/mediaelementplayer.css" />
         <script type="text/javascript" src="js/TeaChaSama.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8" />

@@ -238,6 +238,7 @@ function Chapter(){
         this.audio.controls = document.createElement('audio');
         this.audio.controls.setAttribute('src', this.audio.filename);
         this.audio.controls.setAttribute('id', 'lessonAudio');
+        this.audio.controls.setAttribute('controls', 'controls');
         
         mediaelement.appendChild(this.audio.controls);
         this.audio.controls.load();
