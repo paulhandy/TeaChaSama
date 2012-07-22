@@ -313,9 +313,9 @@ function Line(){
     };
     $(soundbtn).click(function(){
         console.log('playing clip');
-        var mediaelement = this.parent.parent.audio.element;
+        var mediaelement = proto.parent.parent.audio.element;
         mediaelement.pause();
-        mediaelement.setCurrentTime(this.audioClip.start);
+        mediaelement.setCurrentTime(proto.audioClip.start);
         mediaelement.setCurrentTime(10);
         setTimeout(function() {
             mediaelement.play();
