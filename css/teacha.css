@@ -123,3 +123,11 @@
 .chapter-list{
     max-width: 400px;
 }
+.utterance-area{
+    float:left;
+}
+.line-wrapper{
+    position:relative;
+    float:left;
+    word-wrap: break;
+}
