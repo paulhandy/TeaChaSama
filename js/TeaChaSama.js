@@ -136,7 +136,9 @@ function Chapter(){
             var audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
             proto.rawData = data;
             
-            proto.audio = data.audio.filename;
+            audio = new AudioTrack();
+            audio.filename = data.audio.filename;
+            proto.audio = audio;
             for(i=0; i < data.paragraph.length ; i++)
             {
                 paragraph = new Paragraph();
@@ -145,13 +147,15 @@ function Chapter(){
                 for(j=0;j<data.paragraph[i].line.length; j++){
                     line = new Line();
                     line.parent = paragraph;
-                    clip = new AudioClip();
-                    clip.start = data.paragraph[i].line[j].clip.start;
-                    clip.end = data.paragraph[i].line[j].clip.end;
-                    clip.end = data.paragraph[i].line[j].clip.end;
+                    
+
+                    line.audioClip = {
+                        start: data.paragraph[i].line[j].clip.start,
+                        end: data.paragraph[i].line[j].clip.end
+                    };
                     line.text = data.paragraph[i].line[j].text;
                     line.translation = data.paragraph[i].line[j].translation;                    
-                    line.audioClip = clip;
+                    
                     paragraph.line.push(line);
                     console.log(line);
                     if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
@@ -231,7 +235,15 @@ function Chapter(){
         document.getElementById('lesson-article').innerHTML = '';
         document.getElementById('bookNav').style.display = 'none';
         mediaelement = document.getElementById('audioDiv');
-        console.log(this.audio);
+        this.audio.dom = document.createElement('audio');
+        this.audio.dom.setAttribute('src', this.audio.filename);
+        mediaelement.appendChild(this.audio.element);
+        this.audio.dom.load();
+        $(this.audio.dom).mediaelementplayer({
+            success: function(mediaElement, domObject){
+                this.audio.element = mediaElement;
+            }
+        });
         for(i=0; i<this.paragraph.length;i++){
             document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
             document.getElementById('lesson-article').style.display = 'block';
@@ -263,7 +275,11 @@ function Line(){
     this.parent = null;
     this.text = null;
     this.translation = null;
-    this.audioClip = null;
+    this.audioClip = {
+        start: 0,
+        end: 0
+    };
+    var proto = this;
     this.vocab = [];
     this.grammar = [];
     var lineWrapper = document.createElement('span'),
@@ -285,6 +301,23 @@ function Line(){
         lineWrapper.appendChild(utterance);
         return lineWrapper;
     };
+    this.playClip = function(){
+        var mediaelement = this.parent.parent.audio.element;
+        mediaelement.pause();
+        mediaelement.setCurrentTime(this.audioClip.start);
+        mediaelement.setCurrentTime(10);
+        setTimeout(function() {
+            mediaelement.play();
+        }, 50);
+				
+        // add event listener
+        mediaelement.addEventListener('timeupdate', function(e) {
+            var time = mediaelement.currentTime;
+            if(time > proto.audioClip.end)
+                mediaelement.pause();
+        }, false);
+
+    };
     this.vocabInline = function(){
     
     };
@@ -298,8 +331,8 @@ function Line(){
         if(this.audioClip === null){
             this.addAudioClip();
         }
-        soundbtn.onclick = this.audioClip.play;
-        soundbtn.onkeydown = this.audioClip.play;
+        soundbtn.onclick = this.playClip;
+        soundbtn.onkeydown = this.playClip;
         transbtn.onclick = this.showTranslation;
         transbtn.onkeydown = this.showTranslation;
         vocabbtn.onkeydown = this.vocabInline;
@@ -379,17 +412,8 @@ function GrammarReference(){
 * ----------------------------------------------------------------------------
 * Audio Track
 */
-
-/*
-* ----------------------------------------------------------------------------
-* Audio Clip
-*/
-function AudioClip(){
-    this.start= 0;
-    this.end= 0;
-    var proto = this;
-    this.play = function(){
-        var audiocontainer = document.getElementById('audioDiv');
-
-    };
+function AudioTrack(){
+    this.filename = null;
+    this.element = null;
+    this.controls = null;
 }
