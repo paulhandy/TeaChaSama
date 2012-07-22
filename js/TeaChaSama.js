@@ -311,7 +311,7 @@ function Line(){
         lineWrapper.appendChild(utterance);
         return lineWrapper;
     };
-    this.playClip = function(){
+    $(soundbtn).click(function(){
         console.log('playing clip');
         var mediaelement = this.parent.parent.audio.element;
         mediaelement.pause();
@@ -328,7 +328,7 @@ function Line(){
                 mediaelement.pause();
         }, false);
 
-    };
+    });
     this.vocabInline = function(){
     
     };
