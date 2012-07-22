@@ -76,7 +76,7 @@ include("include/getindex.php");
                 $('#saveIndex').click(function(e){
                     var string = JSON.stringify(IndexWriter.data);
                     var data = 'course_number='+COURSENUMBER+'&data='+string;
-                    var data = data.split('').reverse().replace(/'(?!\\)/g, "'\\").reverse().join('');
+                    var data = data.split('').reverse().join('').replace(/'(?!\\)/g, "'\\").split('').reverse().join('');
                     console.log(data);
                     IndexWriter.save({
                         url: _url.indexsave,
@@ -91,7 +91,7 @@ include("include/getindex.php");
                     for(i=0;i<LessonWriter.data.chapter.length;i++){
                         var str = JSON.stringify(LessonWriter.data.chapter[i]);
                         var data = 'cnum='+COURSENUMBER+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+string;
-                        data = data.split('').reverse().replace(/'(?!\\)/g, "'\\").reverse().join('');
+                        data = data.split('').reverse().join('').replace(/'(?!\\)/g, "'\\").split('').reverse().join('');
                         console.log(data);
                         LessonWriter.save({
                             url: _url.lessonsave,
