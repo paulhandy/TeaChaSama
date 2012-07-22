@@ -125,6 +125,7 @@
 }
 .utterance-area{
     float:left;
+    margin-left:20px;
 }
 .line-wrapper{
     position:relative;
@@ -132,7 +133,7 @@
     word-break: break-all;
 }
 .btn-absolute{
-    position:relative;
+    position:absolute;
 }
 .hidden-group{
     position:relative;
