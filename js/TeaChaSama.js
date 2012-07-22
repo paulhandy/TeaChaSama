@@ -99,18 +99,19 @@ function Chapter(){
     this.paragraph = [];
     this.vocabulary = [];
     this.grammar = [];
+    var proto=this;
     this.addParagraph = function(){
         var p = new Paragraph();
         this.paragraph.push(p);
         return p;
     };
   
-    this.databaseChapterParser = function(_url, _data){
+    this.databaseChapterParser = function(_data){
         var chapter = this;
         $.ajax({
-            url: _url,
+            url: 'getlesson.php',
             data: _data,
-            type: post,
+            type: 'GET',
             success: setChapter,
             error : function(j,t,e){
                 console.log(j);
@@ -124,16 +125,17 @@ function Chapter(){
                 return false;
             }
             data = JSON.parse(data);
-            var chapter, audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
-            chapter.rawData = data;
+            var audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
+            proto.rawData = data;
+            console.log(data);
             audio = new AudioTrack();
             audio.fileName = data.audio.filename;
             audio.duration = data.audio.duration;
-            chapter.audio = audio;
+            proto.audio = audio;
             for(i=0; i < data.paragraph.length ; i++)
             {
                 paragraph = new Paragraph();
-                paragraph.parent = chapter;
+                paragraph.parent = proto;
                 for(j=0;j<data.paragraph[i].line[j].length; j++){
                     line = new Line();
                     line.parent = paragraph;
@@ -169,13 +171,13 @@ function Chapter(){
                 vocab = new Vocab();
                 vocab.term = data.vocab[i].term;
                 vocab.translation = data.vocab[i].translation;
-                chapter.vocabulary.push(vocab);
+                proto.vocabulary.push(vocab);
             }
             for(i=0;i < data.grammar.length; i++){
                 grammar = new Grammar();
                 grammar.principle = data.grammar[i].principle;
                 grammar.explanation = data.grammar[i].explanation;
-                chapter.grammar.push(grammar);
+                proto.grammar.push(grammar);
             }
             return true;
         }
@@ -195,6 +197,13 @@ function Chapter(){
         a.appendChild(title);
         a.appendChild(auth);
         li.appendChild(a);
+        li.onclick = function(e){
+            var course = 'course='+proto.parent.parent.courseNumber;
+            var book = 'book='+ proto.parent.index;
+            var chap = 'chapter='+proto.index;
+            proto.databaseChapterParser(course+'&'+book+'&'+chap);
+        };
+        
         return li;
     };
     this.getLessonHtml = function(){
