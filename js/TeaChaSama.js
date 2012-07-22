@@ -312,6 +312,7 @@ function Line(){
         return lineWrapper;
     };
     $(soundbtn).click(function(){
+        var keeplistening = true;
         console.log('playing clip');
         var mediaelement = proto.parent.parent.audio.element;
         mediaelement.play();
@@ -323,9 +324,9 @@ function Line(){
         // add event listener
         mediaelement.ontimeupdate = function(e) {
             var time = mediaelement.currentTime;
-            if(time > proto.audioClip.end){
+            if(time > proto.audioClip.end && keeplistening){
                 mediaelement.pause();
-                mediaelement.ontimeupdate = null;
+                keeplistening = false;
             }
         };
 
