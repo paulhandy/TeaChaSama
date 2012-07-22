@@ -153,7 +153,7 @@ function Chapter(){
                     line.text = data.paragraph[i].line[j].text;
                     line.translation = data.paragraph[i].line[j].translation;                    
                     line.audioClip = clip;
-                    if(data.paragraph[i].line[j].vocab !== null){
+                    if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
                         for(k=0; k< data.paragraph[i].line[j].vocab.length; k++){
                             reference = new VocabReference();
                             reference.index = data.paragraph[i].line[j].vocab.index;
@@ -162,7 +162,7 @@ function Chapter(){
                             line.vocab.push(reference);
                         }
                     }
-                    if(data.paragraph[i].line[j].grammar !== null){
+                    if(Object.keys(data.paragraph[i].line[j]).indexOf('grammar')>=0){
                         for(k=0; k< data.paragraph[i].line[j].grammar.length; k++){
                             reference = new GrammarReference();
                             reference.index = data.paragraph[i].line[j].grammar.index;
