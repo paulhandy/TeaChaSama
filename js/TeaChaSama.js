@@ -327,10 +327,10 @@ function Line(){
         b.setAttribute('class', 'caret');
         ul.setAttribute('class', 'dropdown-menu hidden-group');
         btnGroup.setAttribute('class', 'btn-group');
-        soundbtn.setAttribute('class', 'btn btn-large');
-        transbtn.setAttribute('class', 'btn btn-large');
-        vocabbtn.setAttribute('class', 'btn btn-large');
-        grammarbtn.setAttribute('class', 'btn btn-large');
+        soundbtn.setAttribute('class', 'btn btn-large btn-warning');
+        transbtn.setAttribute('class', 'btn btn-large btn-success');
+        vocabbtn.setAttribute('class', 'btn btn-large btn-info');
+        grammarbtn.setAttribute('class', 'btn btn-large btn-danger');
         btnGroup.appendChild(soundbtn);
         btnGroup.appendChild(transbtn);
         btnGroup.appendChild(vocabbtn);
