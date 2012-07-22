@@ -325,7 +325,7 @@ function Line(){
         ddmbgp.setAttribute('class', 'btn-group btn-absolute');
         bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
         b.setAttribute('class', 'caret');
-        ul.setAttribute('class', 'dropdown-menu');
+        ul.setAttribute('class', 'dropdown-menu hidden-group');
         btnGroup.setAttribute('class', 'btn-group');
         soundbtn.setAttribute('class', 'btn btn-large');
         transbtn.setAttribute('class', 'btn btn-large');
