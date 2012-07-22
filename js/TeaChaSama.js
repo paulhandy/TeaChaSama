@@ -183,6 +183,7 @@ function Chapter(){
     this.getIndexCard = function(i){
         var li, a, title, auth;
         li = document.createElement('li');
+        li.setAttribute('class', 'index-list');
         a = document.createElement('a');
         a.setAttribute('href', '#chapter'+i);
         title = document.createElement('div');

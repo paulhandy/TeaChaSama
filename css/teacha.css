@@ -105,9 +105,13 @@
     margin-left:50px;
     font-size: 14px;
     color: slategray;
+    margin-bottom:10px;
 }
 .chapter-index-title{
     font-size: 17px;
     font-weight:bolder;
     margin-bottom: 10px;
+}
+.index-list:hover{
+    background-color: background;
 }
