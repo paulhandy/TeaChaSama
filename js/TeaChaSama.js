@@ -144,11 +144,10 @@ function Chapter(){
             {
                 paragraph = new Paragraph();
                 paragraph.parent = proto;
-                proto.paragraph.push(paragraph);
+                
                 for(j=0;j<data.paragraph[i].line[j].length; j++){
                     line = new Line();
                     line.parent = paragraph;
-                    paragraph.line.append(line);
                     clip = new AudioClip();
                     clip.start = data.paragraph[i].line[j].clip.start;
                     clip.end = data.paragraph[i].line[j].clip.end;
@@ -178,6 +177,7 @@ function Chapter(){
                     }
                     paragraph.line.push(line);
                 }
+                proto.paragraph.push(paragraph);
             }
             if(hasvocab){
                 for(i=0;i < data.vocab.length; i++){
