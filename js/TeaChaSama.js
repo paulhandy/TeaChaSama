@@ -111,13 +111,18 @@ function Chapter(){
         $.ajax({
             url: 'include/getlesson.php',
             data: _data,
-            type: 'GET',
+            type: 'get',
             dataType: 'json',
-            success: setChapter,
-            error : function(j,t,e){
-                console.log(j);
-                console.log(t);
-                console.log(e);
+            success: function(data, msg){
+                args.lesson = data;
+                isNew = false;
+                setChapter(data, msg);
+            },
+            error: function(msg){
+                console.log(msg.error());
+            },
+            complete:function(j, txt){
+                console.log('xhr complete');
             }
         });
         function setChapter(data, status){
