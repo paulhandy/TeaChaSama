@@ -152,8 +152,8 @@ Proto.splitParagraphs = function(args){
     var text, soup;
     text = args.en;
     soup = text.replace("\u201d", '"').replace("\u201c", '"').replace('\u2019', '\'')
-    .replace(andFilter, '').replace(supFilter, '').replace(splitP, '\n')
-    .replace(englishFilterRe, '').replace(newLineSplit, '\n').trim();
+    .replace(andFilter, ' ').replace(supFilter, ' ').replace(splitP, '\n')
+    .replace(englishFilterRe, ' ').replace(newLineSplit, '\n').trim();
     paragraph.en = soup.split(newLineSplit);
     text = args.jp;
     soup = text.replace(andFilter, '').replace(supFilter, '').replace(splitP, '\n').replace(jaFilterRe, '').replace(newLineSplit, '\n').trim();
@@ -184,6 +184,7 @@ Proto.checkLengths = function(args){
     }
     var i, j=[], offSet;
     for(i=0;i<args.en.length;i++){
+        
         if(args.en[i].line.length != args.jp[i].line.length){
             if(args.en[i].line.length==1){
                 while(args.jp[i].line.length>1){
