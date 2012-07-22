@@ -136,10 +136,7 @@ function Chapter(){
             var audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
             proto.rawData = data;
             
-            audio = new AudioTrack();
-            audio.fileName = data.audio.filename;
-            audio.duration = data.audio.duration;
-            proto.audio = audio;
+            proto.audio = data.audio.filename;
             for(i=0; i < data.paragraph.length ; i++)
             {
                 paragraph = new Paragraph();
@@ -382,10 +379,6 @@ function GrammarReference(){
 * ----------------------------------------------------------------------------
 * Audio Track
 */
-function AudioTrack(){
-    this.fileName = null;
-    this.duration = 0;
-}
 
 /*
 * ----------------------------------------------------------------------------
