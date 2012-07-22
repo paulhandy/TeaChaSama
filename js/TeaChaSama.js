@@ -37,7 +37,7 @@ function BookShelf(){
     this.getIndexHtml = function(){
         var tabarea, nav, li, a, tabcont, tabpane;
         tabarea = document.createElement('div');
-        tabarea.setAttribute('class', 'tabbable tabs-right');
+        tabarea.setAttribute('class', 'tabbable tabs-left');
         nav = document.createElement('ul');
         nav.setAttribute('class', 'nav nav-tabs');
         tabcont = document.createElement('div');
