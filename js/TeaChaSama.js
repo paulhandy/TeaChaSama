@@ -324,8 +324,8 @@ function Line(){
         mediaelement.ontimeupdate = function(e) {
             var time = mediaelement.currentTime;
             if(time > proto.audioClip.end){
-                mediaelement.ontimeupdate = null;
                 mediaelement.pause();
+                mediaelement.ontimeupdate = null;
             }
         };
 
