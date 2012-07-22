@@ -126,6 +126,7 @@ function Chapter(){
             }
         });
         function setChapter(data, status){
+            var hasvocab=false, hasgrammar=false;
             if(data === null){
                 console.log(status);
                 return false;
@@ -161,6 +162,7 @@ function Chapter(){
                             reference.length = data.paragraph[i].line[j].vocab.length;
                             line.vocab.push(reference);
                         }
+                        hasvocab = true;
                     }
                     if(Object.keys(data.paragraph[i].line[j]).indexOf('grammar')>=0){
                         for(k=0; k< data.paragraph[i].line[j].grammar.length; k++){
@@ -170,21 +172,26 @@ function Chapter(){
                             reference.length = data.paragraph[i].line[j].grammar.length;
                             line.grammar.push(reference);
                         }   
+                        hasgrammar=true;
                     }
                     paragraph.line.push(line);
                 }
             }
-            for(i=0;i < data.vocab.length; i++){
-                vocab = new Vocab();
-                vocab.term = data.vocab[i].term;
-                vocab.translation = data.vocab[i].translation;
-                proto.vocabulary.push(vocab);
+            if(hasvocab){
+                for(i=0;i < data.vocab.length; i++){
+                    vocab = new Vocab();
+                    vocab.term = data.vocab[i].term;
+                    vocab.translation = data.vocab[i].translation;
+                    proto.vocabulary.push(vocab);
+                }
             }
-            for(i=0;i < data.grammar.length; i++){
-                grammar = new Grammar();
-                grammar.principle = data.grammar[i].principle;
-                grammar.explanation = data.grammar[i].explanation;
-                proto.grammar.push(grammar);
+            if(hasgrammar){
+                for(i=0;i < data.grammar.length; i++){
+                    grammar = new Grammar();
+                    grammar.principle = data.grammar[i].principle;
+                    grammar.explanation = data.grammar[i].explanation;
+                    proto.grammar.push(grammar);
+                }
             }
             return true;
         }
