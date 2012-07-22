@@ -1,6 +1,8 @@
 <?php
 include("../Include/opendb.php");
 include("include/getindex.php");
+mb_internal_encoding( 'UTF-8' );
+ header( 'Content-Type: text/html; charset=UTF-8' );
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +15,6 @@ include("include/getindex.php");
         <script src="johndyer-mediaelement-b090320/build/mediaelement-and-player.js" type="text/javascript"></script>
         <script type="text/javascript" src="js/TeaChaSama.js"></script>
         <script type="text/javascript" src="js/ChapterDecoder.js"></script>
-        <script type="text/javascript" src="js/FixSentences.js"></script>
         <script type="text/javascript" src="js/FixSentences.js"></script>
         <script type="text/javascript" src="js/AuthoringTools.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>

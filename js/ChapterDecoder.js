@@ -17,7 +17,7 @@ function ChapterDecoder(data){
         $(background).center();
     });
     this.editPreloadedParagraphs = function(args){
-        this.checkLengths(args.raw);
+        args.raw.tofix = this.checkLengths(args.raw);
         this.fixSentences(args.raw);
     };
     this.getParagraphs = function(args){
@@ -170,7 +170,6 @@ Proto.checkLengths = function(args){
             
         }
     }
-    console.log(j[0].en);
     return j;
 };
 function splitJapaneseSentences(myString){

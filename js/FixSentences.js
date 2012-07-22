@@ -27,6 +27,11 @@ Proto.fixSentences = function(pgr){
     this.wrapper.style.display = 'block';
     popdiv.style.display = 'block';
     background.style.display = 'block';
+    background.style.top = '0px';
+    background.style.bottom = '0px';
+    background.style.left = '0px';
+    background.style.right = '0px';
+    background.style.position = 'fixed';
     console.log(pgr);
     if(pgr.tofix.length === 0){
         fixWrapper.style.display = 'none';
@@ -64,16 +69,11 @@ Proto.fixSentences = function(pgr){
         
     resetLists();
     var i;
-    instructions.firstElementChild.innerHTML = pgr.tofix.length+'Do any English sentences need to be Recombined (bad sentence split)? Y/N';
-    for(i=0; i<pgr.tofix[0].jp;i++){
-        rightList[i].classList.add('greyedOut');
-    }
+    instructions.firstElementChild.innerHTML = pgr.tofix.length+'Do any sentences need to be Recombined or split? type N to continue.';
     document.onkeypress = function(e){
         if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
-            for(i=0; i<pgr.tofix[0].jp;i++){
-                rightList[i].classList.remove('greyedOut');
-            }
-            checkSplit();
+            instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
+            routineFix();
             document.onkeypress = null;
         }
         
@@ -81,37 +81,8 @@ Proto.fixSentences = function(pgr){
     document.onkeydown = function(e){
             
     };
-    function checkSplit(){
-        tmp += '<span class="badge badge-info">Type<i class="icon-arrow-up"></i>to select first sentence</span>\n\
-        <span class="badge badge-info">Type<i class="icon-arrow-down"></i>to select second sentence</span>';
-        message.innerHTML = tmp;
-        if(pgr.tofix[0].en > pgr.tofix[0].jp){
-                
-            for(i=0; i<pgr.tofix[0].en;i++){
-                leftList[i].classList.remove('greyedOut');
-            }
-            for(i=0; i<pgr.tofix[0].jp;i++){
-                rightList[i].classList.remove('greyedOut');
-            }
-            instructions.firstElementChild.innerHTML = 'Do any sentences need to be split? [type N to move on]';
-        }
-        if(pgr.tofix[0].en < pgr.tofix[0].jp){
-            for(i=0; i<pgr.tofix[0].en;i++){
-                leftList[i].classList.remove('greyedOut');
-            }
-            for(i=0; i<pgr.tofix[0].jp;i++){
-                rightList[i].classList.remove('greyedOut');
-            }
-            instructions.firstElementChild.innerHTML = 'Do any sentences need to be split? Y/N';
-        }
-        document.onkeypress = function(e){
-            if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
-                instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
-                routineFix();
-            }
-        }
-    }
     function routineFix(arg){
+        console.log('beginnign routine');
         var ndx = pgr.tofix[0].index;
         if(arg == undefined){
             arg = {
@@ -122,7 +93,16 @@ Proto.fixSentences = function(pgr){
         if(pgr.en[ndx].line.length == pgr.jp[ndx].line.length){
             doNextParagraph();
         }
-        if(pgr.tofix[0].en > pgr.tofix[0].jp){
+        var enRed = pgr.tofix[0].en > pgr.tofix[0].jp;
+        highlightMovers({
+            rflength: enRed? pgr.jp[ndx].line.length:pgr.en[ndx].line.length,
+            yflength: enRed? pgr.en[ndx].line.length:pgr.jp[ndx].line.length,
+            r: enRed? arg.jp:arg.en,
+            y: enRed? arg.en:arg.jp,
+            rl: enRed? rightList:leftList,
+            yl: enRed? leftList:rightList
+        });
+        if(enRed){
             if(pgr.jp[ndx].line.length-1 == arg.jp){
                 while(pgr.en[ndx].line.length > pgr.jp[ndx].line.length){
                     //pgr.en[ndx].line[arg.jp].text += pgr.en[ndx].line.pop().text;
@@ -133,14 +113,7 @@ Proto.fixSentences = function(pgr){
                 }
                 routineFix(arg.en, arg.jp);
             }
-            highlightMovers({
-                rflength: pgr.jp[ndx].line.length,
-                yflength: pgr.en[ndx].line.length,
-                r: arg.jp,
-                y:arg.en,
-                rl: rightList,
-                yl:leftList
-            });
+            
             document.onkeydown = function(e){
                 document.onkeydown = null;
                 if(e.keyCode === 38){
@@ -163,8 +136,7 @@ Proto.fixSentences = function(pgr){
                     });
                 }
             }
-        }
-        if(pgr.tofix[0].en < pgr.tofix[0].jp){
+        }else{
             if(pgr.en[ndx].line.length -1== arg.en){
                 while(pgr.jp[ndx].line.length > pgr.en[ndx].line.length){
                     //pgr.jp[ndx].line[pgr.tofix[0].jp-2].text +=pgr.jp[ndx].line.pop().text;
@@ -175,14 +147,6 @@ Proto.fixSentences = function(pgr){
                 }
                 routineFix(arg.en, arg.jp);
             }
-            highlightMovers({
-                rflength: pgr.en[ndx].line.length,
-                yflength: pgr.jp[ndx].line.length,
-                r: arg.en,
-                y:arg.jp,
-                rl: leftList,
-                yl:rightList
-            });
             document.onkeydown = function(e){
                 document.onkeydown = null;
                 if(e.keyCode === 38){
@@ -210,6 +174,7 @@ Proto.fixSentences = function(pgr){
     }
     function highlightMovers(args){
         var i;
+        console.log(args);
         //rflength, yflength, r, y , rcl, ycl;
         for(i=0; i<args.rflength;i++){
             if(i != args.r && i!= args.r+1 && !args.rl[i].classList.contains('greyedOut')){
@@ -275,7 +240,11 @@ Proto.fixSentences = function(pgr){
             leftnav.appendChild(docreate('li', 'divider'));
             leftList[i] = leftnav.appendChild(leftList[i]);
             leftList[i].innerHTML = pgr.en[pgr.tofix[0].index].line[i].text;
-            setListListeners(leftList[i]);
+            setLineListeners({
+                li: leftList[i],
+                index: i,
+                line: pgr.en[pgr.tofix[0].index].line
+            });
         }
         
         for(i=0; i<pgr.jp[pgr.tofix[0].index].line.length;i++){
@@ -283,13 +252,17 @@ Proto.fixSentences = function(pgr){
             rightnav.appendChild(docreate('li', 'divider'));
             rightList[i] = rightnav.appendChild(rightList[i]);
             rightList[i].innerHTML = pgr.jp[pgr.tofix[0].index].line[i].text;
-            setListListeners(rightList[i]);
+            setLineListeners({
+                li:rightList[i],
+                index: i,
+                line: pgr.en[pgr.tofix[0].index].line
+            });
         }
         popdiv.style.height = fixWrapper.offsetHeight+'px';
 
         $(popdiv).center();
     }
-    function setListListeners(li, index){
+    function setLineListeners(args){
         var action;
         li.onclick = OnClick;
         li.onkeydown = OnClick;
@@ -317,6 +290,7 @@ Proto.fixSentences = function(pgr){
             console.log(action);
             switch(action){
                 case 1:
+                    
                     console.log('join up!');
                     break;
                 case 2:
@@ -325,10 +299,14 @@ Proto.fixSentences = function(pgr){
                 case 3:
                     console.log('pick this one!');
                     break;
+                    
             }
         }
     }
+    function joinUp(args){
         
+        resetLists();
+    }
     function removeListListeners(li){
         li.onmouseout = null;
         li.onmouseover = null;
@@ -356,6 +334,6 @@ Proto.sortChapter = function(args){
         args.chapter.paragraph = args.rawpgs.en;
     }else{
         args.chapter.organized = args.rawpgs.en;
-        //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
+    //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
     }
 }
