@@ -112,6 +112,7 @@ function Chapter(){
             url: 'include/getlesson.php',
             data: _data,
             type: 'GET',
+            dataType: 'json',
             success: setChapter,
             error : function(j,t,e){
                 console.log(j);
@@ -124,10 +125,11 @@ function Chapter(){
                 console.log(status);
                 return false;
             }
-            data = JSON.parse(data);
+            console.log(data);
+            //data = JSON.parse(data);
             var audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
             proto.rawData = data;
-            console.log(data);
+            
             audio = new AudioTrack();
             audio.fileName = data.audio.filename;
             audio.duration = data.audio.duration;
