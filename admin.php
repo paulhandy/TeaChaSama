@@ -74,7 +74,7 @@ include("include/getindex.php");
                 courseEditor = new CourseEditor(_url);
                 $('#saveIndex').click(function(e){
                     
-                    var data = 'course_number='+IndexWriter.coursenum+'&data='+JSON.stringify(IndexWriter.data);
+                    var data = 'course_number='+IndexWriter.coursenum+'&data='+JSON.stringify(IndexWriter.data).reverse().replace(/'(?!\\)/g, "'\\").reverse();
                     console.log(data);
                     IndexWriter.save({
                         url: _url.indexsave,
@@ -86,7 +86,7 @@ include("include/getindex.php");
                     $('#saveIndex').trigger('click');
                     console.log('saving lessons');
                     for(i=0;i<LessonWriter.data.chapter.length;i++){
-                        var data = 'cnum='+IndexWriter.coursenum+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+JSON.stringify(LessonWriter.data.chapter[i]);
+                        var data = 'cnum='+IndexWriter.coursenum+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+JSON.stringify(LessonWriter.data.chapter[i]).reverse().replace(/'(?!\\)/g, "'\\").reverse();
                         console.log(data);
                         LessonWriter.save({
                             url: _url.lessonsave,
