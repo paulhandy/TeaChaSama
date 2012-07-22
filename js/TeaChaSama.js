@@ -114,7 +114,7 @@ function Chapter(){
             type: 'get',
             dataType: 'json',
             success: function(data, msg){
-                args.lesson = data;
+                
                 isNew = false;
                 setChapter(data, msg);
             },
@@ -205,7 +205,7 @@ function Chapter(){
         a.appendChild(auth);
         li.appendChild(a);
         li.onclick = function(e){
-            var course = 'course=1';//+proto.parent.parent.courseNumber;
+            var course = 'course=1';
             var book = 'book='+ proto.parent.index;
             var chap = 'chapter='+proto.index;
             proto.databaseChapterParser(course+'&'+book+'&'+chap);
