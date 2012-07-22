@@ -89,7 +89,7 @@ include("include/getindex.php");
                     console.log('saving lessons');
                     
                     for(i=0;i<LessonWriter.data.chapter.length;i++){
-                        var str = JSON.stringify(LessonWriter.data.chapter[i]);
+                        var string = JSON.stringify(LessonWriter.data.chapter[i]);
                         var data = 'cnum='+COURSENUMBER+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+string;
                         data = data.split('').reverse().join('').replace(/'(?!\\)/g, "'\\").split('').reverse().join('');
                         console.log(data);
