@@ -155,6 +155,7 @@ function Chapter(){
                     line.text = data.paragraph[i].line[j].text;
                     line.translation = data.paragraph[i].line[j].translation;                    
                     line.audioClip = clip;
+                    paragraph.line.push(line);
                     if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
                         for(k=0; k< data.paragraph[i].line[j].vocab.length; k++){
                             reference = new VocabReference();
@@ -175,7 +176,7 @@ function Chapter(){
                         }   
                         hasgrammar=true;
                     }
-                    paragraph.line.push(line);
+                    
                 }
                 proto.paragraph.push(paragraph);
             }
