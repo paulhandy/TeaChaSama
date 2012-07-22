@@ -216,7 +216,7 @@ function Chapter(){
             var book = 'book='+ proto.parent.index;
             var chap = 'chapter='+proto.index;
             proto.databaseChapterParser(course+'&'+book+'&'+chap);
-            proto.getLessonHTML();
+            proto.getLessonHtml();
         };
         
         return li;
