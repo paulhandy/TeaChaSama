@@ -7,7 +7,7 @@ function ChapterDecoder(data){
     };
     this.wrapper = document.getElementById('chapterdecoder');
     this.exceptions = ["Mrs.","Mr.","Ms.","Prof.","Dr.","Gen.","Rep.","Sen.","St.","Sr.","Jr.","Ph.D.","M.D.","B.A.","M.A.","D.D.S.","a.m.","p.m.","i.e.","etc."];
-    var proto=this, totalMisaligned=0;
+    var proto=this;
     this.audioclipper = data.audioclipper;
     background = document.getElementById('popbackground');
     popdiv =document.getElementById('popover');
@@ -16,6 +16,41 @@ function ChapterDecoder(data){
         $(popdiv).center();
         $(background).center();
     });
+    this.editPreloadedParagraphs = function(args){
+        var argkeys = Object.keys(args), pgkeys=[], lnkeys=[], translated=false,
+        clipped=false;
+        if(argkeys.indexOf('paragraph')>=0){
+            //stuff for paragraphs
+            if(args.paragraph.length>0){
+                pgkeys=Object.keys(args.paragraph[0]);
+                if(pgkeys.indexOf('line')>=0){
+                    lnkeys = Object.keys(args.paragraph[0].line[0]);
+                    if(lnkeys.indexOf('translation')>=0){
+                        translated = true;
+                    }
+                    if(lnkeys.indexOf('audio')>=0){
+                        clipped = true;
+                    }
+                }
+            }
+        }
+        if(argkeys.indexOf('raw')>=0){
+            if(!translated){
+                
+                this.paragraphs.tofix = this.checkLengths({
+                    en:args.raw.en,
+                    jp:args.raw.jp
+                });
+                this.fixSentences({
+                    tofix: this.paragraphs.tofix,
+                    en: args.raw.en,
+                    jp:args.raw.jp
+                });
+                
+            }
+        }
+        
+    };
     this.getParagraphs = function(args){
         var proto = this;
         var prevonkeydown;
@@ -54,7 +89,7 @@ function ChapterDecoder(data){
         submit.onclick = getTextAndMoveOn;
         prevonkeydown = document.onkeydown;
         
-        function getTextAndMoveOn(e){
+        function getTextAndMoveOn(){
             _gpWrapper.style.display='none';
             proto.text.en = CKEDITOR.instances.entext.getData();
             proto.text.jp = CKEDITOR.instances.jatext.getData();
@@ -67,14 +102,12 @@ function ChapterDecoder(data){
                 jp: proto.paragraphs.jp,
                 ex: proto.exceptions
             });
-            proto.paragraphs.tofix = proto.checkLengths({
-                en: proto.paragraphs.en,
-                jp: proto.paragraphs.jp
-            });
+            
             data.chapter.paragraph = proto.paragraphs.en;
             data.chapter.raw = proto.paragraphs;
+            data.chapter.raw.entext = proto.text.en;
+            data.chapter.raw.jptext = proto.text.jp;
             
-            totalMisaligned = proto.paragraphs.tofix.length;
             if(args.skip){
                 console.log('skipping sentence translation arrangement');
                 if(args.toClipper){
@@ -90,11 +123,18 @@ function ChapterDecoder(data){
                     proto.audioclipper.displayNextTwoLines();
                 }
             }else{
-                if(proto.paragraphs.tofix == false){
+                proto.paragraphs.tofix = proto.checkLengths({
+                    en: proto.paragraphs.en,
+                    jp: proto.paragraphs.jp
+                });
+                if(proto.paragraphs.tofix === false){
                     proto.fixParagraphs(proto.paragraphs);
-                }else{
-                    proto.fixSentences(proto.paragraphs);
                 }
+                proto.fixSentences(proto.paragraphs);
+                proto.sortChapter({
+                    rawpgr: proto.paragraphs,
+                    chapter: data.chapter
+                });
             }
             
         }
@@ -191,7 +231,7 @@ function splitJapaneseSentences(myString){
 function splitIntoSentences(args){
     var abbreviation = false;
     var index = 0;
-    var re = /[^\.\?!]+[\.\?!]*"?[$]*?/g
+    var re = /[^\.\?!]+[a-zA-Z]+?[\.\?!]*"?[$]*?/g;
     //var re = /[^\.\?!]+[\.\?!]+"?/g;
     var mySentences = [];
     var line = {};
@@ -211,8 +251,8 @@ function splitIntoSentences(args){
         var splitSentence = match[0].split(/\s/g);
         var lastWord = splitSentence[splitSentence.length-1].trim();
         var abbreviation = args.ex.indexOf(lastWord.replace(/[^a-zA-Z.]/g, '')) >= 0 
-        || (lastWord.length == 2 && (lastWord.toLocaleUpperCase()).charCodeAt(0) <=90);
-            
+        || (lastWord.replace(/[^a-zA-Z.]/g, '').length == 2 && (lastWord.replace(/[^a-zA-Z.]/g, '').toLocaleUpperCase()).charCodeAt(0) <=90 
+            && lastWord.replace(/[^a-zA-Z.]/g, '').charAt(0) != 'I');
         if (abbreviation)
         {
             abbreviation = true;
