@@ -50,12 +50,15 @@ include("include/getindex.php");
                 <div id="bookNav">
                 </div>
                 <div id="lessonDiv">
-                    <div class="span9">
-                        <!--Body content-->
-                    </div>
                     <div class="span3">
                         <!--Sidebar content-->
                     </div>
+                    <div class="span9" id="lesson-content-wrapper">
+                        <h1 id="lesson-title"></h1>
+                        <h5 id="lesson-author"></h5>
+                        <article id="lesson-article"></article>
+                    </div>
+                    
                 </div>
 
             </div>

@@ -216,15 +216,18 @@ function Chapter(){
             var book = 'book='+ proto.parent.index;
             var chap = 'chapter='+proto.index;
             proto.databaseChapterParser(course+'&'+book+'&'+chap);
+            proto.getLessonHTML();
         };
         
         return li;
     };
     this.getLessonHtml = function(){
         var title, author, article, i;
-        title = document.createElement('h1');
-        author = document.createElement('h6');
-        article = document.createElement('article');
+        title = document.getElementById('lesson-title');
+        title.innerHTML = this.title;
+        author = document.getElementById('lesson-author');
+        author.innerHTML = this.author;
+        article = document.getElementById('lesson-article');
         for(i=0; i<this.paragraph.length;i++){
             article.appendChild(this.paragraph[i].getParagraphHtml());
         }
