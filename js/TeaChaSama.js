@@ -239,7 +239,7 @@ function Chapter(){
         this.audio.controls.setAttribute('src', this.audio.filename);
         mediaelement.appendChild(this.audio.controls);
         this.audio.controls.load();
-        $(this.audio.controls).mediaelementplayer({
+        $('audio').mediaelementplayer({
             success: function(mediaElement, domObject){
                 this.audio.element = mediaElement;
             }
