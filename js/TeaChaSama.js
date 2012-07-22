@@ -235,11 +235,11 @@ function Chapter(){
         document.getElementById('lesson-article').innerHTML = '';
         document.getElementById('bookNav').style.display = 'none';
         mediaelement = document.getElementById('audioDiv');
-        this.audio.dom = document.createElement('audio');
-        this.audio.dom.setAttribute('src', this.audio.filename);
-        mediaelement.appendChild(this.audio.element);
-        this.audio.dom.load();
-        $(this.audio.dom).mediaelementplayer({
+        this.audio.controls = document.createElement('audio');
+        this.audio.controls.setAttribute('src', this.audio.filename);
+        mediaelement.appendChild(this.audio.controls);
+        this.audio.controls.load();
+        $(this.audio.controls).mediaelementplayer({
             success: function(mediaElement, domObject){
                 this.audio.element = mediaElement;
             }
