@@ -196,6 +196,7 @@ function Chapter(){
                     proto.grammar.push(grammar);
                 }
             }
+            proto.getLessonHtml();
             return true;
         }
     };
@@ -219,7 +220,7 @@ function Chapter(){
             var book = 'book='+ proto.parent.index;
             var chap = 'chapter='+proto.index;
             proto.databaseChapterParser(course+'&'+book+'&'+chap);
-            proto.getLessonHtml();
+            
         };
         
         return li;
