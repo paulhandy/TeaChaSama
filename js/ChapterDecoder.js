@@ -232,7 +232,7 @@ function splitJapaneseSentences(myString){
 function splitIntoSentences(args){
     var abbreviation = false;
     var index = 0;
-    var re = /[^\.\?!]+[a-zA-Z]+?[\.\?!]*"?[$]*?/g;
+    var re = /[^\.\?!]+[a-zA-Z]+?[\.\?!]*"*?[$]*?/g;
     //var re = /[^\.\?!]+[\.\?!]+"?/g;
     var mySentences = [];
     var line = {};
