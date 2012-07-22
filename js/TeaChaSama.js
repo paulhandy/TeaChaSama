@@ -198,6 +198,7 @@ function Chapter(){
                 }
             }
             proto.getLessonHtml();
+            $('.dropdown-toggle').dropdown();
             return true;
         }
     };
