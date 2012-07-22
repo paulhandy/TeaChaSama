@@ -323,8 +323,10 @@ function Line(){
         // add event listener
         mediaelement.addEventListener('timeupdate', function(e) {
             var time = mediaelement.currentTime;
-            if(time > proto.audioClip.end)
+            if(time > proto.audioClip.end){
                 mediaelement.pause();
+                mediaelement.removeEventListener('timeupdate');
+            }
         }, false);
 
     });
