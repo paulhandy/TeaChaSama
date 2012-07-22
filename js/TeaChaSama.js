@@ -276,7 +276,7 @@ function Line(){
     soundbtn = document.createElement('button'),
     transbtn = document.createElement('button'),
     vocabbtn = document.createElement('button'),
-    grammarbtn = document.createElement('button'),
+    grammarbtn = document.createElement('button');
     //utterance = document.createElement('span');
     
     this.getLineHtml = function(){
