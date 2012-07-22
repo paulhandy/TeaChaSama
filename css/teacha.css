@@ -129,7 +129,7 @@
 .line-wrapper{
     position:relative;
     float:left;
-    word-wrap: break;
+    word-break: break-all;
 }
 .btn-absolute{
     position:relative;
