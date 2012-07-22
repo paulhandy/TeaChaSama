@@ -44,6 +44,7 @@ include("include/getindex.php");
         <link href="css/teacha.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript">
             var courseEditor;
+            var COURSENUMBER = <?php echo $index['course_number']; ?>;
             var _url = {
                 indexsave:'include/saveindex.php',
                 lessonsave:'include/savelesson.php',
@@ -64,17 +65,18 @@ include("include/getindex.php");
                     e.preventDefault();
                     $(this).tab('show');
                 });
-                var str = '<?php echo $index['index_data']; ?>';
-                var num = '<?php echo $index['course_number']; ?>';
+                var str = document.getElementById('index_json_data').innerHTML;
+                document.getElementById('index_json_data').innerHTML = '';
                 if(str.length > 0){
                     IndexWriter.data = JSON.parse(str);
                     console.log(IndexWriter.data);
                 }
-                IndexWriter.coursenum = num;
+                IndexWriter.coursenum = COURSENUMBER;
                 courseEditor = new CourseEditor(_url);
                 $('#saveIndex').click(function(e){
-                    
-                    var data = 'course_number='+IndexWriter.coursenum+'&data='+JSON.stringify(IndexWriter.data).reverse().replace(/'(?!\\)/g, "'\\").reverse();
+                    var string = JSON.stringify(IndexWriter.data);
+                    var data = 'course_number='+COURSENUMBER+'&data='+string;
+                    var data = data.split('').reverse().replace(/'(?!\\)/g, "'\\").reverse();
                     console.log(data);
                     IndexWriter.save({
                         url: _url.indexsave,
@@ -85,8 +87,11 @@ include("include/getindex.php");
                 $('#saveLessons').click(function(e){
                     $('#saveIndex').trigger('click');
                     console.log('saving lessons');
+                    
                     for(i=0;i<LessonWriter.data.chapter.length;i++){
-                        var data = 'cnum='+IndexWriter.coursenum+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+JSON.stringify(LessonWriter.data.chapter[i]).reverse().replace(/'(?!\\)/g, "'\\").reverse();
+                        var str = JSON.stringify(LessonWriter.data.chapter[i]);
+                        var data = 'cnum='+COURSENUMBER+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+string;
+                        data = data.split('').reverse().replace(/'(?!\\)/g, "'\\").reverse();
                         console.log(data);
                         LessonWriter.save({
                             url: _url.lessonsave,
@@ -202,5 +207,6 @@ include("include/getindex.php");
             </div>
         </div>
         <div class="row rounded-white span12" id="minipop"></div>
+        <div id="index_json_data" style="display:none"><?php echo $index['index_data']; ?></div>
     </body>
 </html>
