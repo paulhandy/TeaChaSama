@@ -268,7 +268,7 @@ function Line(){
     this.vocab = [];
     this.grammar = [];
     var lineWrapper = document.createElement('span'),
-    ddmbgp = document.createElement('sup'),
+    ddmbgp = document.createElement('span'),
     bcontainer = document.createElement('a'),
     b = document.createElement('span'),
     ul = document.createElement('ul'),
@@ -322,8 +322,8 @@ function Line(){
     var initialize = (function(){
         lineWrapper.setAttribute('class', 'line-wrapper');
         utterance.setAttribute('class', 'utterance-area');
-        ddmbgp.setAttribute('class', 'btn-group');
-        bcontainer.setAttribute('class', 'icon-gift dropdown-toggle');
+        ddmbgp.setAttribute('class', 'btn-group btn-absolute');
+        bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
         b.setAttribute('class', 'caret');
         ul.setAttribute('class', 'dropdown-menu');
         btnGroup.setAttribute('class', 'btn-group');
