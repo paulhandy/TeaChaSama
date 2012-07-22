@@ -249,7 +249,7 @@ function Paragraph(){
     this.getParagraphHtml = function(){
         var section = document.createElement('section'), i;
         for(i=0;i<this.line.length; i++){
-            section.innerHTML += this.line[i].getLineHtml().innerHTML;
+            section.appendChild(this.line[i].getLineHtml());
         }
         return section;
     };
