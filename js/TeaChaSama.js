@@ -188,7 +188,9 @@ function Chapter(){
         title = document.createElement('div');
         auth = document.createElement('div');
         title.setAttribute('class', 'chapter-index-title');
+        title.innerHTML = this.title;
         auth.setAttribute('class', 'chapter-index-author');
+        auth.innerHTML = this.author;
         a.appendChild(title);
         a.appendChild(auth);
         li.appendChild(a);
