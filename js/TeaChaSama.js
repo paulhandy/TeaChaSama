@@ -232,6 +232,7 @@ function Chapter(){
         author.innerHTML = this.author;
         article = document.getElementById('lesson-article');
         for(i=0; i<this.paragraph.length;i++){
+            console.log(i);
             article.appendChild(this.paragraph[i].getParagraphHtml());
         }
     };
