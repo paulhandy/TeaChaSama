@@ -230,6 +230,9 @@ function Chapter(){
         var i;
         document.getElementById('lesson-title').innerHTML = this.title;
         document.getElementById('lesson-author').innerHTML = this.author;
+        document.getElementById('lesson-article').innerHTML = '';
+        document.getElementById('bookNav').style.display = 'none';
+        
         for(i=0; i<this.paragraph.length;i++){
             document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
         }
