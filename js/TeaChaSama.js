@@ -267,7 +267,7 @@ function Line(){
     this.vocab = [];
     this.grammar = [];
     var lineWrapper = document.createElement('span'),
-    ddmbgp = document.createElement('div'),
+    ddmbgp = document.createElement('span'),
     bcontainer = document.createElement('a'),
     b = document.createElement('span'),
     ul = document.createElement('ul'),
