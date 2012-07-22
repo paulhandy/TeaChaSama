@@ -79,7 +79,7 @@ function Book(){
         ul = document.createElement('ul');
         ul.setAttribute('class', 'chapter-list');
         for(i=0;i<this.chapter.length;i++){
-            ul.appendChild(this.chapter[i].getIndexCard());
+            ul.appendChild(this.chapter[i].getIndexCard(i));
         }
         pane.appendChild(ul);
         return pane;
