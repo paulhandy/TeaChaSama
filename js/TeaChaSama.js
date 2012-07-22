@@ -237,9 +237,11 @@ function Chapter(){
         mediaelement = document.getElementById('audioDiv');
         this.audio.controls = document.createElement('audio');
         this.audio.controls.setAttribute('src', this.audio.filename);
+        this.audio.controls.setAttribute('id', 'lessonAudio');
+        
         mediaelement.appendChild(this.audio.controls);
         this.audio.controls.load();
-        $('audio').mediaelementplayer({
+        $('#lessonAudio').mediaelementplayer({
             success: function(mediaElement, domObject){
                 this.audio.element = mediaElement;
             }
