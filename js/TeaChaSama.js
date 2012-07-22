@@ -321,7 +321,7 @@ function Line(){
     var initialize = (function(){
         lineWrapper.setAttribute('class', 'line-wrapper');
         utterance.setAttribute('class', 'utterance-area');
-        ddmbgp.setAttribute('class', 'btn-group');
+        ddmbgp.setAttribute('class', 'btn-group btn-absolute');
         bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
         b.setAttribute('class', 'caret');
         ul.setAttribute('class', 'dropdown-menu');

@@ -131,3 +131,6 @@
     float:left;
     word-wrap: break;
 }
+.btn-absolute{
+    position:absolute;
+}
