@@ -57,7 +57,7 @@ include("include/getindex.php");
                         <h1 id="lesson-title"></h1>
                         <h5 id="lesson-author"></h5>
                         <div id="audioDiv"></div>
-                        <article id="lesson-article" class="span6 well"></article>
+                        <article id="lesson-article" class="span8 well" style="display:none;"></article>
                     </div>
                     
                 </div>

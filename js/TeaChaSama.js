@@ -236,6 +236,7 @@ function Chapter(){
         
         for(i=0; i<this.paragraph.length;i++){
             document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
+            document.getElementById('lesson-article').style.display = 'block';
         }
     };
 }

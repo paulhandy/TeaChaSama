@@ -132,7 +132,7 @@
     word-wrap: break;
 }
 .btn-absolute{
-    position:absolute;
+    position:relative;
 }
 .hidden-group{
     position:relative;
