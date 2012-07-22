@@ -112,8 +112,12 @@
     font-weight:bolder;
     margin-bottom: 10px;
 }
+.index-list{
+    padding: 5px;
+}
 .index-list:hover{
     background-color: #EEE;
+    padding-left: 20px;
 }
 .chapter-list{
     max-width: 400px;
