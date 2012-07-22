@@ -134,3 +134,7 @@
 .btn-absolute{
     position:absolute;
 }
+.hidden-group{
+    position:relative;
+    left:-200px;
+}
