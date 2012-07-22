@@ -13,7 +13,7 @@ function ChapterDecoder(data){
     popdiv =document.getElementById('popover');
     $(background).center();
     $(window).resize(function(){
-        $(popdiv).center();
+        $(popdiv).fitHeight().center();
         $(background).center();
     });
     this.editPreloadedParagraphs = function(args){

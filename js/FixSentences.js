@@ -21,10 +21,12 @@ Proto.fixSentences = function(pgr){
          *  or ','. If user selects split and the sentence, we then re-evaluate
          *  and re-present the fix dialogue if necessary.
          */
+    document.onkeydown = null;
     var fixWrapper = document.getElementById('cdFixParagraphs');
+    var splittingSentences=false;
     document.getElementById('cdenterText').style.display = 'none';
     fixWrapper.style.display = 'block';
-    this.wrapper.style.display = 'block';
+    document.getElementById('chapterdecoder').style.display = 'block';
     popdiv.style.display = 'block';
     background.style.display = 'block';
     background.style.top = '0px';
@@ -33,13 +35,11 @@ Proto.fixSentences = function(pgr){
     background.style.right = '0px';
     background.style.position = 'fixed';
     console.log(pgr);
-    if(pgr.tofix.length === 0){
-        fixWrapper.style.display = 'none';
-        this.wrapper.style.dislay= 'none';
-        popdiv.style.display = 'none';
-        background.style.display = 'none';
+    if(pgr.tofix.length == 0){
+        closeFixer();
         return;
     }
+    
     console.log('fixing sentences method start');
     var proto = this;
     
@@ -69,93 +69,101 @@ Proto.fixSentences = function(pgr){
         
     resetLists();
     var i;
-    instructions.firstElementChild.innerHTML = pgr.tofix.length+'Do any sentences need to be Recombined or split? type N to continue.';
+    instructions.firstElementChild.innerHTML = pgr.tofix.length+'Do any sentences need to be Recombined or split? type F to move forward. ';
     document.onkeypress = function(e){
-        if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
-            instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the yellow box goes in the top or bottom red boxes.";
+        if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'F'){
+            instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the red box goes in the top or bottom yellow boxes.";
             routineFix();
             document.onkeypress = null;
         }
         
     }
-    document.onkeydown = function(e){
-            
-    };
+    
     function routineFix(arg){
-        console.log('beginnign routine');
-        var ndx = pgr.tofix[0].index;
+        
+        
+        if(pgr.tofix[0] == null || pgr.tofix.length == 0 || Object.keys(pgr).indexOf('tofix')<0){
+            console.log('moving on');
+            moveOn();
+            return;
+        }
         if(arg == undefined){
             arg = {
                 en:pgr.tofix[0].en > pgr.tofix[0].jp?1:0,
                 jp:pgr.tofix[0].en > pgr.tofix[0].jp?0:1
             };
         }
-        if(pgr.en[ndx].line.length == pgr.jp[ndx].line.length){
+        if(pgr.en[pgr.tofix[0].index].line.length == pgr.jp[pgr.tofix[0].index].line.length ){
             doNextParagraph();
+            return;
         }
         var enRed = pgr.tofix[0].en > pgr.tofix[0].jp;
         highlightMovers({
-            rflength: enRed? pgr.jp[ndx].line.length:pgr.en[ndx].line.length,
-            yflength: enRed? pgr.en[ndx].line.length:pgr.jp[ndx].line.length,
+            rflength: enRed? pgr.jp[pgr.tofix[0].index].line.length:pgr.en[pgr.tofix[0].index].line.length,
+            yflength: enRed? pgr.en[pgr.tofix[0].index].line.length:pgr.jp[pgr.tofix[0].index].line.length,
             r: enRed? arg.jp:arg.en,
             y: enRed? arg.en:arg.jp,
             rl: enRed? rightList:leftList,
             yl: enRed? leftList:rightList
         });
         if(enRed){
-            if(pgr.jp[ndx].line.length-1 == arg.jp){
-                while(pgr.en[ndx].line.length > pgr.jp[ndx].line.length){
+            if(pgr.jp[pgr.tofix[0].index].line.length-1 == arg.jp){
+                while(pgr.en[pgr.tofix[0].index].line.length > pgr.jp[pgr.tofix[0].index].line.length){
                     //pgr.en[ndx].line[arg.jp].text += pgr.en[ndx].line.pop().text;
-                    pgr.en[ndx].line = shiftUp({
-                        array:pgr.en[ndx].line, 
+                    pgr.en[pgr.tofix[0].index].line = shiftUp({
+                        array:pgr.en[pgr.tofix[0].index].line, 
                         index:arg.jp+1
                     });
                 }
+                resetLists();
                 routineFix(arg.en, arg.jp);
             }
             
             document.onkeydown = function(e){
-                document.onkeydown = null;
+                
                 if(e.keyCode === 38){
                     //pgr.en[ndx].line[arg.en-1].text += pgr.en[ndx].line.splice(arg.en, 1)[0].text;
-                    console.log(e);
-                    pgr.en[ndx].line = shiftUp({
-                        array:pgr.en[ndx].line, 
+                    
+                    pgr.en[pgr.tofix[0].index].line = shiftUp({
+                        array:pgr.en[pgr.tofix[0].index].line, 
                         index:arg.en
                     });
                     resetLists();
+                    document.onkeydown = null;
                     routineFix({
                         en:arg.en,
                         jp:arg.jp
                     });
+                    
                 }
                 if(e.keyCode === 40){
+                    document.onkeydown = null;
+                    resetLists();
                     routineFix({
                         en:arg.en+1,
                         jp:arg.jp+1
                     });
                 }
+                
             }
         }else{
-            if(pgr.en[ndx].line.length -1== arg.en){
-                while(pgr.jp[ndx].line.length > pgr.en[ndx].line.length){
+            if(pgr.en[pgr.tofix[0].index].line.length -1== arg.en){
+                while(pgr.jp[pgr.tofix[0].index].line.length > pgr.en[pgr.tofix[0].index].line.length){
                     //pgr.jp[ndx].line[pgr.tofix[0].jp-2].text +=pgr.jp[ndx].line.pop().text;
-                    pgr.jp[ndx].line = shiftUp({
-                        array:pgr.jp[ndx].line, 
+                    pgr.jp[pgr.tofix[0].index].line = shiftUp({
+                        array:pgr.jp[pgr.tofix[0].index].line, 
                         index:arg.en+1
                     });
                 }
                 routineFix(arg.en, arg.jp);
             }
             document.onkeydown = function(e){
-                document.onkeydown = null;
                 if(e.keyCode === 38){
-                    //pgr.jp[ndx].line[arg.jp-1].text += pgr.jp[ndx].line.splice(arg.jp, 1)[0].text;
-                    pgr.jp[ndx].line = shiftUp({
-                        array:pgr.jp[ndx].line, 
+                    pgr.jp[pgr.tofix[0].index].line = shiftUp({
+                        array:pgr.jp[pgr.tofix[0].index].line, 
                         index:arg.jp
                     });
-                    
+                    document.onkeydown = null;
                     resetLists();
                     routineFix({
                         en:arg.en,
@@ -163,20 +171,22 @@ Proto.fixSentences = function(pgr){
                     });
                 }
                 if(e.keyCode === 40){
-                    
+                    document.onkeydown = null;
+                    resetLists();
                     routineFix({
                         en:arg.en+1,
                         jp:arg.jp+1
                     });
                 }
             }
+            
         }
     }
     function highlightMovers(args){
         var i;
-        console.log(args);
+        
         //rflength, yflength, r, y , rcl, ycl;
-        for(i=0; i<args.rflength;i++){
+        for(i=0; i<args.rl.length;i++){
             if(i != args.r && i!= args.r+1 && !args.rl[i].classList.contains('greyedOut')){
                 args.rl[i].classList.add('greyedOut');
                 args.rl[i].classList.remove('alert');
@@ -188,7 +198,7 @@ Proto.fixSentences = function(pgr){
             }
                     
         }
-        for(i=0; i<args.yflength;i++){
+        for(i=0; i<args.yl.length;i++){
             if(i != args.y && !args.yl[i].classList.contains('greyedOut')){
                 args.yl[i].classList.add('greyedOut');
                 args.yl[i].classList.remove('alert');
@@ -201,9 +211,21 @@ Proto.fixSentences = function(pgr){
         }
     }
     function shiftUp(args){
+        if(args.index == 0){
+            return args.array;
+        }
         var splice = args.array.splice(args.index, 1)[0];
         var text =  splice == null? '': splice.text;
-        args.array[args.index-1].text += text;
+        args.array[args.index-1].text += ' '+text;
+        if(Object.keys(splice).indexOf('clip')>0){
+            if(args.array[args.index-1].clip != null){
+                var oclip = args.array[args.index-1].clip;
+                args.array[args.index-1].clip.start = Math.min(oclip.start, splice.clip.start);
+                args.array[args.index-1].clip.end = Math.max(oclip.end, splice.clip.end);
+            }else{
+                args.array[args.index-1].clip = splice.clip;
+            }
+        }
         return args.array;
     }
     function doNextParagraph(){
@@ -217,10 +239,16 @@ Proto.fixSentences = function(pgr){
         }
         pgr.en[pgr.tofix[0].index] = pgr.en[pgr.tofix[0].index];
         pgr.jp[pgr.tofix[0].index] = pgr.jp[pgr.tofix[0].index];
+        moveOn();
+    }
+    function moveOn(){
         pgr.tofix = proto.checkLengths(pgr);
         if(pgr.tofix.length>0){
+            console.log("fixing next paragraph");
             proto.fixSentences(pgr);
+            return;
         }
+        closeFixer();
     }
     function resetLists(){
         leftnav.innerHTML = '';
@@ -255,26 +283,26 @@ Proto.fixSentences = function(pgr){
             setLineListeners({
                 li:rightList[i],
                 index: i,
-                line: pgr.en[pgr.tofix[0].index].line
+                line: pgr.jp[pgr.tofix[0].index].line
             });
         }
         popdiv.style.height = fixWrapper.offsetHeight+'px';
 
-        $(popdiv).center();
+        $(popdiv).fitHeight().center();
     }
     function setLineListeners(args){
         var action;
-        li.onclick = OnClick;
-        li.onkeydown = OnClick;
-        li.onmouseover = function(e){
-            if(!li.classList.contains('greyedOut')){
-                li.appendChild(belongsTo);
-                li.appendChild(joinUp);
-                li.appendChild(splitSentence);
+        args.li.onclick = OnClick;
+        args.li.onkeydown = OnClick;
+        args.li.onmouseover = function(e){
+            if(!args.li.classList.contains('greyedOut')){
+                args.li.appendChild(belongsTo);
+                args.li.appendChild(joinUp);
+                args.li.appendChild(splitSentence);
             }
                 
         }
-        li.onmouseout =  function(e){
+        args.li.onmouseout =  function(e){
             if (e === null){
                 e = window.event;
             }
@@ -284,28 +312,89 @@ Proto.fixSentences = function(pgr){
             if (e === null){
                 e = window.event;
             }
-            console.log(e.target);
             action = e.target == joinUp ? 1: 
-            (e.target == splitSentence ? 2: 3);
-            console.log(action);
+            (e.target == splitSentence ? 2: (e.target == belongsTo?3:0));
             switch(action){
                 case 1:
+                    joinSentencesUp({
+                        line: args.line,
+                        index: args.index,
+                        li: args.li
+                    });
                     
-                    console.log('join up!');
                     break;
                 case 2:
-                    console.log('split sentence');
+                    splitSentences({
+                        line: args.line,
+                        index: args.index,
+                        li: args.li
+                    });
                     break; 
                 case 3:
-                    console.log('pick this one!');
                     break;
-                    
+                default:
+                    break;
             }
         }
     }
-    function joinUp(args){
-        
+    function joinSentencesUp(args){
+        if(args.index==0){
+            var line = {
+                clip: {
+                    start: null,
+                    end: null
+                },
+                text : '',
+                index: 0
+            }
+            args.line.unshift(line);
+            args.index += 1;
+        }
+        var ch = prompt('Type any characters to insert at this point.');
+        args.line[args.index-1].text += ch;
+        args.line = shiftUp({
+            array: args.line,
+            index: args.index
+        });
         resetLists();
+        moveOn();
+    }
+    function splitSentences(args){
+        splittingSentences=true;
+        var oldInstructions = instructions.firstElementChild.innerHTML;
+        instructions.firstElementChild.innerHTML = 'Highlight Part to be split into the next sentence. Type "C" to cancel, "F" to move forward.';
+        $(args.li).bind("mouseup", function(){
+            if(splittingSentences){
+                var areatosplit = getSelectedText();
+                var splitpoint = args.line[args.index].text.indexOf(areatosplit, 0);
+                var substring = args.line[args.index].text.substr(splitpoint);
+                var firstsentence = args.line[args.index].text.substr(0, splitpoint);
+                args.line[args.index].text = firstsentence;
+                args.line.splice(args.index+1, 0,{
+                    text: substring,
+                    clip: args.line[args.index].clip
+                });
+                resetLists();
+            }
+        });
+        document.onkeydown = function(e){
+            if(splittingSentences){
+                if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'C' && splittingSentences){
+                    splittingSentences = false;
+                    $(args.li).unbind('mouseup');
+                    instructions.firstElementChild.innerHTML = oldInstructions;
+                }
+                if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'F'){
+                    instructions.firstElementChild.innerHTML = "choose Up or down, corresponding to whether the red box goes in the top or bottom yellow boxes.";
+                    resetLists();
+                    pgr.tofix = proto.checkLengths(pgr);
+                    document.onkeydown = null;
+                    routineFix();
+                
+                }
+            }
+        };
+        
     }
     function removeListListeners(li){
         li.onmouseout = null;
@@ -313,11 +402,23 @@ Proto.fixSentences = function(pgr){
         li.click = null;
         li.onkeydown = null;
     }
+    function closeFixer(){
+        console.log('all done!');
+        fixWrapper.style.display = 'none';
+        document.getElementById('chapterdecoder').style.dislay= 'none';
+        popdiv.style.display = 'none';
+        background.style.display = 'none';
+    }
+    $('#popbackground').click(function(){
+        document.onkeydown = null;
+        document.onkeypush = null;
+        closeFixer();
+    });
 };
 Proto.fixParagraphs = function(args){
     console.log('fix paragraphs');
-    console.log(args);
     
+    console.log(args);
 }
 Proto.sortChapter = function(args){
     var unclipped = Object.keys(args.chapter.paragraph[0].line[0]).indexOf('clip')<0;

@@ -61,6 +61,8 @@ mb_internal_encoding( 'UTF-8' );
                     $('#popover').hide();
                     $('#minipop').hide();
                     $('#popbackground').hide();
+                    $('#cdFixParagraphs').hide();
+                    
                 });
                 $('#bookEditorTab a').click(function (e) {
                     e.preventDefault();
