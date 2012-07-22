@@ -19,7 +19,11 @@ include("include/getindex.php");
                 bookshelf = new BookShelf();
                 bookshelf.databaseIndexParser(str);
                 $('#bookNav').append(bookshelf.getIndexHtml());
-                
+                $('#bookNav a').click(function (e) {
+                    e.preventDefault();
+                    console.log(this);
+                    $(this).tab('show');
+                });
                 
             });
             
