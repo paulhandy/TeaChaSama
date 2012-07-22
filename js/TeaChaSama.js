@@ -243,7 +243,7 @@ function Chapter(){
         this.audio.controls.load();
         $('#lessonAudio').mediaelementplayer({
             success: function(mediaElement, domObject){
-                this.audio.element = mediaElement;
+                proto.audio.element = mediaElement;
             }
         });
         for(i=0; i<this.paragraph.length;i++){
