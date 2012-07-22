@@ -22,10 +22,17 @@ Proto.fixSentences = function(pgr){
          *  and re-present the fix dialogue if necessary.
          */
     var fixWrapper = document.getElementById('cdFixParagraphs');
+    document.getElementById('cdenterText').style.display = 'none';
     fixWrapper.style.display = 'block';
+    this.wrapper.style.display = 'block';
+    popdiv.style.display = 'block';
+    background.style.display = 'block';
+    console.log(pgr);
     if(pgr.tofix.length === 0){
         fixWrapper.style.display = 'none';
-        $(this.wrapper).hide();
+        this.wrapper.style.dislay= 'none';
+        popdiv.style.display = 'none';
+        background.style.display = 'none';
         return;
     }
     console.log('fixing sentences method start');
@@ -57,19 +64,19 @@ Proto.fixSentences = function(pgr){
         
     resetLists();
     var i;
-    instructions.firstElementChild.innerHTML = 'Do any English sentences need to be Recombined (bad sentence split)? Y/N';
+    instructions.firstElementChild.innerHTML = pgr.tofix.length+'Do any English sentences need to be Recombined (bad sentence split)? Y/N';
     for(i=0; i<pgr.tofix[0].jp;i++){
         rightList[i].classList.add('greyedOut');
     }
-    prevOnkeydown = document.onkeydown;
-    prevOnkeypress = document.onkeypress;
     document.onkeypress = function(e){
         if(String.fromCharCode(e.charCode).toLocaleUpperCase() === 'N'){
             for(i=0; i<pgr.tofix[0].jp;i++){
                 rightList[i].classList.remove('greyedOut');
             }
             checkSplit();
+            document.onkeypress = null;
         }
+        
     }
     document.onkeydown = function(e){
             
@@ -243,10 +250,10 @@ Proto.fixSentences = function(pgr){
         for(i=0;i<rightList.length;i++){
             removeListListeners(rightList[i]);
         }
-        proto.paragraphs.en[pgr.tofix[0].index] = pgr.en[pgr.tofix[0].index];
-        proto.paragraphs.jp[pgr.tofix[0].index] = pgr.jp[pgr.tofix[0].index];
+        pgr.en[pgr.tofix[0].index] = pgr.en[pgr.tofix[0].index];
+        pgr.jp[pgr.tofix[0].index] = pgr.jp[pgr.tofix[0].index];
         pgr.tofix = proto.checkLengths(pgr);
-        if(proto.paragraphs.tofix.length>0){
+        if(pgr.tofix.length>0){
             proto.fixSentences(pgr);
         }
     }
@@ -332,7 +339,23 @@ Proto.fixSentences = function(pgr){
 Proto.fixParagraphs = function(args){
     console.log('fix paragraphs');
     console.log(args);
-    args.en;
-    args.jp;
-    args.ex;
+    
+}
+Proto.sortChapter = function(args){
+    var unclipped = Object.keys(args.chapter.paragraph[0].line[0]).indexOf('clip')<0;
+    var i, j;
+    for(i=0;i<args.rawpgr.en.length;i++){
+        for(j=0;j<args.rawpgr.en[i].line.length;j++){
+            args.rawpgr.en[i].line[j].translation = args.rawpgr.jp[i].line[j].text;
+            if(args.chapter.paragraph.length > i){
+            }
+        }
+    }
+    args.chapter.organized = args.rawpgs.en;
+    if(unclipped){
+        args.chapter.paragraph = args.rawpgs.en;
+    }else{
+        args.chapter.organized = args.rawpgs.en;
+        //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
+    }
 }

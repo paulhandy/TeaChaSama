@@ -59,9 +59,7 @@ function AudioClipper(data){
         _audio.load();
         setTimeout(proto.clipMedia, 50);
         _audio.addEventListener("load", function() {
-            console.log('audio loaded');
-            
-        }, true);
+            console.log('audio loaded');}, true);
     };
     this.addClipData = function(seg){
         

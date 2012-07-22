@@ -17,39 +17,8 @@ function ChapterDecoder(data){
         $(background).center();
     });
     this.editPreloadedParagraphs = function(args){
-        var argkeys = Object.keys(args), pgkeys=[], lnkeys=[], translated=false,
-        clipped=false;
-        if(argkeys.indexOf('paragraph')>=0){
-            //stuff for paragraphs
-            if(args.paragraph.length>0){
-                pgkeys=Object.keys(args.paragraph[0]);
-                if(pgkeys.indexOf('line')>=0){
-                    lnkeys = Object.keys(args.paragraph[0].line[0]);
-                    if(lnkeys.indexOf('translation')>=0){
-                        translated = true;
-                    }
-                    if(lnkeys.indexOf('audio')>=0){
-                        clipped = true;
-                    }
-                }
-            }
-        }
-        if(argkeys.indexOf('raw')>=0){
-            if(!translated){
-                
-                this.paragraphs.tofix = this.checkLengths({
-                    en:args.raw.en,
-                    jp:args.raw.jp
-                });
-                this.fixSentences({
-                    tofix: this.paragraphs.tofix,
-                    en: args.raw.en,
-                    jp:args.raw.jp
-                });
-                
-            }
-        }
-        
+        this.checkLengths(args.raw);
+        this.fixSentences(args.raw);
     };
     this.getParagraphs = function(args){
         var proto = this;

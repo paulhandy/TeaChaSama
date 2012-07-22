@@ -9,9 +9,6 @@ var IndexWriter = {
         }).done(function(msg){
             console.log(msg);
         });
-    },
-    load: function(args){
-        
     }
 };
 
@@ -189,56 +186,114 @@ function BookEditor(urldata){
         
         function addRemoveListener(e){
             args.book.chapter.splice(args.chapter);
+            LessonWriter.data.chapter.splice(args.lesson);
             ncEdit.onclick      = null;
             ncEditClips.onclick = null;
             ncAddAudio.onclick  = null;
             ncRemoveSelf.onclick = null;
             args.nav.removeChild(newChapterLi);
         }
+        var ajxdat = 'course=1&book='+args.book.index+'&chapter='+args.lesson.index;
+        
         function editTextListener(e){
             if(!dataLoaded){
-                LessonWriter.load({
+                $.ajax({
                     url: urldata.lessonget,
-                    data: 'course='+IndexWriter.data.coursenum+'&book='+args.book.index+'&chapter='+args.lesson.index
+                    data: ajxdat,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(data){
+                        args.lesson = data;
+                        isNew = false;
+                    },
+                    error: function(msg){
+                        console.log(msg.error());
+                    },
+                    complete:function(j, txt){
+                        console.log(txt);
+                        dataLoaded=true;
+                        proto.editChapterText({
+                            madeNew: isNew,
+                            chapter: args.lesson,
+                            book: args.book
+                        });
+                    }
                 });
-                dataLoaded=true;
+                
+            }else{
+                proto.editChapterClips({
+                    madeNew: isNew,
+                    chapter: args.lesson,
+                    book: args.book
+                });
             }
-            proto.editChapterText({
-                madeNew: isNew,
-                chapter: args.lesson,
-                book: args.book
-            });
             e.preventDefault();
         }
         function editClipsListener(e){
             if(!dataLoaded){
-                LessonWriter.load({
+                $.ajax({
                     url: urldata.lessonget,
-                    data: 'course='+IndexWriter.data.coursenum+'&book='+args.book.index+'&chapter='+args.lesson.index
+                    data: ajxdat,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(data){
+                        args.lesson = data;
+                        isNew = false;
+                    },
+                    error: function(msg){
+                        console.log(msg.error());
+                    },
+                    complete:function(j, txt){
+                        console.log(txt);
+                        dataLoaded=true;
+                        proto.editChapterClips({
+                            madeNew: isNew,
+                            chapter: args.lesson,
+                            book: args.book
+                        });
+                    }
                 });
-                dataLoaded=true;
+            }else{
+                proto.editChapterClips({
+                    madeNew: isNew,
+                    chapter: args.lesson,
+                    book: args.book
+                });
             }
-            
-            proto.editChapterClips({
-                madeNew: isNew,
-                chapter: args.lesson,
-                book: args.book
-            });
             e.preventDefault();
         }
         function addTrackListener(e){
             if(!dataLoaded){
-                LessonWriter.load({
+                $.ajax({
                     url: urldata.lessonget,
-                    data: 'course='+IndexWriter.data.coursenum+'&book='+args.book.index+'&chapter='+args.lesson.index
+                    data: ajxdat,
+                    type: 'get',
+                    dataType: 'json',
+                    success:function(data){
+                        isNew = false
+                        args.lesson = data;
+                    },
+                    error: function(msg){
+                        console.log(msg.error());
+                    },
+                    complete:function(j, txt){
+                        console.log(txt);
+                        dataLoaded=true;
+                        proto.addChapterAudioTrack({
+                            madeNew: isNew,
+                            chapter: args.lesson
+                        });
+                    }
+                        
                 });
-                dataLoaded=true;
+                
+            }else{
+                proto.editChapterClips({
+                    madeNew: isNew,
+                    chapter: args.lesson,
+                    book: args.book
+                });
             }
-            proto.addChapterAudioTrack({
-                madeNew: isNew,
-                chapter: args.lesson,
-                book: args.book
-            });
             e.preventDefault();
         }
     };
@@ -246,26 +301,21 @@ function BookEditor(urldata){
         if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
             LessonWriter.data.chapter.push(args.chapter);
         }
+        proto.chapterdecoder = new ChapterDecoder(args);
         console.log(args.makeNew? "New Chapter text":"Edit Chapter Text");
         if(args.madeNew){
-            proto.chapterdecoder = new ChapterDecoder({
-                chapter: args.chapter,
-                book:args.book,
-                course: IndexWriter.data
-            });
             proto.chapterdecoder.getParagraphs({
                 skip:false
             });
         }else{
-            
+            proto.chapterdecoder.editPreloadedParagraphs(args.chapter);
         }
     };
     this.editChapterClips = function(args){
         if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
             LessonWriter.data.chapter.push(args.chapter);
         }
-        if(args.madeNew){
-            var ac = IndexWriter.audioclipper;
+        var ac = IndexWriter.audioclipper;
             if(IndexWriter.audioclipper == null || args.chapter.index != ac.chapter.index){
                 ac = new AudioClipper(args.chapter);
                 ac.setAudioDiv();
@@ -275,12 +325,17 @@ function BookEditor(urldata){
                 chapter: args.chapter,
                 audioclipper: ac
             });
+        if(args.madeNew){
+            
             proto.chapterDecoder.getParagraphs({
                 skip:true,
                 toClipper: true
             });
         }else{
-            
+            proto.chapterDecoder.getParagraphs({
+                skip:true,
+                toClipper: true
+            });
         }
     };
     this.addChapterAudioTrack = function(args){
@@ -335,7 +390,7 @@ function BookEditor(urldata){
             proto.addBooki.classList.remove('icon-white');
         }
         proto.addBookButton.onclick = addBookListener;
-        //proto.addBookButton.onkeydown = addBookListener;
+    //proto.addBookButton.onkeydown = addBookListener;
     })();
     function addBookListener(e){
         proto.addBook();
