@@ -226,15 +226,15 @@ function Chapter(){
         return li;
     };
     this.getLessonHtml = function(){
-        var title, author, article, i;
-        title = document.getElementById('lesson-title');
-        title.innerHTML = this.title;
-        author = document.getElementById('lesson-author');
-        author.innerHTML = this.author;
-        article = document.getElementById('lesson-article');
+        var i;
+        
+        document.getElementById('lesson-title').innerHTML = this.title;
+        
+        document.getElementById('lesson-author').innerHTML = this.author;
+        
         for(i=0; i<this.paragraph.length;i++){
             console.log(i);
-            article.appendChild(this.paragraph[i].getParagraphHtml());
+            document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
         }
     };
 }
