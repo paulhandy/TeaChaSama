@@ -46,19 +46,14 @@ function BookShelf(){
         tabarea.appendChild(tabcont);
         for(i=0;i<this.book.length;i++){
             li = document.createElement('li');
-            li.setAttribute('href', '#tab'+(i+1));
             a = document.createElement('a');
+            a.setAttribute('href', '#tab'+(i+1));
             a.setAttribute('data-toggle', 'tab');
             a.innerHTML = this.book[i].title;
             li.appendChild(a);
             nav.appendChild(li);
             tabcont.appendChild(this.book[i].getIndexHtml(i+1));
         }
-        $('#bookNav a').click(function (e) {
-            e.preventDefault();
-            console.log(this);
-            $(this).tab('show');
-        });
         return tabarea;
     };
 }
