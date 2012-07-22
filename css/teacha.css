@@ -115,3 +115,6 @@
 .index-list:hover{
     background-color: background;
 }
+.chapter-list{
+    max-width: 400px;
+}
