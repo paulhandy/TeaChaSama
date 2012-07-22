@@ -277,12 +277,11 @@ function Line(){
     transbtn = document.createElement('button'),
     vocabbtn = document.createElement('button'),
     grammarbtn = document.createElement('button'),
-    utterance = document.createElement('span');
+    //utterance = document.createElement('span');
     
     this.getLineHtml = function(){
-        utterance.innerHTML = this.text;
         lineWrapper.appendChild(ddmbgp);
-        lineWrapper.appendChild(utterance);
+        lineWrapper.innerHTML += this.text;
         return lineWrapper;
     };
     this.vocabInline = function(){
@@ -320,7 +319,6 @@ function Line(){
     };
     var initialize = (function(){
         lineWrapper.setAttribute('class', 'line-wrapper');
-        utterance.setAttribute('class', 'utterance-area');
         ddmbgp.setAttribute('class', 'btn-group');
         bcontainer.setAttribute('class', 'btn btn-mini dropdown-toggle');
         b.setAttribute('class', 'caret');
