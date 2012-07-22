@@ -53,7 +53,7 @@ include("include/getindex.php");
                 <div id="bookNav">
                 </div>
                 <div id="lessonDiv">
-                    <div class="span3">
+                    <div class="span4">
                         <div id="audioDiv" style="position:fixed;top:50px;left:20px;"></div>
                     </div>
                     <div class="span9" id="lesson-content-wrapper">

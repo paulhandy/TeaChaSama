@@ -305,6 +305,7 @@ function Line(){
         return lineWrapper;
     };
     this.playClip = function(){
+        console.log('playing clip');
         var mediaelement = this.parent.parent.audio.element;
         mediaelement.pause();
         mediaelement.setCurrentTime(this.audioClip.start);
