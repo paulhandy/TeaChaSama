@@ -321,13 +321,13 @@ function Line(){
 
 				
         // add event listener
-        mediaelement.addEventListener('timeupdate', function(e) {
+        mediaelement.ontimeupdate = function(e) {
             var time = mediaelement.currentTime;
             if(time > proto.audioClip.end){
+                mediaelement.ontimeupdate = null;
                 mediaelement.pause();
-                mediaelement.removeEventListener('timeupdate');
             }
-        }, false);
+        };
 
     });
     this.vocabInline = function(){
