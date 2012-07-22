@@ -145,7 +145,7 @@ function Chapter(){
                 paragraph = new Paragraph();
                 paragraph.parent = proto;
                 
-                for(j=0;j<data.paragraph[i].line[j].length; j++){
+                for(j=0;j<data.paragraph[i].line.length; j++){
                     line = new Line();
                     line.parent = paragraph;
                     clip = new AudioClip();
@@ -228,13 +228,9 @@ function Chapter(){
     };
     this.getLessonHtml = function(){
         var i;
-        
         document.getElementById('lesson-title').innerHTML = this.title;
-        
         document.getElementById('lesson-author').innerHTML = this.author;
-        
         for(i=0; i<this.paragraph.length;i++){
-            console.log(i);
             document.getElementById('lesson-article').appendChild(this.paragraph[i].getParagraphHtml());
         }
     };
@@ -279,7 +275,6 @@ function Line(){
     vocabbtn = document.createElement('button'),
     grammarbtn = document.createElement('button'),
     utterance = document.createElement('span');
-    initialize();
     
     this.getLineHtml = function(){
         utterance.innerHTML = this.text;
@@ -320,7 +315,7 @@ function Line(){
         grammarbtn.onkeydown =null;
         grammarbtn.onclick = null;
     };
-    function initialize(){
+    var initialize = (function(){
         lineWrapper.setAttribute('class', 'line-wrapper');
         utterance.setAttribute('class', 'utterance-area');
         ddmbgp.setAttribute('class', 'btn-group');
@@ -348,7 +343,7 @@ function Line(){
         vocabbtn.innerHTML = '<ruby><rb><i class="icon icon-book"></i></rb><rt>\u5358\u8a9e</rt></ruby>';
         grammarbtn.innerHTML = '<ruby><rb><canvas class="grammar-canvas"></canvas></rb><rt>\u6587\u6cd5</rt></ruby>';
         grammarbtn.style.padding = '9px 7px';
-    }
+    })();
 }
 
 /*
@@ -393,7 +388,9 @@ function AudioTrack(){
 function AudioClip(){
     this.start= 0;
     this.end= 0;
+    var proto = this;
     this.play = function(){
-    
+        var audiocontainer = document.getElementById('audioDiv');
+
     };
 }
