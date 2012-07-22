@@ -109,7 +109,7 @@ function Chapter(){
     this.databaseChapterParser = function(_data){
         var chapter = this;
         $.ajax({
-            url: 'getlesson.php',
+            url: 'include/getlesson.php',
             data: _data,
             type: 'GET',
             success: setChapter,
