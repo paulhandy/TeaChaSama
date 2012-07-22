@@ -314,12 +314,11 @@ function Line(){
     $(soundbtn).click(function(){
         console.log('playing clip');
         var mediaelement = proto.parent.parent.audio.element;
-        mediaelement.pause();
-        mediaelement.setCurrentTime(proto.audioClip.start);
-        mediaelement.setCurrentTime(10);
+        mediaelement.play();
         setTimeout(function() {
-            mediaelement.play();
+            mediaelement.setCurrentTime(proto.audioClip.start);
         }, 50);
+
 				
         // add event listener
         mediaelement.addEventListener('timeupdate', function(e) {
