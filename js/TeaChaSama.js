@@ -54,6 +54,11 @@ function BookShelf(){
             nav.appendChild(li);
             tabcont.appendChild(this.book[i].getIndexHtml(i+1));
         }
+        $('#bookNav a').click(function (e) {
+            e.preventDefault();
+            console.log(this);
+            $(this).tab('show');
+        });
         return tabarea;
     };
 }
