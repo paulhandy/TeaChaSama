@@ -7,50 +7,33 @@ function BookShelf(){
     this.courseNumber = null;
     this.book = [];
     this.rawData = null;
-    this.databaseIndexParser = function(_url, _data){
-        var bookshelf = this;
-        $.ajax({
-            url: _url,
-            data: _data,
-            type: post,
-            dataType: "json",
-            success: setBookShelf,
-            error : function(j,t,e){
-                console.log(j);
-                console.log(t);
-                console.log(e);
-            }
-        });
-        function setBookShelf(data, status){
-            if(data === null){
-                console.log(status);
-                return false;
-            }
-            data = JSON.parse(data);
-            bookshelf.rawData = data;
-            bookshelf.title = data.title;
-            bookshelf.courseNumber = data.courseNumber;
-            var i , j, book, chapter;
-            for(i=0; i< data.book.length; i++)
+    var bookshelf = this;
+    this.databaseIndexParser = function(data){
+        
+        data = JSON.parse(data);
+        bookshelf.rawData = data;
+        bookshelf.title = data.title;
+        bookshelf.courseNumber = data.courseNumber;
+        var i , j, book, chapter;
+        for(i=0; i< data.book.length; i++)
+        {
+            book = new Book();
+            book.parent = bookshelf;
+            book.title = data.book[i].title;
+            book.index = data.book[i].index;
+            for(j=0; j< data.book[i].chapter.length ; j++)
             {
-                book = new Book();
-                book.parent = bookshelf;
-                book.title = data.book[i].title;
-                book.index = data.book[i].index;
-                for(j=0; j< data.book[i].chapter.length ; j++)
-                {
-                    chapter = new Chapter();
-                    chapter.parent = book;
-                    chapter.title = data.book[i].chapter[j].title;
-                    chapter.author = data.book[i].chapter[j].author;
-                    chapter.index = data.book[i].chapter[j].index;
-                    book.chapter.push(chapter);
-                }
-                bookshelf.book.push(book);
+                chapter = new Chapter();
+                chapter.parent = book;
+                chapter.title = data.book[i].chapter[j].title;
+                chapter.author = data.book[i].chapter[j].author;
+                chapter.index = data.book[i].chapter[j].index;
+                book.chapter.push(chapter);
             }
-            return true;
+            bookshelf.book.push(book);
         }
     };
+
     this.getIndexHtml = function(){
         var tabarea, nav, li, a, tabcont, tabpane;
         tabarea = document.createElement('div');
@@ -69,15 +52,15 @@ function BookShelf(){
             a.innerHTML = this.book[i].title;
             li.appendChild(a);
             nav.appendChild(li);
-            this.book[i].getIndexHtml(i+1);
-            tabcont.appendChild();
+            tabcont.appendChild(this.book[i].getIndexHtml(i+1));
         }
+        return tabarea;
     };
 }
 /*
- * ----------------------------------------------------------------------------
- * Book
- */
+* ----------------------------------------------------------------------------
+* Book
+*/
 function Book(){
     this.parent = null;
     this.title = null;
@@ -103,9 +86,9 @@ function Book(){
     };
 }
 /*
- * ----------------------------------------------------------------------------
- * Chapter
- */
+* ----------------------------------------------------------------------------
+* Chapter
+*/
 function Chapter(){
     this.parent = null;
     this.rawData = null;
@@ -222,9 +205,9 @@ function Chapter(){
     };
 }
 /*
- * ----------------------------------------------------------------------------
- * Paragraph
- */
+* ----------------------------------------------------------------------------
+* Paragraph
+*/
 function Paragraph(){
     this.line = [];
     this.parent = null;
@@ -239,9 +222,9 @@ function Paragraph(){
 }
 
 /*
- * ----------------------------------------------------------------------------
- * Line
- */
+* ----------------------------------------------------------------------------
+* Line
+*/
 function Line(){
     this.parent = null;
     this.text = null;
@@ -334,9 +317,9 @@ function Line(){
 }
 
 /*
- * ----------------------------------------------------------------------------
- * Vocab
- */
+* ----------------------------------------------------------------------------
+* Vocab
+*/
 function Vocab(){
     this.term = null;
     this.translation = null;
@@ -347,9 +330,9 @@ function VocabReference(){
     this.length = 0;
 }
 /*
- * ----------------------------------------------------------------------------
- * Grammar
- */
+* ----------------------------------------------------------------------------
+* Grammar
+*/
 function Grammar(){
     this.principle = null;
     this.explanation = null;
@@ -360,18 +343,18 @@ function GrammarReference(){
     this.length = 0;
 }
 /*
- * ----------------------------------------------------------------------------
- * Audio Track
- */
+* ----------------------------------------------------------------------------
+* Audio Track
+*/
 function AudioTrack(){
     this.fileName = null;
     this.duration = 0;
 }
 
 /*
- * ----------------------------------------------------------------------------
- * Audio Clip
- */
+* ----------------------------------------------------------------------------
+* Audio Clip
+*/
 function AudioClip(){
     this.start= 0;
     this.end= 0;
