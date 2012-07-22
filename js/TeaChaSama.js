@@ -331,19 +331,7 @@ function Line(){
     this.grammarInline = function(){
     
     };
-    this.setListeners = function(){
-        if(this.audioClip === null){
-            this.addAudioClip();
-        }
-        soundbtn.onclick = this.playClip;
-        soundbtn.onkeydown = this.playClip;
-        transbtn.onclick = this.showTranslation;
-        transbtn.onkeydown = this.showTranslation;
-        vocabbtn.onkeydown = this.vocabInline;
-        vocabbtn.onclick = this.vocabInline;
-        grammarbtn.onkeydown = this.grammarInline;
-        grammarbtn.onclick = this.grammarInline;
-    };
+    
   
     this.removeListeners = function(){
         soundbtn.onclick = null;
@@ -383,6 +371,19 @@ function Line(){
         vocabbtn.innerHTML = '<ruby><rb><i class="icon-book"></i></rb><rt>\u5358\u8a9e</rt></ruby>';
         grammarbtn.innerHTML = '<ruby><rb><i class="icon-tint"></i></rb><rt>\u6587\u6cd5</rt></ruby>';
         grammarbtn.style.padding = '9px 7px';
+    })();
+    this.setListeners = (function(){
+        if(this.audioClip === null){
+            this.addAudioClip();
+        }
+        soundbtn.onclick = this.playClip;
+        soundbtn.onkeydown = this.playClip;
+        transbtn.onclick = this.showTranslation;
+        transbtn.onkeydown = this.showTranslation;
+        vocabbtn.onkeydown = this.vocabInline;
+        vocabbtn.onclick = this.vocabInline;
+        grammarbtn.onkeydown = this.grammarInline;
+        grammarbtn.onclick = this.grammarInline;
     })();
 }
 
