@@ -344,7 +344,7 @@ function Line(){
         soundbtn.innerHTML = '<ruby><rb><i class="icon-headphones" ></i></rb><rt>\u805e\u304f</rt></ruby>';
         transbtn.innerHTML = '<ruby><rb><i class="icon-edit"></i></rb><rt>\u7ffb\u8a33</rt></ruby>';
         transbtn.style.padding = '9px 7px';
-        vocabbtn.innerHTML = '<ruby><rb><i class="icon icon-book"></i></rb><rt>\u5358\u8a9e</rt></ruby>';
+        vocabbtn.innerHTML = '<ruby><rb><i class="icon-book"></i></rb><rt>\u5358\u8a9e</rt></ruby>';
         grammarbtn.innerHTML = '<ruby><rb><i class="icon-tint"></i></rb><rt>\u6587\u6cd5</rt></ruby>';
         grammarbtn.style.padding = '9px 7px';
     })();
