@@ -1,5 +1,5 @@
 <?php
-include("include/opendb.php");
+include("../../Include/opendb.php");
 
 ?>
 <!DOCTYPE html>
