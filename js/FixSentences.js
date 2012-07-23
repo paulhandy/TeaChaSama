@@ -214,9 +214,15 @@ Proto.fixSentences = function(pgr){
         if(args.index == 0){
             return args.array;
         }
+        var text = '';
+        if(args.insertChar == null){
+            text += ' ';
+        }else{
+            text += args.insertChar;
+        }
         var splice = args.array.splice(args.index, 1)[0];
-        var text =  splice == null? '': splice.text;
-        args.array[args.index-1].text += ' '+text;
+        text +=  splice == null? '': splice.text;
+        args.array[args.index-1].text += text;
         if(Object.keys(splice).indexOf('clip')>0){
             if(args.array[args.index-1].clip != null){
                 var oclip = args.array[args.index-1].clip;
@@ -351,10 +357,10 @@ Proto.fixSentences = function(pgr){
             args.index += 1;
         }
         var ch = prompt('Type any characters to insert at this point.');
-        args.line[args.index-1].text += ch;
         args.line = shiftUp({
             array: args.line,
-            index: args.index
+            index: args.index,
+            insertChar: ch
         });
         resetLists();
         moveOn();
