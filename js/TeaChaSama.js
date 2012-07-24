@@ -240,7 +240,7 @@ function Chapter(){
         this.audio.controls.setAttribute('src', this.audio.filename);
         this.audio.controls.setAttribute('id', 'lessonAudio');
         this.audio.controls.setAttribute('controls', 'controls');
-        
+        var alternate = '<object width="320" height="240" type="application/x-shockwave-flash" data="johndyer-mediaelement-b090320/build/flashmediaelement.swf"><param name="audio" value="flashmediaelement.swf" /><param name="flashvars" value="controls=true&file='+this.audio.filename+'" /></object>'
         mediaelement.appendChild(this.audio.controls);
         //this.audio.controls.load();
         $('#lessonAudio').mediaelementplayer({
