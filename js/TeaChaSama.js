@@ -285,6 +285,10 @@ function Line(){
     var proto = this;
     this.vocab = [];
     this.grammar = [];
+    
+    
+    
+    
     var lineWrapper = document.createElement('span'),
     ddmbgp = document.createElement('span'),
     bcontainer = document.createElement('a'),
@@ -297,8 +301,8 @@ function Line(){
     vocabbtn = document.createElement('button'),
     grammarbtn = document.createElement('button'),
     utterance = document.createElement('span');
-    soundbtn.onclick = this.playClip;
-    soundbtn.onkeydown = this.playClip;
+    //soundbtn.onclick = this.playClip;
+    //soundbtn.onkeydown = this.playClip;
     transbtn.onclick = this.showTranslation;
     transbtn.onkeydown = this.showTranslation;
     vocabbtn.onkeydown = this.vocabInline;
