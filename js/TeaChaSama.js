@@ -131,7 +131,7 @@ function Chapter(){
                 console.log(status);
                 return false;
             }
-            console.log(data);
+            
             //data = JSON.parse(data);
             var audio, paragraph, line, clip, reference, i, j, k, vocab, grammar;
             proto.rawData = data;
@@ -157,7 +157,7 @@ function Chapter(){
                     line.translation = data.paragraph[i].line[j].translation;                    
                     
                     paragraph.line.push(line);
-                    console.log(line);
+                    
                     /*if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
                         for(k=0; k< data.paragraph[i].line[j].vocab.length; k++){
                             reference = new VocabReference();
@@ -241,8 +241,9 @@ function Chapter(){
         this.audio.controls.setAttribute('id', 'lessonAudio');
         this.audio.controls.setAttribute('controls', 'controls');
         var alternate = '<object width="320" height="240" type="application/x-shockwave-flash" data="johndyer-mediaelement-b090320/build/flashmediaelement.swf"><param name="audio" value="flashmediaelement.swf" /><param name="flashvars" value="controls=true&file='+this.audio.filename+'" /></object>';
-        (this.audio.controls).appendChild(alternate);
+        
         mediaelement.appendChild(this.audio.controls);
+        (this.audio.controls).innerHTML = alternate;
         //this.audio.controls.load();
         $('#lessonAudio').mediaelementplayer({
             success: function(mediaElement, domObject){
