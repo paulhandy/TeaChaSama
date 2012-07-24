@@ -303,12 +303,12 @@ function Line(){
     utterance = document.createElement('span');
     //soundbtn.onclick = this.playClip;
     //soundbtn.onkeydown = this.playClip;
-    transbtn.onclick = this.showTranslation;
-    transbtn.onkeydown = this.showTranslation;
-    vocabbtn.onkeydown = this.vocabInline;
-    vocabbtn.onclick = this.vocabInline;
-    grammarbtn.onkeydown = this.grammarInline;
-    grammarbtn.onclick = this.grammarInline;
+    //transbtn.onclick = this.showTranslation;
+    //transbtn.onkeydown = this.showTranslation;
+    //vocabbtn.onkeydown = this.vocabInline;
+    //vocabbtn.onclick = this.vocabInline;
+    //grammarbtn.onkeydown = this.grammarInline;
+    //grammarbtn.onclick = this.grammarInline;
     this.getLineHtml = function(){
         utterance.innerHTML = this.text;
         lineWrapper.appendChild(ddmbgp);
