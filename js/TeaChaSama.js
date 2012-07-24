@@ -232,7 +232,8 @@ function Chapter(){
         var i, mediaelement;
         document.getElementById('lesson-title').innerHTML = this.title;
         document.getElementById('lesson-author').innerHTML = this.author;
-        document.getElementById('lesson-article').innerHTML = '';
+        $('#lesson-article').empty();
+        //document.getElementById('lesson-article').innerHTML = '';
         document.getElementById('bookNav').style.display = 'none';
         mediaelement = document.getElementById('audioDiv');
         this.audio.controls = document.createElement('audio');
