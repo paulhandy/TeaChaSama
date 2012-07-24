@@ -158,7 +158,7 @@ function Chapter(){
                     
                     paragraph.line.push(line);
                     console.log(line);
-                    if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
+                    /*if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
                         for(k=0; k< data.paragraph[i].line[j].vocab.length; k++){
                             reference = new VocabReference();
                             reference.index = data.paragraph[i].line[j].vocab.index;
@@ -177,7 +177,7 @@ function Chapter(){
                             line.grammar.push(reference);
                         }   
                         hasgrammar=true;
-                    }
+                    }*/
                     
                 }
                 proto.paragraph.push(paragraph);
