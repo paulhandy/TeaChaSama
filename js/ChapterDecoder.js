@@ -1,5 +1,5 @@
 var background, popdiv;
-function ChapterDecoder(data){
+var ChapterDecoder = function(data){
     this.text = {};
     this.paragraphs = {
         en: [],
@@ -17,12 +17,14 @@ function ChapterDecoder(data){
         $(background).center();
     });
     this.editPreloadedParagraphs = function(args){
-        args.raw.tofix = this.checkLengths(args.raw);
-        this.fixSentences(args.raw);
+        args.raw.tofix = checkLengths(args.raw);
+        //var sf = new SentenceFixer(args.raw.tofix == undefined?-1:(args.raw.tofix.length==0?-1:args.raw.tofix[0].index));
+            SentenceFixer.pgr = args.raw;
+            SentenceFixer.fixSentences();
     };
     this.getParagraphs = function(args){
         var proto = this;
-        var prevonkeydown;
+        
         var instructionDiv = document.getElementById('cdinstructions'), 
         instruction= "Enter Text: English on the left, Translation on the right.", 
         submit = document.getElementById('cdEnterTextButton'),
@@ -56,7 +58,6 @@ function ChapterDecoder(data){
         $(popdiv).center();
         submit.onkeydown = getTextAndMoveOn;
         submit.onclick = getTextAndMoveOn;
-        prevonkeydown = document.onkeydown;
         
         function getTextAndMoveOn(){
             _gpWrapper.style.display='none';
@@ -92,14 +93,16 @@ function ChapterDecoder(data){
                     proto.audioclipper.displayNextTwoLines();
                 }
             }else{
-                proto.paragraphs.tofix = proto.checkLengths({
+                proto.paragraphs.tofix = checkLengths({
                     en: proto.paragraphs.en,
                     jp: proto.paragraphs.jp
                 });
                 if(proto.paragraphs.tofix === false){
                     proto.fixParagraphs(proto.paragraphs);
                 }
-                proto.fixSentences(proto.paragraphs);
+                //var sf = new SentenceFixer(proto.paragraphs.tofix == undefined?-1:(proto.paragraphs.tofix.length==0?-1:proto.paragraphs.tofix[0].index));
+                SentenceFixer.pgr = proto.paragraphs;
+                SentenceFixer.fixSentences();
                 proto.sortChapter({
                     rawpgr: proto.paragraphs,
                     chapter: data.chapter
@@ -146,7 +149,7 @@ Proto.splitSentences = function(args){
     }
     return args;
 };
-Proto.checkLengths = function(args){
+ function checkLengths(args){
     console.log(args);
     if(args.en.length != args.jp.length){
         return false;

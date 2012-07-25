@@ -16,6 +16,7 @@ mb_internal_encoding( 'UTF-8' );
         <script type="text/javascript" src="js/TeaChaSama.js"></script>
         <script type="text/javascript" src="js/ChapterDecoder.js"></script>
         <script type="text/javascript" src="js/FixSentences.js"></script>
+        <script type="text/javascript" src="js/KeyListener.js"></script>
         <script type="text/javascript" src="js/AuthoringTools.js"></script>
         <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
         <!-- Time line stuff -->

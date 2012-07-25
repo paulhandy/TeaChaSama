@@ -48,7 +48,6 @@ include("include/getindex.php");
             </div>
         </div>
         <div class="container-fluid">
-
             <div class="row-fluid">
                 <div id="bookNav">
                 </div>

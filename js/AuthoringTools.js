@@ -365,12 +365,10 @@ function BookEditor(urldata){
                     input.setAttribute('value', getSelectedText().trim());
                 }
                 submit.onclick = addTheTrack;
-                //submit.onkeydown = addTheTrack;
             }
         });
         function addTheTrack(e){
             submit.onclick = null;
-            submit.onkeydown = null;
             pop.onmouseup = null;
             $(pop).hide();
             $(bg).hide();
@@ -390,7 +388,6 @@ function BookEditor(urldata){
             proto.addBooki.classList.remove('icon-white');
         }
         proto.addBookButton.onclick = addBookListener;
-    //proto.addBookButton.onkeydown = addBookListener;
     })();
     function addBookListener(e){
         proto.addBook();
