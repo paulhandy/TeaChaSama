@@ -123,7 +123,7 @@ header('Content-Type: text/html; charset=UTF-8');
                             data: data
                         });
                     }
-                    
+                    LessonWriter.data.chapter = [];
                     e.preventDefault();
                 });
             });
