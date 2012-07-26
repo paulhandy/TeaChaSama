@@ -40,7 +40,7 @@ header('Content-Type: text/html; charset=UTF-8');
         <!-- End time line stuff -->
 
         <script type="text/javascript" src="js/AudioClipper.js"></script>
-        
+
 
         <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8" />
         <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
@@ -65,10 +65,12 @@ header('Content-Type: text/html; charset=UTF-8');
                 document.getElementById("minipop").style.display = 'none';
                 //$('#popbackground').click(function(){});
                 $('#closepop').click(function(){
-                     $('#popover').hide();
+                    $('#popover').hide();
                     $('#minipop').hide();
                     $('#popbackground').hide();
                     $('#cdFixParagraphs').hide();
+                    closeFixer();
+  
                 });
                 ChapterDecoder.init();
                 $('#bookEditorTab a').click(function (e) {

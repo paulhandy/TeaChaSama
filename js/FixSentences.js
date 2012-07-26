@@ -121,10 +121,6 @@ SentenceFixer.fixSentences = function(){
     resetLists();
     var i;
     this.instructionDiv.firstElementChild.innerHTML = this.pgr.tofix.length+') Do any sentences need to be Recombined or split? type F to move forward. R to restart. P for previous';
-        
-    $('#popbackground').click(function(){
-        closeFixer();
-    });
 };
 function resetLists(){
     if(!SentenceFixer.isActive){
