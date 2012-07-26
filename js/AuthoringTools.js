@@ -139,7 +139,7 @@ function BookEditor(urldata){
         
         var bookLiInner = '<a href="#'+IndexWriter.data.coursenum+'book'+Book.index+'">'+Book.title+'</a>';
         var newBook = docreate('li', '', '',bookLiInner);
-        var chapterIndexPane = docreate('div', 'tab-pane span7', IndexWriter.data.coursenum+'book'+Book.index);
+        var chapterIndexPane = docreate('div', 'tab-pane span10', IndexWriter.data.coursenum+'book'+Book.index);
         var chapterIndexNav = docreate('ul', 'nav nav-list', '', '<li class="nav-header">Chapters</li>');
         var addChapterli = docreate('li', '', '', '<a href="#"><i class="icon-plus"></i><b>Add a new Lesson</b></a>');            
         this.bookeditortab.insertBefore(newBook, this.addBookButton);
