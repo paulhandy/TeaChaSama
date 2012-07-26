@@ -146,7 +146,7 @@ ChapterDecoder.splitParagraphs = function(args){
     .replace(englishFilterRe, ' ').replace(newLineSplit, '\n').trim();
     paragraph.en = soup.split(newLineSplit);
     text = args.jp;
-    soup = text.replace(andFilter, '').replace(supFilter, '').replace(splitP, '\n').replace(jaFilterRe, '').replace(/[\s]+/g, '\n').trim();
+    soup = text.replace(andFilter, '').replace(/<(?=sup).*?(?=\/sup)[^>]*?>[\s]*/g, '').replace(splitP, '\n').replace(jaFilterRe, '').replace(/[\s]+/g, '\n').trim();
     paragraph.jp = soup.split(/[\s]+/g);
     return paragraph;
 };
