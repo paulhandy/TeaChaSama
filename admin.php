@@ -40,7 +40,7 @@ header('Content-Type: text/html; charset=UTF-8');
         <!-- End time line stuff -->
 
         <script type="text/javascript" src="js/AudioClipper.js"></script>
-        <script type="text/javascript" src="js/GetAudioClips.js"></script>
+        
 
         <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8" />
         <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
