@@ -123,7 +123,7 @@ ChapterDecoder.getParagraphs = function(args){
             //var sf = new SentenceFixer(proto.paragraphs.tofix == undefined?-1:(proto.paragraphs.tofix.length==0?-1:proto.paragraphs.tofix[0].index));
             SentenceFixer.pgr = ChapterDecoder.paragraphs;
             SentenceFixer.fixSentences();
-            /*ChapterDecoder.sortChapter({
+        /*ChapterDecoder.sortChapter({
                 rawpgr: ChapterDecoder.paragraphs,
                 chapter: ChapterDecoder.data.chapter
             });*/
@@ -215,17 +215,26 @@ function splitJapaneseSentences(myString){
         
         index++;
     }
+    if(mySentences.length >0){
+        var ls = mySentences[index-1].text;
+        var substr = myString.substr(myString.indexOf(ls)+ls.length);
+        if(substr.length > 0){
+            mySentences[index-1].text += substr;
+            console.log(ls);
+            console.log(substr);
+        }
+    }
+    
+    
     if(mySentences.length == 0){
         if(myString == null || myString.length == 0){
             return [];
         }
-        return [{text: myString}];
+        return [{
+            text: myString
+        }];
     }
-    var ls = mySentences[mySentences.length-1];
-    var substr = myString.substr(myString.indexOf(ls)+ls.length);
-    if(substr.length > 0){
-        mySentences.push({text: substr});
-    }
+    
     return mySentences;
 }
     
@@ -268,12 +277,16 @@ function splitIntoSentences(args){
         if(args.text == null || args.text.length == 0){
             return [];
         }
-        return [{text: args.text}];
+        return [{
+            text: args.text
+        }];
     }
-    var ls = mySentences[mySentences.length-1];
+    var ls = mySentences[mySentences.length-1].text;
     var substr = args.text.substr(args.text.indexOf(ls)+ls.length);
     if(substr.length > 0){
-        mySentences.push({text: substr});
+        mySentences.push({
+            text: substr
+        });
     }
     return mySentences;
 }
