@@ -196,6 +196,8 @@ function BookEditor(urldata){
         anchor.setAttribute('href','#');
         var newChapterLi = docreate('li', 'indexEditChapter',id);
         var toolBar = docreate('span', 'pull-right editChapterNav');
+        var ncAddJapanese = docreate('i', ' icon-share-alt editButton');
+        ncAddJapanese.setAttribute('title', 'Add/Replace Japanese Text');
         var ncEdit = docreate('i', 'icon-pencil editButton');
         ncEdit.setAttribute('title', 'Add or Edit Text');
         var ncEditClips = docreate('i', 'icon-tag editButton');
@@ -205,6 +207,7 @@ function BookEditor(urldata){
         var ncRemoveSelf = docreate('i', 'icon-remove editButton');
         ncRemoveSelf.setAttribute('title', 'Delete Chapter');
         toolBar.appendChild(ncEdit);
+        toolBar.appendChild(ncAddJapanese);
         toolBar.appendChild(ncAddAudio);
         toolBar.appendChild(ncEditClips);
         toolBar.appendChild(ncRemoveSelf);
@@ -214,6 +217,7 @@ function BookEditor(urldata){
         anchor.onclick = function(e){
             e.preventDefault();
         }
+        ncAddJapanese.onclick = replaceJapaneseText;
         ncEdit.onclick      = editTextListener;
         ncEditClips.onclick = editClipsListener;
         ncAddAudio.onclick  = addTrackListener;
@@ -233,6 +237,28 @@ function BookEditor(urldata){
             book:args.book.index, 
             chapter: args.lesson.index
         };
+        function replaceJapaneseText(e){
+            if(!dataLoaded){
+                LessonWriter.load({
+                    data: ajxdata,
+                    lesson: args.lesson,
+                    dataLoaded: dataLoaded,
+                    done: function(newOrNot){
+                        editJapaneseText({
+                            madeNew: newOrNot,
+                            chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
+                            book: args.book
+                        })
+                    }
+                });
+            }else{
+                editJapaneseText({
+                    madeNew: isNew,
+                    chapter: args.lesson,
+                    book: args.book
+                });
+            }
+        }
         function editTextListener(e){
             console.log('Has data been loaded?'+dataLoaded);
             if(!dataLoaded){
@@ -319,6 +345,13 @@ function BookEditor(urldata){
     function addBookListener(e){
         proto.addBook();
     }
+}
+function editJapaneseText(args){
+    ChapterDecoder.data = args;
+    console.log('filling in japanese text...');
+    ChapterDecoder.getParagraphs({
+        replaceJapanese: true
+    });
 }
 function　editChapterText(args){
     

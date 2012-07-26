@@ -110,7 +110,7 @@ SentenceFixer.fixSentences = function(){
     this.joinUpIcon = docreate('i','icon-hand-up', 'combineSentenceUp');
     this.joinUpIcon.style.cursor = 'pointer';
     this.joinUpIcon.setAttribute('title', 'Recombine With Above Sentence');
-    this.splitSentenceIcon = docreate('i','icon-resize-horizontal', 'sentenceSplitter');
+    this.splitSentenceIcon = docreate('i','icon-resize-full', 'sentenceSplitter');
     this.splitSentenceIcon.style.cursor = 'pointer';
     this.splitSentenceIcon.setAttribute('title', 'Split at [,]/[;] or selected point.');
     this.editTextIcon = docreate('i', 'icon-edit', 'editTextButton');

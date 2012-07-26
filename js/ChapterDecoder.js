@@ -73,6 +73,7 @@ ChapterDecoder.getParagraphs = function(args){
             en: CKEDITOR.instances.entext.getData(),
             jp: CKEDITOR.instances.jatext.getData()
         };
+        
         //proto.text.en = CKEDITOR.instances.entext.getData();
         //proto.text.jp = CKEDITOR.instances.jatext.getData();
         ChapterDecoder.paragraphs = ChapterDecoder.splitParagraphs({
@@ -84,12 +85,19 @@ ChapterDecoder.getParagraphs = function(args){
             jp: ChapterDecoder.paragraphs.jp,
             ex: searchExceptions
         });
-            
+        if(args.replaceJapanese === true){
+            if(ChapterDecoder.data.chapter.raw == null){
+                ChapterDecoder.data.chapter.raw = {};
+            }
+            ChapterDecoder.data.chapter.raw.jp = ChapterDecoder.paragraphs.jp;
+            return;
+        }
         ChapterDecoder.data.chapter.paragraph = ChapterDecoder.paragraphs.en;
         ChapterDecoder.data.chapter.raw = ChapterDecoder.paragraphs;
         ChapterDecoder.data.chapter.raw.entext = ChapterDecoder.text.en;
         ChapterDecoder.data.chapter.raw.jptext = ChapterDecoder.text.jp;
-            
+        
+        
         if(args.skip){
             console.log('skipping sentence translation arrangement');
             if(args.toClipper){
@@ -207,6 +215,17 @@ function splitJapaneseSentences(myString){
         
         index++;
     }
+    if(mySentences.length == 0){
+        if(myString == null || myString.length == 0){
+            return [];
+        }
+        return [{text: myString}];
+    }
+    var ls = mySentences[mySentences.length-1];
+    var substr = myString.substr(myString.indexOf(ls)+ls.length);
+    if(substr.length > 0){
+        mySentences.push({text: substr});
+    }
     return mySentences;
 }
     
@@ -245,8 +264,16 @@ function splitIntoSentences(args){
             index++;
         }
     }
-    if(mySentences.length==0){
-        alert(args.text);
+    if(mySentences.length == 0){
+        if(args.text == null || args.text.length == 0){
+            return [];
+        }
+        return [{text: args.text}];
+    }
+    var ls = mySentences[mySentences.length-1];
+    var substr = args.text.substr(args.text.indexOf(ls)+ls.length);
+    if(substr.length > 0){
+        mySentences.push({text: substr});
     }
     return mySentences;
 }
