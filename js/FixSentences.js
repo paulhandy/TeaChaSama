@@ -334,6 +334,7 @@ function closeFixer(){
     document.getElementById('chapterdecoder').style.dislay= 'none';
     popdiv.style.display = 'none';
     background.style.display = 'none';
+    console.log('Translation Complete!');
 }
 function removeListListeners(li){
     li.onmouseout = null;
