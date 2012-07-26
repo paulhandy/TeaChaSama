@@ -63,12 +63,12 @@ header('Content-Type: text/html; charset=UTF-8');
                 document.getElementById("popbackground").style.display = 'none';
                 document.getElementById("popover").style.display = 'none';
                 document.getElementById("minipop").style.display = 'none';
-                $('#popbackground').click(function(){
-                    $('#popover').hide();
+                //$('#popbackground').click(function(){});
+                $('#closepop').click(function(){
+                     $('#popover').hide();
                     $('#minipop').hide();
                     $('#popbackground').hide();
                     $('#cdFixParagraphs').hide();
-                    
                 });
                 ChapterDecoder.init();
                 $('#bookEditorTab a').click(function (e) {
@@ -190,6 +190,7 @@ header('Content-Type: text/html; charset=UTF-8');
         </div>
         <div class="translucent" id="popbackground"></div>
         <div class="row rounded-white span12" id="popover">
+            <i class=" icon-remove" id="closepop"></i>
             <div id="chapterdecoder">
                 <div id="cdenterText">
                     <h3 id="cdinstructions">Please Provide the text of the Lesson.</h3>
