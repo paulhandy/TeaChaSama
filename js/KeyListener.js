@@ -2,9 +2,31 @@ document.onkeydown = function(e){
     if(SentenceFixer.isActive){
         if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'F'){
             SentenceFixer.instructionDiv.firstElementChild.innerHTML =SentenceFixer.pgr.tofix.length+") choose Up or down, corresponding to whether the red box goes in the top or bottom yellow boxes. R to restart";
+            SentenceFixer.routineFixIsActive = true;
             routineFix();
         }
+        if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'S'){
+            $('#sentenceSplitter').trigger('click');
+        }
+        if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'E'){
+            if(!SentenceFixer.isEditingSentences){
+                e.preventDefault();
+                $('#editTextButton').trigger('click');
+            }
+        }
+        if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'W'){
+            console.log('Putting back up...');
+            $('#combineSentenceUp').trigger('click');
+        }
+        if(SentenceFixer.splittingSentences){
+            if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'C' && SentenceFixer.splittingSentences){
+                SentenceFixer.splittingSentences = false;
+                SentenceFixer.instructionDiv.firstElementChild.innerHTML = SentenceFixer.pgr.tofix.length+"): F to move forward. P to go to previous. R to restart";
+            }
+        }
         if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'R'){
+            SentenceFixer.routineFixIsActive = false;
+            SentenceFixer.splittingSentences = false;
             SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index] = SentenceFixer.backup.en;
             SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index] = SentenceFixer.backup.jp;
             console.log("Restarting...");
@@ -24,29 +46,25 @@ document.onkeydown = function(e){
             console.log("Rewinding...");
             moveOn();
         }
-        if(SentenceFixer.routineFixIsActive && SentenceFixer.isEnRed){
-            if(e.keyCode === 38){
+        if(e.keyCode === 27){
+            // possibly something here
+        }
+        if(e.keyCode === 38 /* up arrow */ && SentenceFixer.routineFixIsActive){
+            console.log('shift up!');
+            if( SentenceFixer.englishIsLonger){
+                console.log('shift english up');
                 SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line = shiftUp({
                     array:SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line, 
-                    index:SentenceFixer.currentJp
+                    index:SentenceFixer.currentEn
                 });
                 resetLists();
                 routineFix({
                     en:SentenceFixer.currentEn,
                     jp:SentenceFixer.currentJp
                 });
-                    
             }
-            if(e.keyCode === 40){
-                resetLists();
-                routineFix({
-                    en:SentenceFixer.currentEn+1,
-                    jp:SentenceFixer.currentJp+1
-                });
-            }
-        }
-        if(SentenceFixer.routineFixIsActive && !SentenceFixer.isEnRed){
-            if(e.keyCode === 38){
+            else if(!SentenceFixer.englishIsLonger){
+                console.log('shift Japanese up');
                 SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line = shiftUp({
                     array:SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line, 
                     index:SentenceFixer.currentJp
@@ -57,20 +75,22 @@ document.onkeydown = function(e){
                     jp:SentenceFixer.currentJp
                 });
             }
-            if(e.keyCode === 40){
+        }
+        if(e.keyCode === 40 /* down arrow*/ && SentenceFixer.routineFixIsActive){
+            if(SentenceFixer.englishIsLonger){
                 resetLists();
                 routineFix({
                     en:SentenceFixer.currentEn+1,
                     jp:SentenceFixer.currentJp+1
                 });
             }
-            if(SentenceFixer.splittingSentences){
-                if(String.fromCharCode(e.keyCode).toLocaleUpperCase() === 'C' && SentenceFixer.splittingSentences){
-                    SentenceFixer.splittingSentences = false;
-                    SentenceFixer.instructionDiv.firstElementChild.innerHTML = SentenceFixer.pgr.tofix.length+"): F to move forward. P to go to previous. R to restart";
-                }
+            else if(!SentenceFixer.englishIsLonger){
+                resetLists();
+                routineFix({
+                    en:SentenceFixer.currentEn+1,
+                    jp:SentenceFixer.currentJp+1
+                });
             }
-        }
-    
+        }      
     }
 };

@@ -1,123 +1,133 @@
 var background, popdiv;
-var ChapterDecoder = function(data){
+var searchExceptions = ["Mrs.","Mr.","Ms.","Prof.","Dr.","Gen.","Rep.","Sen.","St.","Sr.","Jr.","Ph.D.","M.D.","B.A.","M.A.","D.D.S.","a.m.","p.m.","i.e.","etc."];
+var ChapterDecoder = function(){
+    this.data = null;
     this.text = {};
     this.paragraphs = {
         en: [],
         jp: []
     };
-    this.wrapper = document.getElementById('chapterdecoder');
-    this.exceptions = ["Mrs.","Mr.","Ms.","Prof.","Dr.","Gen.","Rep.","Sen.","St.","Sr.","Jr.","Ph.D.","M.D.","B.A.","M.A.","D.D.S.","a.m.","p.m.","i.e.","etc."];
+
+    
     var proto=this;
-    this.audioclipper = data.audioclipper;
-    background = document.getElementById('popbackground');
-    popdiv =document.getElementById('popover');
+    this.audioclipper = this.data.audioclipper;
+    
     $(background).center();
     $(window).resize(function(){
         $(popdiv).fitHeight().center();
         $(background).center();
     });
-    this.editPreloadedParagraphs = function(args){
-        args.raw.tofix = checkLengths(args.raw);
-        //var sf = new SentenceFixer(args.raw.tofix == undefined?-1:(args.raw.tofix.length==0?-1:args.raw.tofix[0].index));
-            SentenceFixer.pgr = args.raw;
-            SentenceFixer.fixSentences();
-    };
-    this.getParagraphs = function(args){
-        var proto = this;
-        
-        var instructionDiv = document.getElementById('cdinstructions'), 
-        instruction= "Enter Text: English on the left, Translation on the right.", 
-        submit = document.getElementById('cdEnterTextButton'),
-        _gpWrapper = document.getElementById('cdenterText');
-        _gpWrapper.style.display='block';
-        background.style.display='block';
-        this.wrapper.style.display='block';
-        if(CKEDITOR.instances.entext !=null){
-            CKEDITOR.instances.entext.destroy();
-            CKEDITOR.instances.jatext.destroy();
-        }
-        
-        CKEDITOR.replace('entext', {
-            uiColor: '#34DFA1',
-            extraPlugins : 'uicolor',
-            toolbar : [ [ 'Source' ], [ 'UIColor' ] ],
-            width: '400px'
-        });
-        CKEDITOR.instances.entext.focus();
-        CKEDITOR.replace( 'jatext',
-        {
-            uiColor: '#14B8C4',
-            extraPlugins : 'uicolor',
-            toolbar : [ [ 'Source' ], [ 'UIColor' ] ],
-            width: '400px'
-        });
-        popdiv.style.display='block';
-        popdiv.style.height = this.wrapper.offsetHeight+250+'px';
-        
-        $(background).center();
-        $(popdiv).center();
-        submit.onkeydown = getTextAndMoveOn;
-        submit.onclick = getTextAndMoveOn;
-        
-        function getTextAndMoveOn(){
-            _gpWrapper.style.display='none';
-            proto.text.en = CKEDITOR.instances.entext.getData();
-            proto.text.jp = CKEDITOR.instances.jatext.getData();
-            proto.paragraphs = proto.splitParagraphs({
-                en: proto.text.en,
-                jp: proto.text.jp
-            });
-            proto.paragraphs = proto.splitSentences({
-                en: proto.paragraphs.en,
-                jp: proto.paragraphs.jp,
-                ex: proto.exceptions
-            });
-            
-            data.chapter.paragraph = proto.paragraphs.en;
-            data.chapter.raw = proto.paragraphs;
-            data.chapter.raw.entext = proto.text.en;
-            data.chapter.raw.jptext = proto.text.jp;
-            
-            if(args.skip){
-                console.log('skipping sentence translation arrangement');
-                if(args.toClipper){
-                    $(proto.wrapper).hide();
-                    $(popdiv).hide();
-                    
-                    proto.audioclipper.chapter= data.chapter;
-                    data = proto.audioclipper.chapter;
-                    console.log(data);
-                    proto.audioclipper.show();
-                    proto.audioclipper.decodeLineSet();
-                    proto.audioclipper.setListeners();
-                    proto.audioclipper.displayNextTwoLines();
-                }
-            }else{
-                proto.paragraphs.tofix = checkLengths({
-                    en: proto.paragraphs.en,
-                    jp: proto.paragraphs.jp
-                });
-                if(proto.paragraphs.tofix === false){
-                    proto.fixParagraphs(proto.paragraphs);
-                }
-                //var sf = new SentenceFixer(proto.paragraphs.tofix == undefined?-1:(proto.paragraphs.tofix.length==0?-1:proto.paragraphs.tofix[0].index));
-                SentenceFixer.pgr = proto.paragraphs;
-                SentenceFixer.fixSentences();
-                proto.sortChapter({
-                    rawpgr: proto.paragraphs,
-                    chapter: data.chapter
-                });
-            }
-            
-        }
-    };
 }
-var Proto = ChapterDecoder.prototype;
-Proto.splitParagraphs = function(args){
+ChapterDecoder.editPreloadedParagraphs = function(args){
+    console.log('preloading chapter:')
+    console.log(args);
+    args.raw.tofix = checkLengths(args.raw);
+    //var sf = new SentenceFixer(args.raw.tofix == undefined?-1:(args.raw.tofix.length==0?-1:args.raw.tofix[0].index));
+    SentenceFixer.pgr = args.raw;
+    SentenceFixer.fixSentences();
+};
+ChapterDecoder.init = function(){
+    this.wrapper = document.getElementById('chapterdecoder');
+    background = document.getElementById('popbackground');
+    popdiv =document.getElementById('popover');
+};
+ChapterDecoder.getParagraphs = function(args){
+        
+    var instructionDiv = document.getElementById('cdinstructions'), 
+    instruction= "Enter Text: English on the left, Translation on the right.", 
+    submit = document.getElementById('cdEnterTextButton'),
+    _gpWrapper = document.getElementById('cdenterText');
+    _gpWrapper.style.display='block';
+    background.style.display='block';
+    ChapterDecoder.wrapper.style.display='block';
+    if(CKEDITOR.instances.entext !=null){
+        CKEDITOR.instances.entext.destroy();
+        CKEDITOR.instances.jatext.destroy();
+    }
+        
+    CKEDITOR.replace('entext', {
+        uiColor: '#34DFA1',
+        extraPlugins : 'uicolor',
+        toolbar : [ [ 'Source' ], [ 'UIColor' ] ],
+        width: '400px'
+    });
+    CKEDITOR.instances.entext.focus();
+    CKEDITOR.replace( 'jatext',
+    {
+        uiColor: '#14B8C4',
+        extraPlugins : 'uicolor',
+        toolbar : [ [ 'Source' ], [ 'UIColor' ] ],
+        width: '400px'
+    });
+    popdiv.style.display='block';
+    popdiv.style.height = ChapterDecoder.wrapper.offsetHeight+250+'px';
+        
+    $(background).center();
+    $(popdiv).center();
+    submit.onkeydown = getTextAndMoveOn;
+    submit.onclick = getTextAndMoveOn;
+        
+    function getTextAndMoveOn(){
+        _gpWrapper.style.display='none';
+        ChapterDecoder.text = {
+            en: CKEDITOR.instances.entext.getData(),
+            jp: CKEDITOR.instances.jatext.getData()
+        };
+        //proto.text.en = CKEDITOR.instances.entext.getData();
+        //proto.text.jp = CKEDITOR.instances.jatext.getData();
+        ChapterDecoder.paragraphs = ChapterDecoder.splitParagraphs({
+            en: ChapterDecoder.text.en,
+            jp: ChapterDecoder.text.jp
+        });
+        ChapterDecoder.paragraphs = ChapterDecoder.splitSentences({
+            en: ChapterDecoder.paragraphs.en,
+            jp: ChapterDecoder.paragraphs.jp,
+            ex: searchExceptions
+        });
+            
+        ChapterDecoder.data.chapter.paragraph = ChapterDecoder.paragraphs.en;
+        ChapterDecoder.data.chapter.raw = ChapterDecoder.paragraphs;
+        ChapterDecoder.data.chapter.raw.entext = ChapterDecoder.text.en;
+        ChapterDecoder.data.chapter.raw.jptext = ChapterDecoder.text.jp;
+            
+        if(args.skip){
+            console.log('skipping sentence translation arrangement');
+            if(args.toClipper){
+                $(ChapterDecoder.wrapper).hide();
+                $(popdiv).hide();
+                    
+                ChapterDecoder.audioclipper.chapter= ChapterDecoder.data.chapter;
+                ChapterDecoder.data = ChapterDecoder.audioclipper.chapter;
+                console.log(ChapterDecoder.data);
+                ChapterDecoder.audioclipper.show();
+                ChapterDecoder.audioclipper.decodeLineSet();
+                ChapterDecoder.audioclipper.setListeners();
+                ChapterDecoder.audioclipper.displayNextTwoLines();
+            }
+        }else{
+            ChapterDecoder.paragraphs.tofix = checkLengths({
+                en: ChapterDecoder.paragraphs.en,
+                jp: ChapterDecoder.paragraphs.jp
+            });
+            if(ChapterDecoder.paragraphs.tofix === false){
+                ChapterDecoder.fixParagraphs(ChapterDecoder.paragraphs);
+            }
+            //var sf = new SentenceFixer(proto.paragraphs.tofix == undefined?-1:(proto.paragraphs.tofix.length==0?-1:proto.paragraphs.tofix[0].index));
+            SentenceFixer.pgr = ChapterDecoder.paragraphs;
+            SentenceFixer.fixSentences();
+            /*ChapterDecoder.sortChapter({
+                rawpgr: ChapterDecoder.paragraphs,
+                chapter: ChapterDecoder.data.chapter
+            });*/
+        }
+            
+    }
+};
+ChapterDecoder.splitParagraphs = function(args){
     var paragraph = {};
-    var splitP = /<(?=p|\/p)[^>]*?>/g;
+    var splitP = /<(?=p|\/p|div|\/div|h\d|\/h\d)[^>]*?>/g;
     var englishFilterRe = /<[^>]*?>/g;
-    var jaFilterRe = /<(?!ruby|rb|rt|\/rb|\/rt|\/ruby|h\d|\/h\d)[^>]*?>/g;
+    var jaFilterRe = /<(?!ruby|rb|rt|\/rb|\/rt|\/ruby)[^>]*?>/g;
     var andFilter = /&[^;]+?;/g;
     var supFilter = /<(?=sup).*?(?=\/sup)[^>]*?>/g;
     var newLineSplit = /[\s]*?\n[\s]*/g;
@@ -128,11 +138,11 @@ Proto.splitParagraphs = function(args){
     .replace(englishFilterRe, ' ').replace(newLineSplit, '\n').trim();
     paragraph.en = soup.split(newLineSplit);
     text = args.jp;
-    soup = text.replace(andFilter, '').replace(supFilter, '').replace(splitP, '\n').replace(jaFilterRe, '').replace(newLineSplit, '\n').trim();
-    paragraph.jp = soup.split(newLineSplit);
+    soup = text.replace(andFilter, '').replace(supFilter, '').replace(splitP, '\n').replace(jaFilterRe, '').replace(/[\s]+/g, '\n').trim();
+    paragraph.jp = soup.split(/[\s]+/g);
     return paragraph;
 };
-Proto.splitSentences = function(args){
+ChapterDecoder.splitSentences = function(args){
     var i, line;
     for(i=0;i<args.en.length;i++){
         args.en[i] = {
@@ -149,7 +159,7 @@ Proto.splitSentences = function(args){
     }
     return args;
 };
- function checkLengths(args){
+function checkLengths(args){
     console.log(args);
     if(args.en.length != args.jp.length){
         return false;
@@ -240,3 +250,27 @@ function splitIntoSentences(args){
     }
     return mySentences;
 }
+ChapterDecoder.fixParagraphs = function(args){
+    console.log('fix paragraphs');
+    
+    console.log(args);
+}
+ChapterDecoder.sortChapter = function(args){
+    var unclipped = Object.keys(args.chapter.paragraph[0].line[0]).indexOf('clip')<0;
+    var i, j;
+    for(i=0;i<args.rawpgr.en.length;i++){
+        for(j=0;j<args.rawpgr.en[i].line.length;j++){
+            args.rawpgr.en[i].line[j].translation = args.rawpgr.jp[i].line[j].text;
+            if(args.chapter.paragraph.length > i){
+            }
+        }
+    }
+    args.chapter.organized = args.rawpgs.en;
+    if(unclipped){
+        args.chapter.paragraph = args.rawpgs.en;
+    }else{
+        args.chapter.organized = args.rawpgs.en;
+    //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
+    }
+}
+

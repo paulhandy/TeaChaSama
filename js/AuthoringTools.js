@@ -17,19 +17,55 @@ var LessonWriter = {
     data : {
         chapter: []
     },
+    lastString: null,
     load: function(args){
+        args.isNew = true;
         $.ajax({
-            url: args.url,
-            type: "GET"
-        }).done(function(msg){
-            console.log(msg);
+            url: _url.lessonget,
+            data: args.data,
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+                args.lesson = data;
+                args.isNew = false;
+            },
+            error: function(msg){
+                try{
+                    var txt = msg.responseText.replace(/\\\'/g, '\'');
+                    while(txt.indexOf('\\\'')>0){
+                        txt = txt.replace(/\\\'/g, '\'');
+                    }
+                    txt = txt.replace(/\'\'/g, '\'');
+                    args.lesson = JSON.parse(txt);
+                    if(Object.keys(args.lesson).length>0){
+                        args.isNew = false;
+                    }
+                }catch(e){
+                    LessonWriter.lastString = msg.responseText;
+                }
+            },
+            complete:function(j, txt){
+                if(LessonWriter.data.chapter.indexOf(args.lesson)<0){
+                    LessonWriter.data.chapter.push(args.lesson);
+                }
+                console.log(txt);
+                args.dataLoaded=true;
+                args.done(args.isNew);
+            }
         });
     },
     save:function(args){
         $.ajax({
             url: args.url,
             data: args.data,
-            type: "POST"
+            type: "POST",
+            success: function(msg){
+                console.log('success');
+            },
+            error: function(err){
+                console.log('there was an error in the process');
+                console.log(err);
+            }
         }).done(function(msg){
             console.log(msg);
         });
@@ -54,7 +90,6 @@ function CourseEditor(args){
 }
 function BookEditor(urldata){
     this.urldata = urldata;
-    this.chapterdecoder = null;
     this.bookLiSet = [];
     var proto = this;
     this.bookeditortab = document.getElementById('bookEditorTab');
@@ -104,7 +139,7 @@ function BookEditor(urldata){
         
         var bookLiInner = '<a href="#'+IndexWriter.data.coursenum+'book'+Book.index+'">'+Book.title+'</a>';
         var newBook = docreate('li', '', '',bookLiInner);
-        var chapterIndexPane = docreate('div', 'tab-pane span5', IndexWriter.data.coursenum+'book'+Book.index);
+        var chapterIndexPane = docreate('div', 'tab-pane span7', IndexWriter.data.coursenum+'book'+Book.index);
         var chapterIndexNav = docreate('ul', 'nav nav-list', '', '<li class="nav-header">Chapters</li>');
         var addChapterli = docreate('li', '', '', '<a href="#"><i class="icon-plus"></i><b>Add a new Lesson</b></a>');            
         this.bookeditortab.insertBefore(newBook, this.addBookButton);
@@ -193,35 +228,28 @@ function BookEditor(urldata){
             ncRemoveSelf.onclick = null;
             args.nav.removeChild(newChapterLi);
         }
-        var ajxdat = 'course=1&book='+args.book.index+'&chapter='+args.lesson.index;
-        
+        var ajxdata = {
+            course: COURSENUMBER, 
+            book:args.book.index, 
+            chapter: args.lesson.index
+        };
         function editTextListener(e){
+            console.log('Has data been loaded?'+dataLoaded);
             if(!dataLoaded){
-                $.ajax({
-                    url: urldata.lessonget,
-                    data: ajxdat,
-                    type: 'get',
-                    dataType: 'json',
-                    success: function(data){
-                        args.lesson = data;
-                        isNew = false;
-                    },
-                    error: function(msg){
-                        console.log(msg.error());
-                    },
-                    complete:function(j, txt){
-                        console.log(txt);
-                        dataLoaded=true;
-                        proto.editChapterText({
-                            madeNew: isNew,
-                            chapter: args.lesson,
+                LessonWriter.load({
+                    data: ajxdata,
+                    lesson: args.lesson,
+                    dataLoaded: dataLoaded,
+                    done: function(newOrNot){
+                        editChapterText({
+                            madeNew: newOrNot,
+                            chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
                             book: args.book
-                        });
+                        })
                     }
                 });
-                
             }else{
-                proto.editChapterClips({
+                editChapterText({
                     madeNew: isNew,
                     chapter: args.lesson,
                     book: args.book
@@ -230,31 +258,22 @@ function BookEditor(urldata){
             e.preventDefault();
         }
         function editClipsListener(e){
+            console.log('Has data been loaded?'+dataLoaded);
             if(!dataLoaded){
-                $.ajax({
-                    url: urldata.lessonget,
-                    data: ajxdat,
-                    type: 'get',
-                    dataType: 'json',
-                    success: function(data){
-                        args.lesson = data;
-                        isNew = false;
-                    },
-                    error: function(msg){
-                        console.log(msg.error());
-                    },
-                    complete:function(j, txt){
-                        console.log(txt);
-                        dataLoaded=true;
-                        proto.editChapterClips({
-                            madeNew: isNew,
-                            chapter: args.lesson,
+                LessonWriter.load({
+                    data: ajxdata,
+                    lesson: args.lesson,
+                    dataLoaded: dataLoaded,
+                    done: function(newOrNot){
+                        editChapterClips({
+                            madeNew: newOrNot,
+                            chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
                             book: args.book
-                        });
+                        })
                     }
                 });
             }else{
-                proto.editChapterClips({
+                editChapterClips({
                     madeNew: isNew,
                     chapter: args.lesson,
                     book: args.book
@@ -263,32 +282,22 @@ function BookEditor(urldata){
             e.preventDefault();
         }
         function addTrackListener(e){
+            console.log('Has data been loaded?'+dataLoaded);
             if(!dataLoaded){
-                $.ajax({
-                    url: urldata.lessonget,
-                    data: ajxdat,
-                    type: 'get',
-                    dataType: 'json',
-                    success:function(data){
-                        isNew = false
-                        args.lesson = data;
-                    },
-                    error: function(msg){
-                        console.log(msg.error());
-                    },
-                    complete:function(j, txt){
-                        console.log(txt);
-                        dataLoaded=true;
-                        proto.addChapterAudioTrack({
-                            madeNew: isNew,
-                            chapter: args.lesson
-                        });
+                LessonWriter.load({
+                    data: ajxdata,
+                    lesson: args.lesson,
+                    dataLoaded: dataLoaded,
+                    done: function(newOrNot){
+                        addChapterAudioTrack({
+                            madeNew: newOrNot,
+                            chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
+                            book: args.book
+                        })
                     }
-                        
                 });
-                
             }else{
-                proto.editChapterClips({
+                addChapterAudioTrack({
                     madeNew: isNew,
                     chapter: args.lesson,
                     book: args.book
@@ -297,89 +306,7 @@ function BookEditor(urldata){
             e.preventDefault();
         }
     };
-    this.editChapterText = function(args){
-        if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
-            LessonWriter.data.chapter.push(args.chapter);
-        }
-        proto.chapterdecoder = new ChapterDecoder(args);
-        console.log(args.makeNew? "New Chapter text":"Edit Chapter Text");
-        if(args.madeNew){
-            proto.chapterdecoder.getParagraphs({
-                skip:false
-            });
-        }else{
-            proto.chapterdecoder.editPreloadedParagraphs(args.chapter);
-        }
-    };
-    this.editChapterClips = function(args){
-        if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
-            LessonWriter.data.chapter.push(args.chapter);
-        }
-        var ac = IndexWriter.audioclipper;
-            if(IndexWriter.audioclipper == null || args.chapter.index != ac.chapter.index){
-                ac = new AudioClipper(args.chapter);
-                ac.setAudioDiv();
-                ac.getWaveForm();
-            }
-            proto.chapterDecoder = new ChapterDecoder({
-                chapter: args.chapter,
-                audioclipper: ac
-            });
-        if(args.madeNew){
-            
-            proto.chapterDecoder.getParagraphs({
-                skip:true,
-                toClipper: true
-            });
-        }else{
-            proto.chapterDecoder.getParagraphs({
-                skip:true,
-                toClipper: true
-            });
-        }
-    };
-    this.addChapterAudioTrack = function(args){
-        if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
-            LessonWriter.data.chapter.push(args.chapter);
-        }
-        var pop = document.getElementById('minipop');
-        var bg = document.getElementById('popbackground');
-        var afd = document.createElement('div');
-        afd.setAttribute('class', 'well');
-        var input = document.createElement('input');
-        input.setAttribute('type', 'text');
-        var submit = docreate('button', '', '', 'Done');
-        pop.appendChild(input);
-        pop.appendChild(submit);
-        pop.appendChild(afd);
-        $.ajax({
-            url: 'audio/index.php',
-            type: 'GET',
-            success: function(data){
-                pop.style.display = 'block';
-                pop.style.width = '500px';
-                $(pop).center();
-                $(bg).show().center();
-                afd.innerHTML = data;
-                afd.onmouseup = function(){
-                    input.setAttribute('value', getSelectedText().trim());
-                }
-                submit.onclick = addTheTrack;
-            }
-        });
-        function addTheTrack(e){
-            submit.onclick = null;
-            pop.onmouseup = null;
-            $(pop).hide();
-            $(bg).hide();
-            args.chapter.audio = {
-                filename: input.getAttribute('value')
-            };
-            IndexWriter.audioclipper = new AudioClipper(args.chapter);
-            IndexWriter.audioclipper.setAudioDiv();
-            IndexWriter.audioclipper.getWaveForm();
-        }
-    };
+    
     this.setListeners = (function(){
         proto.addBookButton.onmouseover = function(){
             proto.addBooki.classList.add('icon-white');
@@ -393,3 +320,83 @@ function BookEditor(urldata){
         proto.addBook();
     }
 }
+function　editChapterText(args){
+    
+    ChapterDecoder.data = args;
+    console.log(args.makeNew? "New Chapter text":"Edit Chapter Text");
+    if(args.madeNew){
+        ChapterDecoder.getParagraphs({
+            skip:false
+        });
+    }else{
+        ChapterDecoder.editPreloadedParagraphs(args.chapter);
+    }
+}
+function editChapterClips(args){
+        
+    var ac = IndexWriter.audioclipper;
+    if(IndexWriter.audioclipper == null || args.chapter.index != ac.chapter.index){
+        ac = new AudioClipper(args.chapter);
+        ac.setAudioDiv();
+        ac.getWaveForm();
+    }
+    ChapterDecoder.data = {
+        chapter: args.chapter,
+        audioclipper: ac
+    };
+    if(args.madeNew){
+            
+        ChapterDecoder.getParagraphs({
+            skip:true,
+            toClipper: true
+        });
+    }else{
+        ChapterDecoder.getParagraphs({
+            skip:true,
+            toClipper: true
+        });
+    }
+}
+function addChapterAudioTrack(args){
+    if(LessonWriter.data.chapter.indexOf(args.chapter)<0){
+        LessonWriter.data.chapter.push(args.chapter);
+    }
+    var pop = document.getElementById('minipop');
+    var bg = document.getElementById('popbackground');
+    var afd = document.createElement('div');
+    afd.setAttribute('class', 'well');
+    var input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    var submit = docreate('button', '', '', 'Done');
+    pop.appendChild(input);
+    pop.appendChild(submit);
+    pop.appendChild(afd);
+    $.ajax({
+        url: 'audio/index.php',
+        type: 'GET',
+        success: function(data){
+            pop.style.display = 'block';
+            pop.style.width = '500px';
+            $(pop).center();
+            $(bg).show().center();
+            afd.innerHTML = data;
+            afd.onmouseup = function(){
+                input.setAttribute('value', getSelectedText().trim());
+            }
+            submit.onclick = addTheTrack;
+        }
+    });
+    function addTheTrack(e){
+        submit.onclick = null;
+        pop.onmouseup = null;
+        $(pop).hide();
+        $(bg).hide();
+        args.chapter.audio = {
+            filename: input.getAttribute('value')
+        };
+        IndexWriter.audioclipper = new AudioClipper(args.chapter);
+        IndexWriter.audioclipper.setAudioDiv();
+        IndexWriter.audioclipper.getWaveForm();
+    }
+}
+

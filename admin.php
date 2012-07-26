@@ -1,8 +1,8 @@
 <?php
 include("../Include/opendb.php");
 include("include/getindex.php");
-mb_internal_encoding( 'UTF-8' );
- header( 'Content-Type: text/html; charset=UTF-8' );
+mb_internal_encoding('UTF-8');
+header('Content-Type: text/html; charset=UTF-8');
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,6 +40,7 @@ mb_internal_encoding( 'UTF-8' );
         <!-- End time line stuff -->
 
         <script type="text/javascript" src="js/AudioClipper.js"></script>
+        <script type="text/javascript" src="js/GetAudioClips.js"></script>
 
         <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8" />
         <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
@@ -54,6 +55,10 @@ mb_internal_encoding( 'UTF-8' );
                 indexget:'include/getindex.php'
             }
             $(function(){
+                $(window).resize(function(){
+                    $(popdiv).fitHeight().center();
+                    $(background).center();
+                });
                 $('#audioEditor').css('width', $(window).width()-100+'px');
                 document.getElementById("popbackground").style.display = 'none';
                 document.getElementById("popover").style.display = 'none';
@@ -65,6 +70,7 @@ mb_internal_encoding( 'UTF-8' );
                     $('#cdFixParagraphs').hide();
                     
                 });
+                ChapterDecoder.init();
                 $('#bookEditorTab a').click(function (e) {
                     e.preventDefault();
                     $(this).tab('show');
@@ -72,15 +78,26 @@ mb_internal_encoding( 'UTF-8' );
                 var str = document.getElementById('index_json_data').innerHTML;
                 document.getElementById('index_json_data').innerHTML = '';
                 if(str.length > 0){
-                    IndexWriter.data = JSON.parse(str);
+                    try{
+                        IndexWriter.data = JSON.parse(str);
+                    }catch(e){
+                        str = str.replace(/\\\'/g, '\'');
+                        while(str.indexOf('\\\'')>0){
+                            str = str.replace(/\\\'/g, '\'');
+                        }
+                        str = str.replace(/\'\'/g, '\'');
+                        IndexWriter.data = JSON.parse(str);
+                    }
                     console.log(IndexWriter.data);
                 }
                 IndexWriter.coursenum = COURSENUMBER;
                 courseEditor = new CourseEditor(_url);
                 $('#saveIndex').click(function(e){
                     var string = JSON.stringify(IndexWriter.data);
-                    var data = 'course_number='+COURSENUMBER+'&data='+string;
-                    var data = data.split('').reverse().join('').replace(/'(?!\\)/g, "'\\").split('').reverse().join('');
+                    var data = {
+                        course_number:COURSENUMBER,
+                        data:string
+                    };
                     console.log(data);
                     IndexWriter.save({
                         url: _url.indexsave,
@@ -94,8 +111,12 @@ mb_internal_encoding( 'UTF-8' );
                     
                     for(i=0;i<LessonWriter.data.chapter.length;i++){
                         var string = JSON.stringify(LessonWriter.data.chapter[i]);
-                        var data = 'cnum='+COURSENUMBER+'&bki='+LessonWriter.data.chapter[i].book+'&chi='+LessonWriter.data.chapter[i].index+'&dat='+string;
-                        data = data.split('').reverse().join('').replace(/'(?!\\)/g, "'\\").split('').reverse().join('');
+                        var data = {
+                            cnum: COURSENUMBER,
+                            bki:LessonWriter.data.chapter[i].book,
+                            chi: LessonWriter.data.chapter[i].index,
+                            dat: string
+                        };
                         console.log(data);
                         LessonWriter.save({
                             url: _url.lessonsave,

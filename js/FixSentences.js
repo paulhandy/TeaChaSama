@@ -22,25 +22,30 @@
  *  and re-present the fix dialogue if necessary.
  */
 
-var SentenceFixer = function(){
-    this.isActive = false;
-    this.pgr = null;
-    this.fixWrapper = null;
-    this.instructionDiv = null;
-    this.splittingSentences = false;
-    this.backup = null;
-    this.messageDiv = null;
-    this.leftnav = null;
-    this.rightnav = null;
-    this.leftHeader = null; 
-    this.rightHeader = null; 
-    this.leftList = [];
-    this.rightList = []; 
-    this.joinUpIcon = null;
-    this.splitSentenceIcon = null;
-    this.belongsToIcon = null;
-    this.currentJp = 0;
-    this.currentEn = 0;
+var SentenceFixer = {
+    isActive : false,
+    pgr : null,
+    fixWrapper : null,
+    instructionDiv : null,
+    splittingSentences : false,
+    isEditingSentences : false,
+    backup : null,
+    messageDiv : null,
+    leftnav : null,
+    rightnav : null,
+    leftHeader : null, 
+    rightHeader : null, 
+    leftList : [],
+    rightList : [], 
+    joinUpIcon : null,
+    splitSentenceIcon : null,
+    editTextIcon : null,
+    currentJp : 0,
+    currentEn : 0,
+    editingSentence : null
+};
+SentenceFixer.fixParagraphs = function(){
+    
 };
 SentenceFixer.fixSentences = function(){
     this.isActive = true;
@@ -102,13 +107,13 @@ SentenceFixer.fixSentences = function(){
     this.leftHeader.innerHTML = 'English Sentences:';
     this.rightHeader.innerHTML = 'Translated Sentences:';
     
-    this.joinUpIcon = docreate('i','icon-hand-up');
+    this.joinUpIcon = docreate('i','icon-hand-up', 'combineSentenceUp');
     this.joinUpIcon.style.cursor = 'pointer';
     this.joinUpIcon.setAttribute('title', 'Recombine With Above Sentence');
-    this.splitSentenceIcon = docreate('i','icon-resize-horizontal');
+    this.splitSentenceIcon = docreate('i','icon-resize-horizontal', 'sentenceSplitter');
     this.splitSentenceIcon.style.cursor = 'pointer';
     this.splitSentenceIcon.setAttribute('title', 'Split at [,]/[;] or selected point.');
-    this.belongsToIcon = docreate('i', 'icon-flag');
+    this.editTextIcon = docreate('i', 'icon-edit', 'editTextButton');
     this.fixWrapper.focus();
     SentenceFixer.leftList = [];
     SentenceFixer.rightList = [];
@@ -196,6 +201,7 @@ function shiftUp(args){
     return args.array;
 }
 function doNextParagraph(){
+    SentenceFixer.routineFixIsActive = false;
     if(!SentenceFixer.isActive){
         return;
     }
@@ -226,11 +232,12 @@ function setLineListeners(args){
     args.li.onkeydown = OnClick;
     args.li.onmouseover = function(e){
         if(!args.li.classList.contains('greyedOut')){
-            args.li.appendChild(SentenceFixer.belongsToIcon);
+            args.li.appendChild(SentenceFixer.editTextIcon);
             args.li.appendChild(SentenceFixer.joinUpIcon);
             args.li.appendChild(SentenceFixer.splitSentenceIcon);
         }
-                
+        $('.enSentence').removeClass('activeSentence');
+        args.li.classList.add('activeSentence');
     }
     args.li.onmouseout =  function(e){
         if (e === null){
@@ -243,7 +250,7 @@ function setLineListeners(args){
             e = window.event;
         }
         action = e.target == SentenceFixer.joinUpIcon ? 1: 
-        (e.target == SentenceFixer.splitSentenceIcon ? 2: (e.target == SentenceFixer.belongsToIcon?3:0));
+        (e.target == SentenceFixer.splitSentenceIcon ? 2: (e.target == SentenceFixer.editTextIcon?3:0));
         switch(action){
             case 1:
                 joinSentencesUp({
@@ -261,11 +268,39 @@ function setLineListeners(args){
                 });
                 break; 
             case 3:
+                editSentenceText({
+                    line: args.line,
+                    index: args.index,
+                    li: args.li
+                });
                 break;
             default:
                 break;
         }
     }
+}
+function editSentenceText(args){
+    // args.line, args.index, args.li
+    if(!SentenceFixer.isEditingSentences){
+        SentenceFixer.isEditingSentences = true;
+        SentenceFixer.editingSentence = args;
+        
+        var textArea = document.createElement('textarea');
+        textArea.setAttribute('cols', 50);
+        textArea.setAttribute('rows', 6);
+        textArea.innerHTML = args.line[args.index].text;
+        args.li.innerHTML = '';
+        args.li.appendChild(textArea);
+        textArea.focus();
+        SentenceFixer.editingSentence.textarea = textArea;
+        SentenceFixer.editTextIcon.setAttribute('class', 'icon-check');
+    }else{
+        SentenceFixer.isEditingSentences = false;
+        SentenceFixer.editingSentence.line[SentenceFixer.editingSentence.index].text = SentenceFixer.editingSentence.textarea.value;
+        SentenceFixer.editingSentence.li.innerHTML = SentenceFixer.editingSentence.textarea.value;
+        resetLists();
+    }
+    
 }
 function joinSentencesUp(args){
     if(!SentenceFixer.isActive){
@@ -326,17 +361,17 @@ function routineFix(arg){
         doNextParagraph();
         return;
     }
-    var enRed = SentenceFixer.pgr.tofix[0].en > SentenceFixer.pgr.tofix[0].jp;
+    SentenceFixer.englishIsLonger = SentenceFixer.pgr.tofix[0].en > SentenceFixer.pgr.tofix[0].jp;
     highlightMovers({
-        rflength: enRed? SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length:SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length,
-        yflength: enRed? SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length:SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length,
-        r: enRed? arg.jp:arg.en,
-        y: enRed? arg.en:arg.jp,
-        rl: enRed? SentenceFixer.rightList:SentenceFixer.leftList,
-        yl: enRed? SentenceFixer.leftList:SentenceFixer.rightList
+        rflength: SentenceFixer.englishIsLonger? SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length:SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length,
+        yflength: SentenceFixer.englishIsLonger? SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length:SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length,
+        r: SentenceFixer.englishIsLonger? arg.jp:arg.en,
+        y: SentenceFixer.englishIsLonger? arg.en:arg.jp,
+        rl: SentenceFixer.englishIsLonger? SentenceFixer.rightList:SentenceFixer.leftList,
+        yl: SentenceFixer.englishIsLonger? SentenceFixer.leftList:SentenceFixer.rightList
     });
     SentenceFixer.routineFixIsActive = true;
-    if(enRed){
+    if(SentenceFixer.englishIsLonger){
         console.log(SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length-1 +":"+arg.jp);
         if(SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length-1 == arg.jp){
             while(SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length > SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length){
@@ -349,7 +384,6 @@ function routineFix(arg){
             resetLists();
             routineFix(arg.en, arg.jp);
         }
-        SentenceFixer.isEnRed = true;
     }else{
         if(SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length -1== arg.en){
             while(SentenceFixer.pgr.jp[SentenceFixer.pgr.tofix[0].index].line.length > SentenceFixer.pgr.en[SentenceFixer.pgr.tofix[0].index].line.length){
@@ -361,7 +395,6 @@ function routineFix(arg){
             }
             routineFix(arg.en, arg.jp);
         }
-        this.isEnRed = false;
     }
 }
 function highlightMovers(args){
@@ -400,8 +433,8 @@ function splitSentences(args){
         return;
     }
     SentenceFixer.splittingSentences=true;
-    SentenceFixer.constructorinstructionDiv.firstElementChild.innerHTML;
-    SentenceFixer.constructorinstructionDiv.firstElementChild.innerHTML = 'Highlight Part to be split into the next sentence. Type "C" to cancel, "F" to move forward. "R" to restart';
+    SentenceFixer.instructionDiv.firstElementChild.innerHTML;
+    SentenceFixer.instructionDiv.firstElementChild.innerHTML = 'Highlight Part to be split into the next sentence. Type "C" to cancel, "F" to move forward. "R" to restart';
     $(args.li).bind("mouseup", function(){
         if(SentenceFixer.splittingSentences){
             SentenceFixer.splittingSentences = false;
@@ -418,39 +451,9 @@ function splitSentences(args){
         }
     }); 
 }
-
 /*
- * 
- * 
- * 
- * 
- * 
- * For paragraphs. Incomplete
- * 
- * 
- * 
+ * paragraph fixer:
+ * show three paragraphs side by side.
+ * Match? move to next three.
+ * Not match? Split sentences into new paragraphs
  */
-Proto.fixParagraphs = function(args){
-    console.log('fix paragraphs');
-    
-    console.log(args);
-}
-Proto.sortChapter = function(args){
-    var unclipped = Object.keys(args.chapter.paragraph[0].line[0]).indexOf('clip')<0;
-    var i, j;
-    for(i=0;i<args.rawpgr.en.length;i++){
-        for(j=0;j<args.rawpgr.en[i].line.length;j++){
-            args.rawpgr.en[i].line[j].translation = args.rawpgr.jp[i].line[j].text;
-            if(args.chapter.paragraph.length > i){
-            }
-        }
-    }
-    args.chapter.organized = args.rawpgs.en;
-    if(unclipped){
-        args.chapter.paragraph = args.rawpgs.en;
-    }else{
-        args.chapter.organized = args.rawpgs.en;
-    //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
-    }
-}
-
