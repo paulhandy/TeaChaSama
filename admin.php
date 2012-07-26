@@ -192,7 +192,7 @@ header('Content-Type: text/html; charset=UTF-8');
         </div>
         <div class="translucent" id="popbackground"></div>
         <div class="row rounded-white span12" id="popover">
-            <i class=" icon-remove" id="closepop"></i>
+            <i class=" icon-remove" id="closepop" style="position:absolute; top:0;right:5px; cursor:pointer;"></i>
             <div id="chapterdecoder">
                 <div id="cdenterText">
                     <h3 id="cdinstructions">Please Provide the text of the Lesson.</h3>
