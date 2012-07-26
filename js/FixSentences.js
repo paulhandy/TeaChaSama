@@ -296,6 +296,7 @@ function editSentenceText(args){
         SentenceFixer.editTextIcon.setAttribute('class', 'icon-check');
     }else{
         SentenceFixer.isEditingSentences = false;
+        SentenceFixer.editTextIcon.setAttribute('class', 'icon-edit');
         SentenceFixer.editingSentence.line[SentenceFixer.editingSentence.index].text = SentenceFixer.editingSentence.textarea.value;
         SentenceFixer.editingSentence.li.innerHTML = SentenceFixer.editingSentence.textarea.value;
         resetLists();
