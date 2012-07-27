@@ -1,6 +1,7 @@
 /* 
  * Purpose of this is to align audio with lines in the text.
  */
+
 function AudioClipper(data){
     this.chapter = data;
     this.lineSet = [];

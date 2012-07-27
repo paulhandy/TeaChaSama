@@ -204,12 +204,15 @@ function BookEditor(urldata){
         ncEditClips.setAttribute('title', 'Edit Audio Clips');
         var ncAddAudio = docreate('i', 'icon-headphones editButton');
         ncAddAudio.setAttribute('title', 'Add Audio Track');
+        var ncComplete = docreate('i', 'icon-ok editButton');
+        ncComplete.setAttribute('title', 'Complete Lesson');
         var ncRemoveSelf = docreate('i', 'icon-remove editButton');
         ncRemoveSelf.setAttribute('title', 'Delete Chapter');
         toolBar.appendChild(ncEdit);
         toolBar.appendChild(ncAddJapanese);
         toolBar.appendChild(ncAddAudio);
         toolBar.appendChild(ncEditClips);
+        toolBar.appendChild(ncComplete);
         toolBar.appendChild(ncRemoveSelf);
         anchor.appendChild(toolBar);
         newChapterLi.appendChild(anchor);
@@ -217,6 +220,7 @@ function BookEditor(urldata){
         anchor.onclick = function(e){
             e.preventDefault();
         }
+        ncComplete.onclick = completeLesson;
         ncAddJapanese.onclick = replaceJapaneseText;
         ncEdit.onclick      = editTextListener;
         ncEditClips.onclick = editClipsListener;
@@ -237,6 +241,20 @@ function BookEditor(urldata){
             book:args.book.index, 
             chapter: args.lesson.index
         };
+        function completeLesson(e){
+            if(!dataLoaded){
+                LessonWriter.load({
+                    data: ajxdata,
+                    lesson: args.lesson,
+                    dataLoaded: dataLoaded,
+                    done: function(newOrNot){
+                        FinishUp(LessonWriter.data.chapter[LessonWriter.data.chapter.length-1]);
+                    }
+                });
+            }else{
+                editJapaneseText(args.lesson);
+            }
+        }
         function replaceJapaneseText(e){
             if(!dataLoaded){
                 LessonWriter.load({

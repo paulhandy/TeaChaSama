@@ -103,7 +103,9 @@ ChapterDecoder.getParagraphs = function(args){
             if(args.toClipper){
                 $(ChapterDecoder.wrapper).hide();
                 $(popdiv).hide();
-                    
+                if(ChapterDecoder.audioclipper == undefined){
+                    ChapterDecoder.audioclipper = new AudioClipper(ChapterDecoder.data.chapter);
+                }
                 ChapterDecoder.audioclipper.chapter= ChapterDecoder.data.chapter;
                 ChapterDecoder.data = ChapterDecoder.audioclipper.chapter;
                 console.log(ChapterDecoder.data);
@@ -195,15 +197,15 @@ function checkLengths(args){
 };
 function splitJapaneseSentences(myString){
     /*
-         *'\uff1f'+'is ?'
-         *'\uff01'+'is !'
-         *'\u3002'+'is maru'
-         *'\u300d'+'is single quote'
-         *'\u300f'+'is double quote'
-         *'\uff08' is open parentheses
-         *'\uff09' is close parentheses
-         * '\u3001' is comma
-         */
+     *'\uff1f'+'is ?'
+     *'\uff01'+'is !'
+     *'\u3002'+'is maru'
+     *'\u300d'+'is single quote'
+     *'\u300f'+'is double quote'
+     *'\uff08' is open parentheses
+     *'\uff09' is close parentheses
+     * '\u3001' is comma
+     */
         
     var index = 0,
     re = /[^\u3002]+[\u3002]+(\u300d|\u300f|\u300d\u300f)?(\uff08([^\uff09]+)\uff09)?/g,
@@ -295,22 +297,34 @@ ChapterDecoder.fixParagraphs = function(args){
     
     console.log(args);
 }
-ChapterDecoder.sortChapter = function(args){
-    var unclipped = Object.keys(args.chapter.paragraph[0].line[0]).indexOf('clip')<0;
-    var i, j;
-    for(i=0;i<args.rawpgr.en.length;i++){
-        for(j=0;j<args.rawpgr.en[i].line.length;j++){
-            args.rawpgr.en[i].line[j].translation = args.rawpgr.jp[i].line[j].text;
-            if(args.chapter.paragraph.length > i){
+var FinishUp = function(args){
+    var i, j, k, l;
+    console.log(args);
+    if(args.raw != null){
+        console.log('Raw exists.  Checking for english and japanese...');
+        if(args.raw.en != null){
+            if(args.raw.en[0].line !=null){
+                if(args.raw.en[0].line[0].clip != null){
+                    console.log('Time to add these things up!');
+
+                    for(i=0; i< args.raw.en.length; i++){
+                        
+                        for(j=0;j<args.raw.en[i].line.length;j++){
+                            if(args.raw.en[i].line[j].clip != args.paragraph[i].line[j].clip){
+                            //see if the sentences are different
+                            }
+                            var ste, stp;
+                            ste = args.raw.en[i].line[j].text.trim().replace(/[^a-zA-Z\s]/g, '').trim().split(/\s/g);
+                            stp = args.paragraph[i].line[j].text.trim().replace(/[^a-zA-Z\s]/g, '').trim().split(/\s/g);
+                            if(ste.length != stp.length){
+                                console.log('unequal sentences!!!!');
+                                console.log(ste);
+                                console.log(stp);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-    args.chapter.organized = args.rawpgs.en;
-    if(unclipped){
-        args.chapter.paragraph = args.rawpgs.en;
-    }else{
-        args.chapter.organized = args.rawpgs.en;
-    //some fancy code here to deal with merging clips.  like to ask each paragraph if there is a en text match, and go from there.
-    }
 }
-
