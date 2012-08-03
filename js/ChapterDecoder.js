@@ -7,11 +7,6 @@ var ChapterDecoder = function(){
         en: [],
         jp: []
     };
-
-    
-    var proto=this;
-    this.audioclipper = this.data.audioclipper;
-    
     $(background).center();
     $(window).resize(function(){
         $(popdiv).fitHeight().center();
@@ -103,16 +98,11 @@ ChapterDecoder.getParagraphs = function(args){
             if(args.toClipper){
                 $(ChapterDecoder.wrapper).hide();
                 $(popdiv).hide();
-                if(ChapterDecoder.audioclipper == undefined){
-                    ChapterDecoder.audioclipper = new AudioClipper(ChapterDecoder.data.chapter);
-                }
-                ChapterDecoder.audioclipper.chapter= ChapterDecoder.data.chapter;
-                ChapterDecoder.data = ChapterDecoder.audioclipper.chapter;
-                console.log(ChapterDecoder.data);
-                ChapterDecoder.audioclipper.show();
-                ChapterDecoder.audioclipper.decodeLineSet();
-                ChapterDecoder.audioclipper.setListeners();
-                ChapterDecoder.audioclipper.displayNextTwoLines();
+                AudioClipper.chapter= ChapterDecoder.data.chapter;
+                AudioClipper.show();
+                AudioClipper.decodeLineSet();
+                AudioClipper.setListeners();
+                AudioClipper.displayNextTwoLines();
             }
         }else{
             ChapterDecoder.paragraphs.tofix = checkLengths({
@@ -297,34 +287,9 @@ ChapterDecoder.fixParagraphs = function(args){
     
     console.log(args);
 }
-var FinishUp = function(args){
-    var i, j, k, l;
-    console.log(args);
-    if(args.raw != null){
-        console.log('Raw exists.  Checking for english and japanese...');
-        if(args.raw.en != null){
-            if(args.raw.en[0].line !=null){
-                if(args.raw.en[0].line[0].clip != null){
-                    console.log('Time to add these things up!');
-
-                    for(i=0; i< args.raw.en.length; i++){
-                        
-                        for(j=0;j<args.raw.en[i].line.length;j++){
-                            if(args.raw.en[i].line[j].clip != args.paragraph[i].line[j].clip){
-                            //see if the sentences are different
-                            }
-                            var ste, stp;
-                            ste = args.raw.en[i].line[j].text.trim().replace(/[^a-zA-Z\s]/g, '').trim().split(/\s/g);
-                            stp = args.paragraph[i].line[j].text.trim().replace(/[^a-zA-Z\s]/g, '').trim().split(/\s/g);
-                            if(ste.length != stp.length){
-                                console.log('unequal sentences!!!!');
-                                console.log(ste);
-                                console.log(stp);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+var MoveToParagraph = function(args){
+    args.paragraph = {
+        en: args.raw.en,
+        jp: args.raw.jp
     }
 }

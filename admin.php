@@ -55,6 +55,7 @@ header('Content-Type: text/html; charset=UTF-8');
                 indexget:'include/getindex.php'
             }
             $(function(){
+                AudioClipper.init();
                 $(window).resize(function(){
                     $(popdiv).fitHeight().center();
                     $(background).center();

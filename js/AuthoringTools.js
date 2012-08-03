@@ -384,17 +384,12 @@ function　editChapterText(args){
     }
 }
 function editChapterClips(args){
-        
-    var ac = IndexWriter.audioclipper;
-    if(IndexWriter.audioclipper == null || args.chapter.index != ac.chapter.index){
-        ac = new AudioClipper(args.chapter);
-        ac.setAudioDiv();
-        ac.getWaveForm();
+    if(args.chapter.index != AudioClipper.chapter.index){
+        AudioClipper.chapter = args.chapter;
+        AudioClipper.setAudioDiv();
+        AudioClipper.getWaveForm();
     }
-    ChapterDecoder.data = {
-        chapter: args.chapter,
-        audioclipper: ac
-    };
+    ChapterDecoder.data = args;
     if(args.madeNew){
             
         ChapterDecoder.getParagraphs({
@@ -445,9 +440,9 @@ function addChapterAudioTrack(args){
         args.chapter.audio = {
             filename: input.getAttribute('value')
         };
-        IndexWriter.audioclipper = new AudioClipper(args.chapter);
-        IndexWriter.audioclipper.setAudioDiv();
-        IndexWriter.audioclipper.getWaveForm();
+        AudioClipper.chapter = args.chapter;
+        AudioClipper.setAudioDiv();
+        AudioClipper.getWaveForm();
     }
 }
 

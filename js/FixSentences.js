@@ -449,9 +449,3 @@ function splitSentences(args){
         }
     }); 
 }
-/*
- * paragraph fixer:
- * show three paragraphs side by side.
- * Match? move to next three.
- * Not match? Split sentences into new paragraphs
- */
