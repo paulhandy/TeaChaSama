@@ -271,6 +271,8 @@ function setLineListeners(args){
                 break;
             case 4:
                 args.line.splice(args.index, 1);
+                resetLists();
+                break;
             default:
                 break;
         }
@@ -323,7 +325,6 @@ function joinSentencesUp(args){
         insertChar: ch
     });
     resetLists();
-    moveOn();
 }
 function closeFixer(){
     SentenceFixer.isActive = false;
