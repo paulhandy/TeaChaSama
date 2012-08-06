@@ -292,4 +292,5 @@ var MoveToParagraph = function(args){
         en: args.raw.en,
         jp: args.raw.jp
     }
+    args.raw = undefined;
 }
