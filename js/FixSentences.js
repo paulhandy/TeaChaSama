@@ -37,9 +37,10 @@ var SentenceFixer = {
     rightHeader : null, 
     leftList : [],
     rightList : [], 
-    joinUpIcon : null,
-    splitSentenceIcon : null,
-    editTextIcon : null,
+    joinUpIcon : docreate('i','icon-hand-up', 'combineSentenceUp'),
+    splitSentenceIcon : docreate('i','icon-resize-full', 'sentenceSplitter'),
+    editTextIcon : docreate('i', 'icon-edit', 'editTextButton'),
+    removeTextIcon: docreate('i', 'icon-remove', 'editTextButton'),
     currentJp : 0,
     currentEn : 0,
     editingSentence : null
@@ -106,14 +107,10 @@ SentenceFixer.fixSentences = function(){
     this.rightHeader = document.getElementById('fixRightNavHeader');
     this.leftHeader.innerHTML = 'English Sentences:';
     this.rightHeader.innerHTML = 'Translated Sentences:';
-    
-    this.joinUpIcon = docreate('i','icon-hand-up', 'combineSentenceUp');
     this.joinUpIcon.style.cursor = 'pointer';
     this.joinUpIcon.setAttribute('title', 'Recombine With Above Sentence');
-    this.splitSentenceIcon = docreate('i','icon-resize-full', 'sentenceSplitter');
     this.splitSentenceIcon.style.cursor = 'pointer';
     this.splitSentenceIcon.setAttribute('title', 'Split at [,]/[;] or selected point.');
-    this.editTextIcon = docreate('i', 'icon-edit', 'editTextButton');
     this.fixWrapper.focus();
     SentenceFixer.leftList = [];
     SentenceFixer.rightList = [];
@@ -231,6 +228,7 @@ function setLineListeners(args){
             args.li.appendChild(SentenceFixer.editTextIcon);
             args.li.appendChild(SentenceFixer.joinUpIcon);
             args.li.appendChild(SentenceFixer.splitSentenceIcon);
+            args.li.appendChild(SentenceFixer.removeTextIcon);
         }
         $('.enSentence').removeClass('activeSentence');
         args.li.classList.add('activeSentence');
@@ -246,7 +244,8 @@ function setLineListeners(args){
             e = window.event;
         }
         action = e.target == SentenceFixer.joinUpIcon ? 1: 
-        (e.target == SentenceFixer.splitSentenceIcon ? 2: (e.target == SentenceFixer.editTextIcon?3:0));
+        (e.target == SentenceFixer.splitSentenceIcon ? 2: (e.target == SentenceFixer.editTextIcon?3:
+        (e.target == SentenceFixer.removeTextIcon? 4: 0)));
         switch(action){
             case 1:
                 joinSentencesUp({
@@ -270,6 +269,8 @@ function setLineListeners(args){
                     li: args.li
                 });
                 break;
+            case 4:
+                args.line.splice(args.index, 1);
             default:
                 break;
         }
