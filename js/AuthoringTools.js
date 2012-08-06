@@ -248,7 +248,7 @@ function BookEditor(urldata){
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
-                        FinishUp(LessonWriter.data.chapter[LessonWriter.data.chapter.length-1]);
+                        MoveToParagraph(LessonWriter.data.chapter[LessonWriter.data.chapter.length-1]);
                     }
                 });
             }else{
