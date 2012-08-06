@@ -248,11 +248,12 @@ function BookEditor(urldata){
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
+                        dataLoaded=true;
                         MoveToParagraph(LessonWriter.data.chapter[LessonWriter.data.chapter.length-1]);
                     }
                 });
             }else{
-                editJapaneseText(args.lesson);
+                MoveToParagraph(LessonWriter.data.chapter[LessonWriter.data.chapter.length-1]);
             }
         }
         function replaceJapaneseText(e){
@@ -262,6 +263,7 @@ function BookEditor(urldata){
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
+                        dataLoaded=true;
                         editJapaneseText({
                             madeNew: newOrNot,
                             chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
@@ -278,13 +280,13 @@ function BookEditor(urldata){
             }
         }
         function editTextListener(e){
-            console.log('Has data been loaded?'+dataLoaded);
             if(!dataLoaded){
                 LessonWriter.load({
                     data: ajxdata,
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
+                        dataLoaded=true;
                         editChapterText({
                             madeNew: newOrNot,
                             chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
@@ -309,6 +311,7 @@ function BookEditor(urldata){
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
+                        dataLoaded=true;
                         editChapterClips({
                             madeNew: newOrNot,
                             chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
@@ -333,6 +336,7 @@ function BookEditor(urldata){
                     lesson: args.lesson,
                     dataLoaded: dataLoaded,
                     done: function(newOrNot){
+                        dataLoaded=true;
                         addChapterAudioTrack({
                             madeNew: newOrNot,
                             chapter: LessonWriter.data.chapter[LessonWriter.data.chapter.length-1],
@@ -350,7 +354,6 @@ function BookEditor(urldata){
             e.preventDefault();
         }
     };
-    
     this.setListeners = (function(){
         proto.addBookButton.onmouseover = function(){
             proto.addBooki.classList.add('icon-white');
