@@ -16,8 +16,12 @@ var ChapterDecoder = function(){
 ChapterDecoder.editPreloadedParagraphs = function(args){
     console.log('preloading chapter:')
     console.log(args);
-    args.raw.tofix = checkLengths(args.raw == undefined? args.paragraph:args.raw);
-    //var sf = new SentenceFixer(args.raw.tofix == undefined?-1:(args.raw.tofix.length==0?-1:args.raw.tofix[0].index));
+    var tofix = checkLengths(args.raw == undefined? args.paragraph:args.raw);
+    if(args.raw == undefined){
+        args.paragraph.tofix = tofix;
+    }else{
+        args.raw.tofix = tofix;
+    }
     SentenceFixer.pgr = args.raw == undefined? args.paragraph:args.raw;
     SentenceFixer.fixSentences();
 };
