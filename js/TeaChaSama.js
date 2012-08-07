@@ -284,7 +284,7 @@ function Line(){
     utterance = document.createElement('span');
     //soundbtn.onclick = this.playClip;
     //soundbtn.onkeydown = this.playClip;
-    $(transbtn).click(this.showTranslation);
+    $(transbtn).click(function(){proto.showTranslation();});
     //vocabbtn.onkeydown = this.vocabInline;
     //vocabbtn.onclick = this.vocabInline;
     //grammarbtn.onkeydown = this.grammarInline;
