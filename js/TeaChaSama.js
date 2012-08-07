@@ -319,7 +319,7 @@ function Line(){
     
     };
     this.showTranslation = function(){
-    
+        $('#translationDiv').html(proto.translation);
     };
     this.grammarInline = function(){
     
