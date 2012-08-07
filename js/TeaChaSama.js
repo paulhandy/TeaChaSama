@@ -287,6 +287,8 @@ function Line(){
     $(transbtn).click(function(){
         $('#translationDiv').html(proto.translation);
         console.log(proto);
+        console.log($('#translationDiv'));
+        
     });
     //vocabbtn.onkeydown = this.vocabInline;
     //vocabbtn.onclick = this.vocabInline;
