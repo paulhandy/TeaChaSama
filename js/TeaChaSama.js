@@ -139,46 +139,24 @@ function Chapter(){
             audio = new AudioTrack();
             audio.filename = data.audio.filename;
             proto.audio = audio;
-            for(i=0; i < data.paragraph.length ; i++)
+            for(i=0; i < data.paragraph.en.length ; i++)
             {
                 paragraph = new Paragraph();
                 paragraph.parent = proto;
                 
-                for(j=0;j<data.paragraph[i].line.length; j++){
+                for(j=0;j<data.paragraph.en[i].line.length; j++){
                     line = new Line();
                     line.parent = paragraph;
                     
 
                     line.audioClip = {
-                        start: data.paragraph[i].line[j].clip.start,
-                        end: data.paragraph[i].line[j].clip.end
+                        start: data.paragraph.en[i].line[j].clip.start,
+                        end: data.paragraph.en[i].line[j].clip.end
                     };
-                    line.text = data.paragraph[i].line[j].text;
-                    line.translation = data.paragraph[i].line[j].translation;                    
+                    line.text = data.paragraph.en[i].line[j].text;
+                    line.translation = data.paragraph.jp[i].line[j].text;
                     
                     paragraph.line.push(line);
-                    
-                    /*if(Object.keys(data.paragraph[i].line[j]).indexOf('vocab')>=0){
-                        for(k=0; k< data.paragraph[i].line[j].vocab.length; k++){
-                            reference = new VocabReference();
-                            reference.index = data.paragraph[i].line[j].vocab.index;
-                            reference.start = data.paragraph[i].line[j].vocab.start;
-                            reference.length = data.paragraph[i].line[j].vocab.length;
-                            line.vocab.push(reference);
-                        }
-                        hasvocab = true;
-                    }
-                    if(Object.keys(data.paragraph[i].line[j]).indexOf('grammar')>=0){
-                        for(k=0; k< data.paragraph[i].line[j].grammar.length; k++){
-                            reference = new GrammarReference();
-                            reference.index = data.paragraph[i].line[j].grammar.index;
-                            reference.start = data.paragraph[i].line[j].grammar.start;
-                            reference.length = data.paragraph[i].line[j].grammar.length;
-                            line.grammar.push(reference);
-                        }   
-                        hasgrammar=true;
-                    }*/
-                    
                 }
                 proto.paragraph.push(paragraph);
             }
