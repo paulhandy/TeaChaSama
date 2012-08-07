@@ -54,6 +54,7 @@ include("include/getindex.php");
                 <div id="lessonDiv">
                     <div class="span4">
                         <div id="audioDiv" style="position:fixed;top:50px;left:20px;"></div>
+                        <div id="translationDiv"></div>
                     </div>
                     <div class="span8" id="lesson-content-wrapper">
                         <h1 id="lesson-title"></h1>
