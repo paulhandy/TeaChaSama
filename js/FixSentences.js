@@ -41,8 +41,8 @@ var SentenceFixer = {
     splitSentenceIcon : docreate('i','icon-resize-full', 'sentenceSplitter'),
     editTextIcon : docreate('i', 'icon-edit', 'editTextButton'),
     removeTextIcon: docreate('i', 'icon-remove', 'editTextButton'),
-    currentJp : 0,
-    currentEn : 0,
+    currentJp: 0,
+    currentEn: 0,
     editingSentence : null
 };
 SentenceFixer.fixParagraphs = function(){

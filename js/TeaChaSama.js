@@ -7,18 +7,18 @@ function BookShelf(){
     this.courseNumber = null;
     this.book = [];
     this.rawData = null;
-    var bookshelf = this;
+    var proto = this;
     this.databaseIndexParser = function(data){
         
         data = JSON.parse(data);
-        bookshelf.rawData = data;
-        bookshelf.title = data.title;
-        bookshelf.courseNumber = data.courseNumber;
+        proto.rawData = data;
+        proto.title = data.title;
+        proto.courseNumber = data.courseNumber;
         var i , j, book, chapter;
         for(i=0; i< data.book.length; i++)
         {
             book = new Book();
-            book.parent = bookshelf;
+            book.parent = proto;
             book.title = data.book[i].title;
             book.index = data.book[i].index;
             for(j=0; j< data.book[i].chapter.length ; j++)
@@ -30,7 +30,7 @@ function BookShelf(){
                 chapter.index = data.book[i].chapter[j].index;
                 book.chapter.push(chapter);
             }
-            bookshelf.book.push(book);
+            proto.book.push(book);
         }
     };
 
@@ -108,6 +108,7 @@ function Chapter(){
   
     this.databaseChapterParser = function(_data){
         var chapter = this;
+        console.log(_data);
         $.ajax({
             url: 'include/getlesson.php',
             data: _data,
@@ -148,11 +149,13 @@ function Chapter(){
                     line = new Line();
                     line.parent = paragraph;
                     
-
-                    line.audioClip = {
-                        start: data.paragraph.en[i].line[j].clip.start,
-                        end: data.paragraph.en[i].line[j].clip.end
-                    };
+                    if(data.paragraph.en[i].line[j].clip != undefined){
+                        line.audioClip = {
+                            start: data.paragraph.en[i].line[j].clip.start,
+                            end: data.paragraph.en[i].line[j].clip.end
+                        };
+                    }
+                    
                     line.text = data.paragraph.en[i].line[j].text;
                     line.translation = data.paragraph.jp[i].line[j].text;
                     
@@ -197,10 +200,14 @@ function Chapter(){
         a.appendChild(auth);
         li.appendChild(a);
         li.onclick = function(e){
-            var course = 'course=1';
-            var book = 'book='+ proto.parent.index;
-            var chap = 'chapter='+proto.index;
-            proto.databaseChapterParser(course+'&'+book+'&'+chap);
+            var course = proto.parent.parent.courseNumber;
+            var book = proto.parent.index;
+            var chap = proto.index;
+            proto.databaseChapterParser({
+                course: course, 
+                book: book, 
+                chapter: chap
+            });
             
         };
         

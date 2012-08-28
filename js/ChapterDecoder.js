@@ -137,7 +137,7 @@ ChapterDecoder.splitParagraphs = function(args){
     var newLineSplit = /[\s]*?\n[\s]*/g;
     var text, soup;
     text = args.en;
-    soup = text.replace("\u201d", '"').replace("\u201c", '"').replace('\u2019', '\'')
+    soup = text.replace(/(&#8220;|&#8221;)/g, '"').replace(/(&#39;|&#8217;&#8216;)/g, '\'')
     .replace(andFilter, ' ').replace(supFilter, ' ').replace(splitP, '\n')
     .replace(englishFilterRe, ' ').replace(newLineSplit, '\n').trim();
     paragraph.en = soup.split(newLineSplit);
@@ -237,7 +237,7 @@ function splitJapaneseSentences(myString){
 function splitIntoSentences(args){
     var abbreviation = false;
     var index = 0;
-    var re = /[^\.\?!]+[a-zA-Z]+?[\.\?!]*"*?[$]*?/g;
+    var re =   /[^\.\?!]+[\.\?!]*"?(\([^\)]+\))?/g;
     //var re = /[^\.\?!]+[\.\?!]+"?/g;
     var mySentences = [];
     var line = {};

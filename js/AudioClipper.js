@@ -66,10 +66,10 @@ AudioClipper.setAudioDiv = function(){
 AudioClipper.addClipData = function(seg){
         
     if(this.index.line < this.lineSet.length || this.rewriteIndex.length > 0){
-        if(!this.media.paused){
+        /*if(!this.media.paused){
             AudioClipper.timeline.currentTime = seg.startTime;
             this.media.setCurrentTime(seg.startTime);
-        }
+        }*/
         if(this.rewriteIndex.length > 0){
             var i = this.rewriteIndex.pop();
             seg.text = this.lineSet[i].text;
@@ -316,6 +316,7 @@ AudioClipper.checkFinished = function(){
             k++;
         }
     }
+    AudioClipper.media.pause();
     data = AudioClipper.chapter;
 }
 AudioClipper.updateLineSetClipData = function(){
