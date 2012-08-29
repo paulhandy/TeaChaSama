@@ -16,7 +16,7 @@ VocabGlosser.displayLines = function(){
     }
     $(popdiv).show().fitHeight().center();
     $(background).show().center();
-    background.style.position = fixed;
+    background.style.position = 'fixed';
     $('.glossline').bind('mouseup', function(){
         var id = $(this).attr('id').replace(/[^-\d]/g, '').split('-');
         var text = getSelectedText();
