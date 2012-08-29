@@ -51,11 +51,11 @@ VocabGlosser.glossText = function(args){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.text);
             if(loc != -1){
-                found.push[{
+                found.push({
                     pg:i,
                     ln:j, 
                     inx: loc
-                }];
+                });
                 
                 $('#glosser_related_lines_list').append('<li id=related'+(found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
             }
