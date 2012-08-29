@@ -70,8 +70,8 @@ VocabGlosser.glossText = function(args){
         background.classList.remove('forwardBackground');
         $('.related_line.isRelated').each(function(){
             var ix = $(this).attr('id').replace(/[^\d]/g, '');
-            VocabGlosser.data.paragraph.en[i].line[j].vocab = VocabGlosser.data.paragraph.en[i].line[j].vocab || [];
-            VocabGlosser.data.paragraph.en[i].line[j].vocab.push({
+            VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab = VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab || [];
+            VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab.push({
                 lineIndex: args.found.inx,
                 vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
             });
