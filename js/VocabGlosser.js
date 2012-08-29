@@ -56,6 +56,7 @@ VocabGlosser.glossText = function(args){
                     ln:j, 
                     inx: loc
                 }];
+                console.log(args.found);
                 $('#glosser_related_lines_list').append('<li id=related'+(args.found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
             }
         }
