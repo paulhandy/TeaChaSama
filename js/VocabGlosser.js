@@ -50,9 +50,9 @@ VocabGlosser.glossText = function(args){
                     pg:i,
                     ln:j, 
                     inx: loc
-                }]
-            };
-            $('#glosser_related_lines_list').append('<li id=related'+(args.found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
+                }];
+                $('#glosser_related_lines_list').append('<li id=related'+(args.found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
+            }
         }
     }
     // append glosser here
@@ -76,8 +76,12 @@ VocabGlosser.glossText = function(args){
         });
         document.body.removeChild(glosser);
     });
-    $(background).click(function(e){document.body.removeChild(glosser);});
-    $(popdiv).click(function(e){document.body.removeChild(glosser);});
+    $(background).click(function(e){
+        document.body.removeChild(glosser);
+    });
+    $(popdiv).click(function(e){
+        document.body.removeChild(glosser);
+    });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
         $('#v_tr_txt').val(txt);
@@ -90,14 +94,14 @@ VocabGlosser.glossText = function(args){
         }
     });
     $('#select_every_line_glosser').click(function(){
-         $('.related_line').each(function(){
-             this.classList.add('isRelated');
-         })
+        $('.related_line').each(function(){
+            this.classList.add('isRelated');
+        })
     });
     $('#deselect_every_line_glosser').click(function(){
-         $('.related_line').each(function(){
-             this.classList.remove('isRelated');
-         })
+        $('.related_line').each(function(){
+            this.classList.remove('isRelated');
+        })
     });
 };
 function getSelectedText(){
