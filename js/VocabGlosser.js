@@ -46,7 +46,7 @@ VocabGlosser.glossText = function(args){
     background.classList.add('forwardBackground');
     glosser.style.zIndex = '1002';
     $('body').append(glosser);
-    $(glosser).center().fitHeight();
+    $(glosser).center();
     for(i=0;i<VocabGlosser.data.paragraph.en.length;i++){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.text);
@@ -60,6 +60,7 @@ VocabGlosser.glossText = function(args){
             }
         }
     }
+    $(glosser).fitHeight();
     $('#submit_vocab').click(function(){
         VocabGlosser.data.vocab = VocabGlosser.data.vocab || [];
         args.text = $('#hlt_txt').attr('value');
@@ -71,6 +72,7 @@ VocabGlosser.glossText = function(args){
         $('.related_line.isRelated').each(function(){
             var ix = $(this).attr('id').replace(/[^\d]/g, '');
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab = VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab || [];
+            console.log(args.found);
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab.push({
                 lineIndex: args.found[ix].inx,
                 vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
