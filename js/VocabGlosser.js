@@ -56,7 +56,7 @@ VocabGlosser.glossText = function(args){
     }
     // append glosser here
     glosser.setAttribute('class', 'row rounded-white');
-    $('body').appendChild(glosser);
+    $('body').append(glosser);
     $(glosser).center().fitHeight();
     $('#submit_vocab').click(function(){
         VocabGlosser.data.vocab = VocabGlosser.data.vocab || [];
