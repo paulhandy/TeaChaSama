@@ -76,6 +76,9 @@ VocabGlosser.glossText = function(args){
         });
         document.body.removeChild(glosser);
     });
+    $(background).click(function(e){
+        document.body.removeChild(glosser);
+    });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
         $('#v_tr_txt').val(txt);
