@@ -77,10 +77,14 @@ VocabGlosser.glossText = function(args){
         document.body.removeChild(glosser);
     });
     $(background).click(function(e){
-        document.body.removeChild(glosser);
+        try{
+            document.body.removeChild(glosser);
+        }catch(e){}
     });
     $(popdiv).click(function(e){
-        document.body.removeChild(glosser);
+        try{
+            document.body.removeChild(glosser);
+        }catch(e){}
     });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
