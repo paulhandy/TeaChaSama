@@ -76,7 +76,7 @@ VocabGlosser.glossText = function(args){
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab = VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab || [];
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab.push({
                 lineIndex: found[ix].inx,
-                vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
+                vocabIndex: VocabGlosser.data.vocab.length-1
             });
             console.log(args.text);
         });
