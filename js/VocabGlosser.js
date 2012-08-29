@@ -31,7 +31,7 @@ VocabGlosser.displayLines = function(){
 VocabGlosser.glossText = function(args){
     console.log(args);
     var i,j, loc;
-    args.found = [];
+    var found = [];
     var glosser = document.createElement('div');
     console.log(VocabGlosser.data);
     glosser.innerHTML = '<table><tr><td>Text: </td><td><input type="text" name="selected_text" id="hlt_txt" value="'+args.text+'"/></td></tr>\n\
@@ -51,13 +51,13 @@ VocabGlosser.glossText = function(args){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.text);
             if(loc != -1){
-                args.found.push[{
+                found.push[{
                     pg:i,
                     ln:j, 
                     inx: loc
                 }];
-                console.log(args.found);
-                $('#glosser_related_lines_list').append('<li id=related'+(args.found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
+                console.log(found);
+                $('#glosser_related_lines_list').append('<li id=related'+(found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
             }
         }
     }
@@ -73,9 +73,9 @@ VocabGlosser.glossText = function(args){
         $('.related_line.isRelated').each(function(){
             var ix = $(this).attr('id').replace(/[^\d]/g, '');
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab = VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab || [];
-            console.log(args.found);
+            console.log(found);
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab.push({
-                lineIndex: args.found[ix].inx,
+                lineIndex: found[ix].inx,
                 vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
             });
         });
