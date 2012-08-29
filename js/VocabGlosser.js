@@ -78,6 +78,7 @@ VocabGlosser.glossText = function(args){
                 lineIndex: found[ix].inx,
                 vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
             });
+            console.log(args.text);
         });
         document.body.removeChild(glosser);
     });
