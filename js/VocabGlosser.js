@@ -33,7 +33,7 @@ VocabGlosser.glossText = function(args){
     args.found = [];
     var glosser = document.createElement('div');
     console.log(VocabGlosser.data);
-    glosser.innerHTML = '<table><tr><td>Text: </td><td><input type="text" name="selected_text" id="hlt_txt" value="'++'"/></td></tr>\n\
+    glosser.innerHTML = '<table><tr><td>Text: </td><td><input type="text" name="selected_text" id="hlt_txt" value=""/></td></tr>\n\
     <tr><td>Translation: </td><td><input type="text" name="term_trans" id="v_tr_txt"/></td></tr></table>\n\
     <button id="submit_vocab">save</button>\n\
     <div id="glosstrans">'+VocabGlosser.data.paragraph.jp[args.id[0]].line[args.id[1]].text+'</div>\n\
