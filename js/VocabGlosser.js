@@ -56,11 +56,12 @@ VocabGlosser.glossText = function(args){
                     ln:j, 
                     inx: loc
                 }];
-                console.log(found);
+                
                 $('#glosser_related_lines_list').append('<li id=related'+(found.length-1)+'" class="related_line">'+VocabGlosser.data.paragraph.en[i].line[j].text+'</li>');
             }
         }
     }
+    console.log(found);
     $(glosser).fitHeight();
     $('#submit_vocab').click(function(){
         VocabGlosser.data.vocab = VocabGlosser.data.vocab || [];
@@ -73,7 +74,6 @@ VocabGlosser.glossText = function(args){
         $('.related_line.isRelated').each(function(){
             var ix = $(this).attr('id').replace(/[^\d]/g, '');
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab = VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab || [];
-            console.log(found);
             VocabGlosser.data.paragraph.en[args.id[0]].line[args.id[1]].vocab.push({
                 lineIndex: found[ix].inx,
                 vocabIndex: VocabGlosser.data.vocab.indexOf(args.text)
