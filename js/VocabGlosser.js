@@ -8,9 +8,11 @@ VocabGlosser.displayLines = function(){
     var i,j;
     $('#vocabglosser').html('');
     for(i=0;i<VocabGlosser.data.paragraph.en.length;i++){
+        $('#vocabglosser').append('<p>');
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             $('#vocabglosser').append('<a id="pickfrom'+i+'-'+j+'" class=glossline>'+VocabGlosser.data.paragraph.en[i].line[j].text+'</a>');
         }
+        $('#vocabglosser').append('</p>');
     }
     $(popdiv).show().fitHeight().center();
     $(background).show().center();
