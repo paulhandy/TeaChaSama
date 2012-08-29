@@ -234,8 +234,13 @@ header('Content-Type: text/html; charset=UTF-8');
                     </div>
                 </div>
             </div>
+            <div id="vocabglosser">
+
+            </div>
         </div>
         <div class="row rounded-white span12" id="minipop"></div>
         <div id="index_json_data" style="display:none"><?php echo $index['index_data']; ?></div>
     </body>
 </html>
+
+
