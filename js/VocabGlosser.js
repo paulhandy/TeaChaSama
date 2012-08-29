@@ -46,6 +46,7 @@ VocabGlosser.glossText = function(args){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.data);
             if(loc>-1){
+                console.log(loc);
                 args.found.push[{
                     pg:i,
                     ln:j, 
