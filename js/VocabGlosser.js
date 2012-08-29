@@ -36,7 +36,7 @@ VocabGlosser.glossText = function(args){
     glosser.innerHTML = '<table><tr><td>Text: </td><td><input type="text" name="selected_text" id="hlt_txt" /></td></tr>\n\
     <tr><td>Translation: </td><td><input type="text" name="term_trans" id="v_tr_txt"/></td></tr></table>\n\
     <button id="submit_vocab">save</button>\n\
-    <div id="glosstrans">'+VocabGlosser.data.paragraph.jp[i].line[j].text+'</div>\n\
+    <div id="glosstrans">'+VocabGlosser.data.paragraph.jp[args.id[0]].line[args.id[1]].text+'</div>\n\
     <div>Select from below lines which have related vocabluary words.</div>\n\
     <button id="select_every_line_glosser">select all</button><button id="deselect_every_line_glosser">Deselect all</button>\n\
     <ul id="glosser_related_lines_list"></ul>';
