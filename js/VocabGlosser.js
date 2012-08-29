@@ -29,6 +29,7 @@ VocabGlosser.displayLines = function(){
     });
 };
 VocabGlosser.glossText = function(args){
+    console.log(args.text);
     var i,j, loc;
     args.found = [];
     var glosser = document.createElement('div');
