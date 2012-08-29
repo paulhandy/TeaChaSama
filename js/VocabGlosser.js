@@ -12,7 +12,7 @@ VocabGlosser.displayLines = function(){
             $('#vocabglosser').append('<a id="pickfrom'+i+'-'+j+'" class=glossline>'+VocabGlosser.data.paragraph.en[i].line[j].text+'</a>');
         }
     }
-    $(popdiv).show().center();
+    $(popdiv).show().fitHeight().center();
     $(background).show().center();
     $('.glossline').bind('mouseup', function(){
         var id = $(this).attr('id').replace(/[^-\d]/g, '').split('-');
