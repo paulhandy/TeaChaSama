@@ -68,6 +68,7 @@ VocabGlosser.glossText = function(args){
             term: $('#hlt_txt').attr('value'),
             trans: $('#v_tr_txt').attr('value')
         });
+        background.classList.remove('forwardBackground');
         $('.related_line.isRelated').each(function(){
             var ix = $(this).attr('id').replace(/[^\d]/g, '');
             VocabGlosser.data.paragraph.en[i].line[j].vocab = VocabGlosser.data.paragraph.en[i].line[j].vocab || [];
@@ -81,6 +82,7 @@ VocabGlosser.glossText = function(args){
     $('.forwardBackground').click(function(e){
         try{
             document.body.removeChild(glosser);
+            background.classList.remove('forwardBackground');
         }catch(e){
             
         }
