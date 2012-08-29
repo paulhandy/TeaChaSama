@@ -41,12 +41,16 @@ VocabGlosser.glossText = function(args){
     <div>Select from below lines which have related vocabluary words.</div>\n\
     <button id="select_every_line_glosser">select all</button><button id="deselect_every_line_glosser">Deselect all</button>\n\
     <ul id="glosser_related_lines_list"></ul>';
-    
+    // append glosser here
+    glosser.setAttribute('class', 'row rounded-white');
+    background.classList.add('forwardBackground');
+    glosser.style.zIndex = '1002';
+    $('body').append(glosser);
+    $(glosser).center().fitHeight();
     for(i=0;i<VocabGlosser.data.paragraph.en.length;i++){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.text);
             if(loc != -1){
-                console.log(loc);
                 args.found.push[{
                     pg:i,
                     ln:j, 
@@ -56,12 +60,6 @@ VocabGlosser.glossText = function(args){
             }
         }
     }
-    // append glosser here
-    glosser.setAttribute('class', 'row rounded-white');
-    background.classList.add('forwardBackground');
-    glosser.style.zIndex = '1002';
-    $('body').append(glosser);
-    $(glosser).center().fitHeight();
     $('#submit_vocab').click(function(){
         VocabGlosser.data.vocab = VocabGlosser.data.vocab || [];
         args.text = $('#hlt_txt').attr('value');
