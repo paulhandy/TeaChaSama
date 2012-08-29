@@ -56,7 +56,8 @@ VocabGlosser.glossText = function(args){
     }
     // append glosser here
     glosser.setAttribute('class', 'row rounded-white');
-    document.body.appendChild(glosser);
+    $('body').appendChild(glosser);
+    $(glosser).center().fitHeight();
     $('#submit_vocab').click(function(){
         VocabGlosser.data.vocab = VocabGlosser.data.vocab || [];
         args.text = $('#hlt_txt').attr('value');
@@ -76,7 +77,7 @@ VocabGlosser.glossText = function(args){
     });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
-        $('#v_tr_txt').attr(val, txt);
+        $('#v_tr_txt').attr('value', txt);
     });
     $('.related_line').click(function(){
         if(this.classList.contains('isRelated')){
