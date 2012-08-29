@@ -57,6 +57,8 @@ VocabGlosser.glossText = function(args){
     }
     // append glosser here
     glosser.setAttribute('class', 'row rounded-white');
+    background.classList.add('forwardBackground');
+    glosser.style.zIndex = '1002';
     $('body').append(glosser);
     $(glosser).center().fitHeight();
     $('#submit_vocab').click(function(){
@@ -76,15 +78,12 @@ VocabGlosser.glossText = function(args){
         });
         document.body.removeChild(glosser);
     });
-    $(background).click(function(e){
+    $('.forwardBackground').click(function(e){
         try{
             document.body.removeChild(glosser);
-        }catch(e){}
-    });
-    $(popdiv).click(function(e){
-        try{
-            document.body.removeChild(glosser);
-        }catch(e){}
+        }catch(e){
+            
+        }
     });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
