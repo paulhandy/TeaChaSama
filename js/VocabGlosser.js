@@ -40,7 +40,7 @@ VocabGlosser.glossText = function(args){
     <div>Select from below lines which have related vocabluary words.</div>\n\
     <button id="select_every_line_glosser">select all</button><button id="deselect_every_line_glosser">Deselect all</button>\n\
     <ul id="glosser_related_lines_list"></ul>';
-    console.log($('#hlt_txt').attr('value', args.text));
+    $('#hlt_txt').val(args.text);
     for(i=0;i<VocabGlosser.data.paragraph.en.length;i++){
         for(j=0;j<VocabGlosser.data.paragraph.en[i].line.length;j++){
             loc = VocabGlosser.data.paragraph.en[i].line[j].text.indexOf(args.data);
@@ -77,7 +77,7 @@ VocabGlosser.glossText = function(args){
     });
     $('#glosstrans').bind('mouseup', function(){
         var txt = getSelectedText();
-        $('#v_tr_txt').attr('value', txt);
+        $('#v_tr_txt').val(txt);
     });
     $('.related_line').click(function(){
         if(this.classList.contains('isRelated')){
