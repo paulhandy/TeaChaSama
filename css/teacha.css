@@ -139,3 +139,7 @@
     position:relative;
     left:-200px;
 }
+.isRelated{
+    background-color: #bbb;
+}
+.forwardBackground{z-index: 1001;}
